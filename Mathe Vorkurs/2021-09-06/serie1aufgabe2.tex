@@ -8,6 +8,7 @@
 \usepackage{titling}
 \usepackage{amssymb}
 \usepackage{mathtools}
+\usepackage{enumitem}
 
 
 \renewcommand{\footrulewidth}{0.4pt}
@@ -15,7 +16,7 @@
 \setlength\headheight{15pt}
 \setlength{\parskip}{1em}
 
-\title{Erste Vorlesung}
+\title{Serie 1 Aufgabe 2}
 \author{Eli Kogan-Wang}
 \date{September 6, 2021}
 
@@ -28,5 +29,35 @@
 
 
 \begin{document}
-Notes.
+
+$$M:=\{1;2\}$$
+$$N:=\{2,3,4\}$$
+
+\begin{enumerate}[label=(\roman*)]
+  \item $\neg(M\subsetneq N)$
+
+        Da $1\in M$ aber $1\not\in N$.
+  \item $\neg(M\subseteq N)$
+
+        Da $1\in M$ aber $1\not\in N$.
+  \item $\neg(M\cap N=\emptyset)$
+
+        Da $M\cap N={2}$.
+  \item $\neg(M\cup N=\{1;3;4\})$
+
+        Da $M\cup N = \{1;2;3;4\}$.
+  \item $\neg(\{2, 4\}\subseteq N)$
+
+        Da $2\in N\land 4\in N$.
+  \item $2\in M$
+
+        Da $2\in M$.
+  \item $\neg(3 \subseteq N)$
+
+        Da 3 keine Menge ist.
+  \item $(2, 2) \in M \times N$
+
+        Da $2\in N\land2\in M$.
+\end{enumerate}
+
 \end{document}
