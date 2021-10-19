@@ -1,0 +1,223 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage[top=1in, bottom=1.25in, left=1.25in, right=1.25in]{geometry}
+\usepackage{minted}
+\usepackage{blindtext}
+\usepackage{fancyhdr}
+\usepackage{titling}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{systeme}
+\usepackage{tikz}
+\usetikzlibrary{calc,tikzmark}
+
+
+\renewcommand{\footrulewidth}{0.4pt}
+
+\setlength\headheight{15pt}
+\setlength{\parskip}{1em}
+
+\title{linal 2021-10-14}
+\author{Eli Kogan-Wang}
+\date{\today}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\thetitle}
+\rhead{\thedate}
+\lfoot{\theauthor}
+\rfoot{Page \thepage}
+
+
+\begin{document}
+% \maketitle
+% \thispagestyle{fancy}
+\renewcommand{\abstractname}{Abstract}
+\begin{abstract}
+  This is partial notes for linal 2021-10-14.
+\end{abstract}
+\section*{Lineare Gleichungssysteme I}
+
+\paragraph*{Beispiel}
+
+\[
+  \systeme*{x_1+2x_2+x_3=2\tikzmark{A},x_1+3x_2-x_3=1\tikzmark{B}}
+\]
+
+\begin{tikzpicture}[overlay,remember picture]
+  %\node at (pic cs:A) {-1};
+  \draw[->, in=0, out=360] (pic cs:A) to (pic cs:B);
+
+\end{tikzpicture}
+
+\paragraph*{Bemerkung} Bei jedem Schritt hat sich die Lösungsmenge des Systems nicht geändert
+
+\paragraph*{Allgemein}
+
+\[
+  \left\{
+  \begin{aligned}
+    a_{11}x_{1}+a_{12}x_{2}+...+a_{1n}x_{n}=b_{1} \\
+    a_{21}x_{1}+a_{22}x_{2}+...+a_{2n}x_{n}=b_{2} \\
+    \vdots                                        \\
+    a_{m1}x_{1}+a_{m2}x_{2}+...+a_{mn}x_{n}=b_{m}
+  \end{aligned}
+  \right.
+  \tag{*}
+\]
+
+$$a_{ij}\in\mathbb{R}$$
+
+\paragraph*{Ziel} eine kompaktere Darstellung von ${(*)}$
+
+Die Tabelle $$A=\begin{pmatrix}
+    a_{11} & a_{12} & ...    & a_{1n} \\
+    a_{21} & a_{22} & ...    & a_{2n} \\
+    \vdots & \vdots & \ddots & \vdots \\
+    a_{m1} & a_{m2} & ...    & a_{mn}
+  \end{pmatrix}$$ ist eine $m\times n$-Matrix über $\mathbb{R}$.
+
+$m$ ist die Anzahl von Zeilen und $n$ die Anzahl von Spalten.
+
+$a_{ij}$ ist das Element von A in der $i$-ten Zeile und $j$-ten Spalte.
+
+$Mat_{m\times n}(\mathbb{R})$ bezeichnet die Menge aller $m\times n$-Matrizen mit koeffizienten in $\mathbb{R}$.
+
+$\vec{b}=\begin{pmatrix}
+    b_1    \\
+    \vdots \\
+    b_m
+  \end{pmatrix}\in\mathbb{R}^m$ ist ein $m$-Tupel (Spaltenvektor).
+
+\subsection*{Rechenregeln für Matrizen und Vektoren}
+
+\paragraph{Addition von Vektoren}
+
+$$\begin{pmatrix}
+    c_1 \\ c_2 \\ \vdots \\ c_m
+  \end{pmatrix} + \begin{pmatrix}
+    d_1 \\ d_2 \\ \vdots \\ d_m
+  \end{pmatrix}:=\begin{pmatrix}
+    c_1+d_1 \\ c_2+d_2 \\ \vdots \\ c_m+d_m
+  \end{pmatrix}$$
+
+\paragraph{Multiplikation eines Vektors mit einer Zahl}
+
+$$a\cdot\begin{pmatrix}
+    c_1 \\ c_2 \\ \vdots \\ c_m
+  \end{pmatrix}:=\begin{pmatrix}
+    ac_1 \\ ac_2 \\ \vdots \\ ac_m
+  \end{pmatrix}$$
+
+\paragraph{Multiplikation einer $m\times n$-Matrix mit einem $n$-Tupel}
+
+$$\begin{pmatrix}
+    a_{11} & a_{12} & \dots  & a_{1n} \\
+    a_{21} & a_{22} & \dots  & a_{2n} \\
+    \vdots & \vdots & \ddots & \vdots \\
+    a_{m1} & a_{m2} & \dots  & a_{mn}
+  \end{pmatrix}\cdot\begin{pmatrix}
+    x_{1} \\ x_{2} \\ \vdots \\ x_{n}
+  \end{pmatrix}:=\begin{pmatrix}
+    a_{11}x_{1} & + & a_{12}x_{2} & + & \dots  & + & a_{1n}x_{n} \\
+    a_{21}x_{1} & + & a_{22}x_{2} & + & \dots  & + & a_{2n}x_{n} \\
+    \vdots      &   & \vdots      &   & \ddots &   & \vdots      \\
+    a_{i1}x_{1} & + & a_{i2}x_{2} & + & \dots  & + & a_{in}x_{n} \\
+    \vdots      &   & \vdots      &   & \ddots &   & \vdots      \\
+    a_{m1}x_{1} & + & a_{m2}x_{2} & + & \dots  & + & a_{mn}x_{n}
+  \end{pmatrix}$$
+
+Höhe ist $n$.
+
+$i$-te Stelle.
+
+\paragraph*{Beispiel}
+
+$$A=\begin{pmatrix}
+    1 & 2 & -1 \\
+    3 & 0 & 1
+  \end{pmatrix}\in Mat_{2\times3}(\mathbb{R})$$
+
+$$\vec{c}=\begin{pmatrix}
+    -2 \\-1\\5
+  \end{pmatrix}$$
+
+$$A\cdot\vec{c}=\begin{pmatrix}
+    1 & 2 & -1 \\
+    3 & 0 & 1
+  \end{pmatrix}\cdot\begin{pmatrix}
+    -2 \\-1\\5
+  \end{pmatrix}=\begin{pmatrix}
+    -2 -2 -5 \\
+    -6 + 0 + 5
+  \end{pmatrix}=\begin{pmatrix}
+    -9 \\
+    -1
+  \end{pmatrix}$$
+
+\paragraph*{Beobachtung} Das System $(*)$ hat die folgende Darstellung:
+
+$$A\vec{x}=\vec{b}\quad\text{für}\quad\vec{x}=\begin{pmatrix}
+    x_1 \\ \vdots \\ x_n
+  \end{pmatrix}\quad\text{und}\quad\vec{b}=\begin{pmatrix}
+    b_1 \\ \vdots \\ b_m
+  \end{pmatrix}$$
+
+\paragraph*{Notation} $\text{Lös}(A,\vec{b}):=\left\{\vec{x}\in\mathbb{R}^n\vert A\vec{x}=\vec{b}\right\}$ ist die Lösungsmenge von $(*)$
+
+\paragraph*{Lemma} Sei $A\in\text{Mat}_{m\times n}\mathbb{R}$.
+
+(1) Für alle $\vec{x},\vec{y}\in\mathbb{R}^n$ gil: $A\cdot(\vec{x}+\vec{y})=A\vec{x}+A\vec{y}$
+
+(2) Für alle $a\in\mathbb{R}$ und $\vec{z}\in\mathbb{R}^n$ gilt: $A\cdot (a\vec{z})=a\cdot A\vec{z}$
+
+\paragraph*{Beweis}
+
+$$\begin{pmatrix}
+    a_{11} & a_{12} & \dots  & a_{1n} \\
+    \vdots & \vdots & \ddots & \vdots \\
+    a_{m1} & a_{m2} & \dots  & a_{mn}
+  \end{pmatrix}\begin{pmatrix}
+    x_{1} + y_{1} \\ \vdots \\ x_{n} +y_{n}
+  \end{pmatrix}$$
+$$=\begin{pmatrix}
+    a_{11}(x_{1}+y_{1}) + a_{12}(x_{2}+y_{2}) + \dots  + a_{1n}(x_{n}+y_{n}) \\
+    \vdots                                                                   \\
+    a_{m1}(x_{1}+y_{1}) + a_{m2}(x_{2}+y_{2}) + \dots  + a_{mn}(x_{n}+y_{n})
+  \end{pmatrix}$$
+
+\subsection*{Gaußsches Verfahren}
+
+\paragraph{Beobachtung}
+
+$$\left\{\begin{aligned}
+    a_{i1}x_{1} & + & a_{i2} & + & x_{2} & + & \dots & + & a_{in}x_{n} & = & b_i \\
+    a_{j1}x_{1} & + & a_{j2} & + & x_{2} & + & \dots & + & a_{jn}x_{n} & = & b_j \\
+  \end{aligned} \right.$$
+$$\iff\left\{\begin{aligned}
+    \mu a_{i1}x_{1} & + & \mu a_{i2}x_{2} & + & \dots+\mu a_{in}x_{n} & = & \mu b_i \\
+    a_{j1}x_{1}     & + & a_{j2}x_{2}     & + & \dots+a_{jn}x_{n}     & = & b_j     \\
+  \end{aligned}\right.\quad\mu\in\mathbb{R},\mu\neq0$$
+$$\lambda\in\mathbb{R}$$
+$$\iff\left\{\begin{aligned}
+    a_{i1}x_{1}                & + & a_{i2}x_{2}                  & + & \dots & + & a_{in}x_{n}=b_i                                \\
+    (a_{j1}+\lambda a_{i1})x_1 & + & (a_{j2}+\lambda a_{i2})x_{2} & + & \dots & + & (a_{jn}+\lambda a_{in})x_{n}=b_j + \lambda b_i \\
+  \end{aligned}\right.$$
+
+\paragraph{Definition}
+Seien $A\in Mat_{m\times n}(\mathbb{R})$ und $\vec{b}\in\mathbb{R}^m$. Dann heißt
+$$(A\vert\vec{b}):=\left(\begin{array}{ccc|c}
+      a_{11} & \dots  & a_{1n} & b_ 1   \\
+      \vdots & \ddots & \vdots & \vdots \\
+      a_{m1} & \dots  & a_{mn} & b_m
+    \end{array}\right)\in Mat_{m
+      \times(n+1)}(\mathbb{R})$$ erweiterte Koeffizientenmatrix
+
+\paragraph{Satz} Es gilt: $Lös(A,\vec{b})=Lös(A',\vec{b}')$, wobei $(A'\vert\vec{b}')$ durch
+eine Kette folgender Transformationen von Zeilen von $(A\vert\vec{b})$ entsteht.
+
+% enumerate roman
+$$\tag{(I)}(a_{i1}\dots a_{in}\vert b_{i})\rightsquigarrow(\mu a_{i1}\,\mu a_{i2}\dots\mu a_{in}\vert \mu b_i)$$
+
+\end{document}
