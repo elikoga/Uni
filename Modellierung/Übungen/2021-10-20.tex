@@ -1,0 +1,126 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage[top=1in, bottom=1.25in, left=1.25in, right=1.25in]{geometry}
+\usepackage{minted}
+\usepackage{blindtext}
+\usepackage{fancyhdr}
+\usepackage{titling}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{hyperref}
+
+
+\renewcommand{\footrulewidth}{0.4pt}
+
+\setlength\headheight{15pt}
+\setlength{\parskip}{1em}
+
+\title{Document Template}
+\author{Eli Kogan-Wang}
+\date{\today}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\thetitle}
+\rhead{\thedate}
+\lfoot{\theauthor}
+\rfoot{Page \thepage}
+
+
+\begin{document}
+% \maketitle
+% \thispagestyle{fancy}
+\renewcommand{\abstractname}{Abstract}
+\begin{abstract}
+    This is the notes in modelling for today.
+\end{abstract}
+\section{Document}
+
+\paragraph{Tutorin} Julia (grinjuk@mail.upb.de)
+
+\paragraph{Aufgabe 1}
+
+Voraussetzung zur Prüfungszulassung sind je $\ge$ 20\% der Punkte bei $\ge$ 9 (von 13) Übungszetteln.
+
+\paragraph{Aufgabe 2}
+
+\subparagraph{2.1}
+
+Zu zeigen:
+
+Für alle $n\in\mathbb{N}$ gilt:
+
+$$1^2+2^2+3^2+\dots+n^2=\sum_{i=1}^n i^2=\frac{n(n+1)(2n+1)}{6}$$
+
+I.A.
+
+Für $n=1$ gilt:
+
+$$\sum_{i=1}^n i^2=1^2=1=\frac{6}{6}=\frac{1(1+1)(2\cdot 1+1)}{6}$$
+
+I.V.
+
+Es sei ein $n\in\mathbb{N}$. Für dieses gilt:
+
+$$\sum_{i=1}^n i^2=\frac{n(n+1)(2n+1)}{6}$$
+
+I.S.
+
+Zu zeigen:
+
+$$\sum_{i=1}^{n+1} i^2=\frac{(n+1)((n+1)+1)(2(n+1)+1)}{6}$$
+
+
+$$\begin{aligned}
+        \sum_{i=1}^{n+1} i^2
+         & =\sum_{i=1}^n i^2 + (n+1)^2                             \\
+         & \underset{I.V.}{=}\frac{n(n+1)(2n+1)}{6}+(n+1)^2        \\
+         & =\frac{n(n+1)(2n+1)}{6}+(n+1)^2                         \\
+         & =\frac{n(n+1)(2n+1)}{6}+\frac{6\cdot(n+1)^2}{6}         \\
+         & =\frac{n(n+1)(2n+1)+6\cdot(n+1)^2}{6}                   \\
+         & =\frac{(n^2+1)(2n+1)+6\cdot(n^2+2n+1)}{6}               \\
+         & =\frac{(n+1)(6(n+1)+n(2n+1))}{6}                        \\
+         & =\frac{(n+1)(6n+6+2n^2+1n)}{6}                          \\
+         & =\frac{(n+1)(2n^2+7n+6)}{6}                             \\
+         & =\frac{(n+1)(n+2)(2n+3)}{6}                             \\
+         &                                                  & \Box
+    \end{aligned}$$
+
+\subparagraph{2.2}
+
+Zu zeigen:
+
+Für alle $n\in\mathbb{N}_0$ gilt:
+
+$$n^2+n\text{ ist gerade}$$
+
+I.A.
+
+Für $n=0$ gilt:
+
+$$0^2+0=0$$
+
+$0$ ist gerade, weil $\exists k\in\mathbb{N}_0: 2k=0$ mit $k=0$.
+
+I.V.
+
+Es sei ein $n\in\mathbb{N}_0$. Für dieses gilt:
+
+$$n^2+n\text{ ist gerade}$$
+
+Also $\exists k\in\mathbb{N}_0: 2k=n^2+n$. Wir nennen dieses $k$ $k_0$.
+
+I.S.
+
+Zu zeigen:
+
+$$(n+1)^2+(n+1)\text{ ist gerade}$$
+
+$$(n+1)^2+(n+1)=n^2+2n+1+n+1=n^2+n+2(n+1)\underset{I.V.}{=}2k_0+2(n+1)=2(k_0+n+1)$$
+
+Nun ist $(n+1)^2+(n+1)$ gerade, weil $\exists k\in\mathbb{N}_0: 2k=(n+1)^2+(n+1)$ mit $k=k_0+n+1$.
+
+$\Box$
+
+\end{document}
