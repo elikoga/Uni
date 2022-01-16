@@ -1,0 +1,689 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{fancyhdr}
+\usepackage{fancyheadings}
+\usepackage[ngerman,german]{babel}
+\usepackage[utf8]{inputenc}
+%\usepackage[latin1]{inputenc}
+\usepackage[active]{srcltx}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{ifthen}
+\usepackage{listings}
+\usepackage{struktex}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{gauss}
+\usepackage{dsfont}
+\usepackage{amssymb}
+\usepackage{minted}
+\usepackage{stmaryrd}
+
+\newcommand{\x}{\cdot}
+\newcommand{\ran}[2]{\langle #1,#2\rangle}
+\renewcommand{\Re}{\mathbb{R}}
+\makeatletter
+\newcommand{\Spvek}[2][r]{%
+  \gdef\@VORNE{1}
+  \left(\hskip-\arraycolsep%
+  \begin{array}{#1}\vekSp@lten{#2}\end{array}%
+  \hskip-\arraycolsep\right)}
+
+\def\vekSp@lten#1{\xvekSp@lten#1;vekL@stLine;}
+\def\vekL@stLine{vekL@stLine}
+\def\xvekSp@lten#1;{\def\temp{#1}%
+  \ifx\temp\vekL@stLine
+  \else
+  \ifnum\@VORNE=1\gdef\@VORNE{0}
+  \else\@arraycr\fi%
+  #1%
+  \expandafter\xvekSp@lten
+  \fi}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%% EDIT THIS PART %%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\Fach}{Programmiersprachen}
+\newcommand{\Name}{Name:Björn Bick, Max Herting, Miriam Nippel, Eli Kogan-Wang}
+\newcommand{\Semester}{WS 21/22}
+\newcommand{\Uebungsblatt}{2} %  <-- UPDATE ME
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\parindent}{0em}
+\topmargin -1.0cm
+\oddsidemargin 0cm
+\evensidemargin 0cm
+\setlength{\textheight}{9.2in}
+\setlength{\textwidth}{6.0in}
+
+%%%%%%%%%%%%%%%
+%% Aufgaben-COMMAND
+\newcommand{\Aufgabe}[1]{
+  {
+  \vspace*{0.5cm}
+  \textsf{\textbf{Aufgabe #1}}
+  \vspace*{0.2cm}
+
+  }
+}
+%%%%%%%%%%%%%%
+\hypersetup{
+    pdftitle={\Fach{}: Übungsblatt \Uebungsblatt{}},
+    pdfauthor={\Name},
+    pdfborder={0 0 0}
+}
+
+\lstset{ %
+language=java,
+basicstyle=\footnotesize\tt,
+showtabs=false,
+tabsize=2,
+captionpos=b,
+breaklines=true,
+extendedchars=true,
+showstringspaces=false,
+flexiblecolumns=true,
+}
+
+
+
+\title{Übungsblatt \Uebungsblatt{}}
+\author{\Name{}}
+
+\begin{document}
+\pagestyle{fancy}
+\lhead{\sf \large \Fach{} \\ \small \Name{}}
+\rhead{\sf \Semester{} \\}
+\vspace*{0.2cm}
+\begin{center}
+  \LARGE \sf \textbf{Übungsblatt \Uebungsblatt{}}
+\end{center}
+\vspace*{0.2cm}
+
+\newcommand{\dd}{\text{d}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Insert your solutions here %%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% since the prof has said in
+% https://panda.uni-paderborn.de/mod/forum/discuss.php?d=316471
+% we need to code in "Schreibe dein Programm" instead of normal Racket
+
+Prof. Bodden hat in \url{https://panda.uni-paderborn.de/mod/forum/discuss.php?d=316471}
+erwähnt, dass wir in der Lernphase nicht in Racket schreiben, sondern in
+``Schreibe dein Programm - Anfänger'' unsere Aufgaben lösen sollen.
+
+
+
+Dementsprechend haben wir in diesem Übungsblatt die Aufgaben in
+``Schreibe dein Programm - Anfänger'' geschrieben.
+
+\Aufgabe{1}
+
+\begin{minted}[]{racket}
+(define pi (* 2 (acos 0)))
+\end{minted}
+
+% a) b) c)
+\begin{enumerate}[a)]
+  \item \begin{minted}{racket}
+(: circle-circumference (real -> real))
+
+(define circle-circumference
+  (lambda (r)
+    (* 2 pi r)))
+
+(check-expect (circle-circumference 0) 0)
+(check-within (circle-circumference 1/2) pi 0.0001)
+  \end{minted}
+  \item \begin{minted}{racket}
+(: circle-area (real -> real))
+
+(define circle-area
+  (lambda (r)
+    (* pi r r)))
+
+(check-expect (circle-area 0) 0)
+(check-within (circle-area 1) pi 0.0001)
+  \end{minted}
+  \item \begin{minted}{racket}
+(: sphere-volume (real -> real))
+
+(define sphere-volume
+  (lambda (r)
+    (* 4/3 pi r r r)))
+
+(check-expect (sphere-volume 0) 0)
+(check-within (sphere-volume 1) (* 4/3 pi) 0.0001)
+    \end{minted}
+  \item \begin{minted}{racket}
+(define-record cartesian
+  make-cartesian
+  (cartesian-x real)
+  (cartesian-y real))
+
+(: cartesian-from-polar (real real -> cartesian))
+
+(define cartesian-from-polar
+  (lambda (r phi)
+    (make-cartesian
+      (* r (cos phi))
+      (* r (sin phi)))))
+
+(check-expect (cartesian-from-polar 0 3234) (make-cartesian 0 0))
+    \end{minted}
+\end{enumerate}
+
+\Aufgabe{2}
+\begin{minted}{racket}
+(: leap-year? (integer -> boolean))
+
+(define leap-year?
+  (lambda (year)
+    (cond
+      ((not (= 0 (modulo year 4))) #f)
+      ((not (= 0 (modulo year 100))) #t)
+      ((= 0 (modulo year 400)) #t)
+      (else #f))))
+
+(check-expect (leap-year? 0) #t)
+(check-expect (leap-year? 1) #f)
+(check-expect (leap-year? 100) #f)
+(check-expect (leap-year? 400) #t)
+\end{minted}
+
+\Aufgabe{3}
+\begin{enumerate}[a)]
+  \item \begin{minted}{racket}
+(define-record real-3
+  make-real-3
+  (real-3-x real)
+  (real-3-y real)
+  (real-3-z real))
+    \end{minted}
+  \item \begin{minted}{racket}
+(: real-3-length (real-3 -> real))
+
+(define real-3-length
+  (lambda (vec)
+      (sqrt
+        (+
+        (* (real-3-x vec) (real-3-x vec))
+        (* (real-3-y vec) (real-3-y vec))
+        (* (real-3-z vec) (real-3-z vec))))))
+
+(check-expect (real-3-length (make-real-3 3 4 0)) 5)
+    \end{minted}
+  \item \begin{minted}{racket}
+(: real-3-subtract (real-3 real-3 -> real-3))
+
+(define real-3-subtract
+  (lambda (vec1 vec2)
+    (make-real-3
+      (- (real-3-x vec1) (real-3-x vec2))
+      (- (real-3-y vec1) (real-3-y vec2))
+      (- (real-3-z vec1) (real-3-z vec2)))))
+
+(: real-3-distance (real-3 real-3 -> real))
+
+(define real-3-distance
+  (lambda (vec1 vec2)
+    (real-3-length
+      (real-3-subtract vec1 vec2))))
+
+(check-expect
+  (real-3-distance (make-real-3 0 3 0) (make-real-3 4 0 0))
+  5)
+  \end{minted}
+  \item \begin{minted}{racket}
+(: real-3-cross-product (real-3 real-3 -> real-3))
+
+(define real-3-cross-product
+  (lambda (vec1 vec2)
+    (make-real-3
+      (- (* (real-3-y vec1) (real-3-z vec2))
+        (* (real-3-z vec1) (real-3-y vec2)))
+      (- (* (real-3-z vec1) (real-3-x vec2))
+        (* (real-3-x vec1) (real-3-z vec2)))
+      (- (* (real-3-x vec1) (real-3-y vec2))
+        (* (real-3-y vec1) (real-3-x vec2))))))
+
+
+(check-expect
+  (real-3-cross-product (make-real-3 1 2 3) (make-real-3 4 5 6))
+  (make-real-3 -3 6 -3))
+  \end{minted}
+\end{enumerate}
+
+\Aufgabe{4}
+
+\begin{minted}{racket}
+(define-record empty-list
+  make-empty-list
+  empty?)
+
+(define-record cons-list-of-numbers
+  cons
+  cons?
+  (first number)
+  (rest list-of-numbers))
+
+(define list-of-numbers
+  (signature
+   (mixed empty-list
+          cons-list-of-numbers)))
+\end{minted}
+
+\begin{enumerate}[a)]
+  \item \begin{minted}{racket}
+(: sum-list (list-of-numbers -> number))
+
+(define sum-list
+  (lambda (list)
+    (cond
+      ((empty? list) 0)
+      (else (+ (first list) (sum-list (rest list)))))))
+
+(check-expect (sum-list (make-empty-list)) 0)
+(check-expect (sum-list (cons 1 (make-empty-list))) 1)
+(check-expect (sum-list (cons 1 (cons 2 (make-empty-list)))) 3)
+\end{minted}
+  \item \begin{minted}{racket}
+(: length-list (list-of-numbers -> number))
+
+(define length-list
+  (lambda (list)
+    (cond
+      ((empty? list) 0)
+      (else (+ 1 (length-list (rest list)))))))
+
+(: average-list (list-of-numbers -> number))
+
+(define average-list
+  (lambda (list)
+    (/ (sum-list list) (length-list list))))
+
+; (check-expect (average-list (make-empty-list)) 0)
+; undefined should be undefined
+(check-expect (average-list (cons 1 (make-empty-list))) 1)
+(check-expect (average-list (cons 1 (cons 2 (make-empty-list)))) 1.5)
+\end{minted}
+  \item \begin{minted}{racket}
+(define-record cons-list-of-strings
+  make-cons-list-of-strings
+  const-list-of-strings?
+    (string-list-first string)
+    (string-list-rest list-of-strings))
+
+(define list-of-strings
+  (signature
+   (mixed empty-list
+          cons-list-of-strings)))
+
+; string-append exists
+
+(: concat-list (list-of-strings -> string))
+
+(define concat-list
+  (lambda (list)
+    (cond
+      ((empty? list) "")
+      (else (string-append
+              (string-list-first list)
+              (concat-list (string-list-rest list)))))))
+
+(check-expect (concat-list (make-empty-list)) "")
+(check-expect (concat-list
+                (make-cons-list-of-strings "a"
+                  (make-empty-list))) "a")
+(check-expect
+    (concat-list
+        (make-cons-list-of-strings "a"
+          (make-cons-list-of-strings "b"
+            (make-empty-list))))
+    "ab")
+\end{minted}
+  \item \begin{minted}{racket}
+; check wether string is in list with string=?
+
+(: string-in-list? (string list-of-strings -> boolean))
+
+(define string-in-list?
+  (lambda (str list)
+    (cond
+      ((empty? list) #f)
+      (else (or (string=? str (string-list-first list))
+                (string-in-list? str (string-list-rest list)))))))
+
+(check-expect (string-in-list? "a"
+                (make-cons-list-of-strings "a" (make-empty-list)))
+              #t)
+(check-expect (string-in-list? "b"
+                (make-cons-list-of-strings "a" (make-empty-list)))
+              #f)
+\end{minted}
+\end{enumerate}
+
+\Aufgabe{5}
+
+\begin{minted}{racket}
+(: ggt (integer integer -> integer))
+
+(define ggt
+  (lambda (a b)
+    (cond
+      ((= a b) a)
+      ((> a b) (ggt (- a b) b))
+      (else (ggt a (- b a))))))
+
+(check-expect (ggt 4 2) 2)
+(check-expect (ggt 2 4) 2)
+(check-expect (ggt 6 3) 3)
+(check-expect (ggt 3 6) 3)
+(check-expect (ggt 23 4) 1)
+(check-expect (ggt 82 4) 2)
+\end{minted}
+
+\Aufgabe{6}
+
+\textbf{Vorwort: } Diese Aufgabe ist erschwert durch das Fehlen von Character-Level
+Operationen in ``Schreibe dein Programm - Anfänger''. Die Character-Level Operationen
+lassen sich mithilfe von gezieltem Anwenden von \mintinline{racket}{string>=?} wieder
+implentieren, sodass das Arbeiten mit Characters wieder möglich ist.
+
+\textbf{Prelude: }
+\begin{minted}[fontsize=\scriptsize]{racket}
+(define language "your-worst-nightmare")
+
+(define-record empty-list
+  make-empty-list
+  empty?)
+
+(define-record cons-list-of-strings
+  make-cons-list-of-strings
+  cons-list-of-strings?
+  (string-list-first string)
+  (string-list-rest list-of-strings))
+
+(define list-of-strings
+  (signature
+   (mixed empty-list
+          cons-list-of-strings)))
+
+(: list-without-last (list-of-strings -> list-of-strings))
+
+(define list-without-last
+  (lambda (list)
+    (cond
+      ((empty? (string-list-rest list)) (make-empty-list))
+      (else (make-cons-list-of-strings
+              (string-list-first list)
+              (list-without-last (string-list-rest list)))))))
+
+(: list-last (list-of-strings -> string))
+
+(define list-last
+  (lambda (list)
+    (cond
+      ((empty? (string-list-rest list)) (string-list-first list))
+      (else (list-last (string-list-rest list))))))
+
+(: concat-list (list-of-strings -> string))
+
+(define concat-list
+  (lambda (list)
+    (cond
+      ((empty? list) "")
+      (else (string-append (string-list-first list) (concat-list (string-list-rest list)))))))
+
+(check-expect
+  (concat-list
+    (make-cons-list-of-strings "a"
+      (make-cons-list-of-strings "b"
+        (make-cons-list-of-strings "c"
+          (make-empty-list)))))
+  "abc")
+
+(: list-append (list-of-strings string -> list-of-strings))
+
+(define list-append
+  (lambda (list1 str)
+    (cond
+      ((empty? list1) (make-cons-list-of-strings str (make-empty-list)))
+      (else (make-cons-list-of-strings
+              (string-list-first list1)
+              (list-append (string-list-rest list1) str))))))
+
+(check-expect (list-append
+                (make-cons-list-of-strings "a"
+                  (make-cons-list-of-strings "b"
+                    (make-empty-list))) "c")
+              (make-cons-list-of-strings "a"
+                (make-cons-list-of-strings "b"
+                  (make-cons-list-of-strings "c"
+                    (make-empty-list)))))
+
+; normalize string-list by making all upper case letters lower case
+
+(: string-to-lower-case (string -> string))
+
+(define string-to-lower-case
+  (lambda (str)
+    (cond
+      ((string=? str "A") "a")
+      ((string=? str "B") "b")
+      ((string=? str "C") "c")
+      ((string=? str "D") "d")
+      ((string=? str "E") "e")
+      ((string=? str "F") "f")
+      ((string=? str "G") "g")
+      ((string=? str "H") "h")
+      ((string=? str "I") "i")
+      ((string=? str "J") "j")
+      ((string=? str "K") "k")
+      ((string=? str "L") "l")
+      ((string=? str "M") "m")
+      ((string=? str "N") "n")
+      ((string=? str "O") "o")
+      ((string=? str "P") "p")
+      ((string=? str "Q") "q")
+      ((string=? str "R") "r")
+      ((string=? str "S") "s")
+      ((string=? str "T") "t")
+      ((string=? str "U") "u")
+      ((string=? str "V") "v")
+      ((string=? str "W") "w")
+      ((string=? str "X") "x")
+      ((string=? str "Y") "y")
+      ((string=? str "Z") "z")
+      (else str))))
+
+(check-expect (string-to-lower-case "A") "a")
+(check-expect (string-to-lower-case "B") "b")
+
+(: normalize-string-list (list-of-strings -> list-of-strings))
+
+(define normalize-string-list
+  (lambda (list)
+    (cond
+      ((empty? list) (make-empty-list))
+      (else (make-cons-list-of-strings
+              (string-to-lower-case (string-list-first list))
+              (normalize-string-list (string-list-rest list)))))))
+
+(check-expect (normalize-string-list
+                (make-cons-list-of-strings "A"
+                  (make-cons-list-of-strings "B"
+                    (make-empty-list))))
+              (make-cons-list-of-strings "a"
+                (make-cons-list-of-strings "b"
+                  (make-empty-list))))
+
+(: first-char-after-prefix (list-of-strings string -> string))
+
+(define first-char-after-prefix
+  (lambda (prefix str)
+    (cond
+      ((string>=? str (string-append (concat-list prefix) "z")) "z")
+      ((string>=? str (string-append (concat-list prefix) "y")) "y")
+      ((string>=? str (string-append (concat-list prefix) "x")) "x")
+      ((string>=? str (string-append (concat-list prefix) "w")) "w")
+      ((string>=? str (string-append (concat-list prefix) "v")) "v")
+      ((string>=? str (string-append (concat-list prefix) "u")) "u")
+      ((string>=? str (string-append (concat-list prefix) "t")) "t")
+      ((string>=? str (string-append (concat-list prefix) "s")) "s")
+      ((string>=? str (string-append (concat-list prefix) "r")) "r")
+      ((string>=? str (string-append (concat-list prefix) "q")) "q")
+      ((string>=? str (string-append (concat-list prefix) "p")) "p")
+      ((string>=? str (string-append (concat-list prefix) "o")) "o")
+      ((string>=? str (string-append (concat-list prefix) "n")) "n")
+      ((string>=? str (string-append (concat-list prefix) "m")) "m")
+      ((string>=? str (string-append (concat-list prefix) "l")) "l")
+      ((string>=? str (string-append (concat-list prefix) "k")) "k")
+      ((string>=? str (string-append (concat-list prefix) "j")) "j")
+      ((string>=? str (string-append (concat-list prefix) "i")) "i")
+      ((string>=? str (string-append (concat-list prefix) "h")) "h")
+      ((string>=? str (string-append (concat-list prefix) "g")) "g")
+      ((string>=? str (string-append (concat-list prefix) "f")) "f")
+      ((string>=? str (string-append (concat-list prefix) "e")) "e")
+      ((string>=? str (string-append (concat-list prefix) "d")) "d")
+      ((string>=? str (string-append (concat-list prefix) "c")) "c")
+      ((string>=? str (string-append (concat-list prefix) "b")) "b")
+      ((string>=? str (string-append (concat-list prefix) "a")) "a")
+      ((string>=? str (string-append (concat-list prefix) "Z")) "Z")
+      ((string>=? str (string-append (concat-list prefix) "Y")) "Y")
+      ((string>=? str (string-append (concat-list prefix) "X")) "X")
+      ((string>=? str (string-append (concat-list prefix) "W")) "W")
+      ((string>=? str (string-append (concat-list prefix) "V")) "V")
+      ((string>=? str (string-append (concat-list prefix) "U")) "U")
+      ((string>=? str (string-append (concat-list prefix) "T")) "T")
+      ((string>=? str (string-append (concat-list prefix) "S")) "S")
+      ((string>=? str (string-append (concat-list prefix) "R")) "R")
+      ((string>=? str (string-append (concat-list prefix) "Q")) "Q")
+      ((string>=? str (string-append (concat-list prefix) "P")) "P")
+      ((string>=? str (string-append (concat-list prefix) "O")) "O")
+      ((string>=? str (string-append (concat-list prefix) "N")) "N")
+      ((string>=? str (string-append (concat-list prefix) "M")) "M")
+      ((string>=? str (string-append (concat-list prefix) "L")) "L")
+      ((string>=? str (string-append (concat-list prefix) "K")) "K")
+      ((string>=? str (string-append (concat-list prefix) "J")) "J")
+      ((string>=? str (string-append (concat-list prefix) "I")) "I")
+      ((string>=? str (string-append (concat-list prefix) "H")) "H")
+      ((string>=? str (string-append (concat-list prefix) "G")) "G")
+      ((string>=? str (string-append (concat-list prefix) "F")) "F")
+      ((string>=? str (string-append (concat-list prefix) "E")) "E")
+      ((string>=? str (string-append (concat-list prefix) "D")) "D")
+      ((string>=? str (string-append (concat-list prefix) "C")) "C")
+      ((string>=? str (string-append (concat-list prefix) "B")) "B")
+      ((string>=? str (string-append (concat-list prefix) "A")) "A"))))
+
+(check-expect (first-char-after-prefix
+                (make-cons-list-of-strings "n"
+                  (make-cons-list-of-strings "c"
+                    (make-empty-list))) "ncg")
+              "g")
+
+(check-expect (first-char-after-prefix
+                (make-cons-list-of-strings "n"
+                  (make-cons-list-of-strings "c"
+                    (make-empty-list))) "ncgO")
+              "g")
+
+(: split-string-helper (list-of-strings string -> list-of-strings))
+
+(define split-string-helper
+  (lambda (prefix str)
+    (cond
+      (; if we have determined all characters, the concatenation of the prefix is the str
+       (string=? str (concat-list prefix))
+       prefix)
+      (else ; determine the next character and recurse
+       (split-string-helper (list-append prefix (first-char-after-prefix prefix str)) str)))))
+
+(check-expect (split-string-helper
+                (make-cons-list-of-strings "a"
+                  (make-cons-list-of-strings "b"
+                    (make-empty-list))) "abc")
+              (make-cons-list-of-strings "a"
+                (make-cons-list-of-strings "b"
+                  (make-cons-list-of-strings "c"
+                    (make-empty-list)))))
+
+(: split-string (string -> list-of-strings))
+
+(define split-string
+  (lambda (str)
+    (split-string-helper (make-empty-list) str)))
+
+(check-expect (split-string "abc")
+              (make-cons-list-of-strings "a"
+                (make-cons-list-of-strings "b"
+                  (make-cons-list-of-strings "c"
+                    (make-empty-list)))))
+
+
+; now let's test this
+
+(check-expect
+  (split-string "abcd")
+  (make-cons-list-of-strings "a"
+    (make-cons-list-of-strings "b"
+      (make-cons-list-of-strings "c"
+        (make-cons-list-of-strings "d"
+          (make-empty-list))))))
+\end{minted}
+
+\textbf{Hauptaufgabe:}
+
+\begin{minted}[frame=lines]{racket}
+(: palindrome-list? (list-of-strings -> boolean))
+
+(define palindrome-list?
+  (lambda (list)
+    (cond
+      ((empty? list) #t)
+      ((empty? (string-list-rest list)) #t)
+      (else (and
+             (string=? (string-list-first list) (list-last list))
+             (palindrome-list? (list-without-last (string-list-rest list))))))))
+
+(: palindrome? (string -> boolean))
+
+(define palindrome?
+  (lambda (str); convert to list then check
+    (palindrome-list? (normalize-string-list (split-string str)))))
+
+(check-expect
+ (palindrome? "a")
+ #t)
+(check-expect
+ (palindrome? "ab")
+ #f)
+(check-expect
+ (palindrome? "aba")
+ #t)
+(check-expect
+ (palindrome? "abab")
+ #f)
+(check-expect
+ (palindrome? "ababa")
+ #t)
+(check-expect
+ (palindrome? "ababab")
+ #f)
+(check-expect
+ (palindrome? "aBbA")
+ #t)
+(check-expect
+ (palindrome? "aBbAb")
+ #f)
+\end{minted}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+
+
+
+
