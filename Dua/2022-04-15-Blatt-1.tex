@@ -1,0 +1,186 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+% Pseudocode
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\setlength{\parindent}{0in}
+
+\newcommand{\uebungsGruppe}{1}
+\newcommand{\zettelNummer}{1}
+\newcommand{\studierenderEins}{Eli Kogan-Wang (7251030)}
+\newcommand{\studierenderZwei}{David Noah Stamm (7249709)}
+\newcommand{\studierenderDrei}{Daniel Heins (7213874)}
+\newcommand{\studierenderVier}{Tim Wolf (7269381)}
+
+\newcounter{AufgabenCounter}
+\setcounter{AufgabenCounter}{1}
+\newcounter{TeilaufgabenCounter}
+\newenvironment{aufgabe}{\section*{Aufgabe \theAufgabenCounter}\setcounter{TeilaufgabenCounter}{1}}{\stepcounter{AufgabenCounter}}
+\newenvironment{teilaufgabe}{\paragraph*{\alph{TeilaufgabenCounter})}}{\stepcounter{TeilaufgabenCounter}}
+
+\renewcommand{\to}{\textnormal{ to }}
+\newcommand{\bigO}{\mathcal{O}}
+
+\newcommand{\qed}{\hfill$\square$}
+
+\begin{document}
+
+\title{Datenstrukturen und Algorithmen \\ Heimübung \zettelNummer{}}
+\author{\studierenderEins{} \\
+  \studierenderZwei{} \\
+  \studierenderDrei{} \\
+  \studierenderVier{}}
+
+\maketitle
+
+\begin{aufgabe}
+
+  Sei $G := (V, E)$ ein zusammenhängender, ungerichteter Graph
+  mit exakt einem Pfad pro Knotenpaar
+  und nicht-leerer, endlicher Knotenmenge.
+
+  Zu zeigen:
+
+  $$\sum_{v\in V}deg(v)=2(|V|-1)$$
+
+  Alle über den Beweis betrachteten Graphen haben die beschriebenen Eigenschaften.
+
+  Beweis über Induktion, über die Anzahl der Knoten $|V|$:
+
+  \textbf{I.A.}\\
+  Sei $G := (V, E)$ mit $|V|=1$.\\
+  Also $E=\emptyset$ aus den Eigenschaften.\\
+  Also $\forall v\in V,\deg(v)=0$.\\
+  Also $\sum_{v\in V}deg(v)=0=2(|V|-1)$.\\
+  \textbf{I.V.}\\
+  Sei $n\in \mathbb{N}^+$.\\
+  $\forall G := (V, E)$ mit $|V|=n$ gilt:
+  $$\sum_{v\in V}deg(v)=2(n-1)$$
+  \textbf{I.S.}\\
+  Sei $G := (V, E)$ mit $|V|=n+1$.\\
+  Aus den Eigenschaften von $G$ folgt:\\
+  Es gibt einen Knoten $v_{Blatt}$ mit $deg(v_{Blatt})=1$.\\
+  Wir betrachten den induzierten Teilgraph $G' := (V', E')$ mit $V'=V\backslash\{v_{Blatt}\}$.\\
+  Für $G'$ gilt aus I.V.
+  $$\sum_{v\in V'}deg_{G'}(v)=2(n-1)$$
+  $E\backslash E'=\{v_{Blatt},v_{Parent}\}$
+  $$\forall v\in V: deg_G(v)=\begin{aligned}\begin{cases}
+        1             & \text{wenn }v=v_{Blatt}  \\
+        deg_{G'}(v)+1 & \text{wenn }v=v_{Parent} \\
+        deg_{G'}(v)   & \text{sonst}
+      \end{cases}\end{aligned}$$
+
+  Also:
+  $$\sum_{v\in V}deg_{G}(v)=2(n-1)+2$$
+
+  $$2(n-1)+2=2((n+1)-1)=2(|V|-1)$$
+
+  \qed
+
+\end{aufgabe}
+
+\begin{aufgabe}
+  Zu zeigen:
+  $$\forall n\in \mathbb{N}:\sum_{i=1}^{n}i^3=\frac{n^2\cdot (n+1)^2}{4}$$
+
+  Beweis über Induktion, über die $n$.
+
+  \textbf{I.A.}\\
+  $n=1$.\\
+  Also $\sum_{i=1}^{1}i^3=1^3=1$.\\
+  $\frac{1^2\cdot (1+1)^2}{4}=1$.\\
+  \textbf{I.V.}\\
+  Sei $n\in \mathbb{N}$.\\
+  Es gilt:
+  $$\sum_{i=1}^{n}i^3=\frac{n^2\cdot (n+1)^2}{4}$$
+  \textbf{I.S.}\\
+  Zu zeigen:
+  $$\sum_{i=1}^{n+1}i^3=\frac{(n+1)^2\cdot ((n+1)+1)^2}{4}$$
+  $$
+    \begin{aligned}
+      \sum_{i=1}^{n+1}i^3 & = (n+1)^3+\sum_{i=1}^{n}i^3                           \\
+                          & \overset{I.V.}{=} (n+1)^3+\frac{n^2\cdot (n+1)^2}{4}  \\
+                          & = \frac{4\cdot (n+1)^3}{4}+\frac{n^2\cdot (n+1)^2}{4} \\
+                          & = \frac{4\cdot (n+1)^3+n^2\cdot (n+1)^2}{4}           \\
+                          & = \frac{(4\cdot(n+1)+n^2) \cdot (n+1)^2}{4}           \\
+                          & = \frac{(n^2+2\cdot2\cdot n + 2^2) \cdot (n+1)^2}{4}  \\
+                          & = \frac{(n+2)^2 \cdot (n+1)^2}{4}                     \\
+                          & = \frac{((n+1)+1)^2 \cdot (n+1)^2}{4}                 \\
+                          & = \frac{(n+1)^2 \cdot ((n+1)+1)^2}{4}                 \\
+    \end{aligned}
+  $$
+  \qed
+\end{aufgabe}
+
+\begin{aufgabe}
+  \begin{teilaufgabe}
+    Lineare Suche in Pseudocode:
+    \begin{algorithm}[H]
+      \caption{\textsc{LinSearch}($A[1, \dots, n], v$)}
+      \begin{algorithmic}[1]
+        \For{$i \gets 1 \to n$}
+        \If{$A[i]=v$}
+        \State \textbf{Return} $i$ \label{return:i}
+        \EndIf
+        \EndFor
+        \State \textbf{Return} \textsc{Nil} \label{return:nil}
+      \end{algorithmic}
+    \end{algorithm}
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    Schleifeninvariante $I(i)$: $\forall j\in [1,i): A[j]\neq v$
+
+    \textbf{Initialisierung}
+    $$i=1\implies[1,i)=\emptyset\implies\forall j\in\emptyset: A[j]\neq v =: I(1)$$
+    \textbf{Erhaltung}
+    Angenommen $I(i)$.
+    Wenn $A[i]=v$ dann brechen wir ab und das Ende des Schleifendurchlaufs wird nicht erreicht (siehe Termination).
+    Sonst, wenn $A[i]\neq v$ dann:
+    $$(I(i) := \forall j\in [1,i): A[j]\neq v) \land A[i]\neq v\iff\forall j\in [1,i+1): A[j]\neq v =: I(i+1)$$
+    Also gilt $I(i+1)$ am Ende des Schleifendurchlaufs.
+
+    \textbf{Terminierung}
+    Die Schleife kann aus 2 Gründen beendet werden:
+    \begin{enumerate}
+      \item \textbf{Return} $i$ (Zeile \ref{return:i}) wenn $A[i]=v$.
+            $I(i)$ gilt genau wie am Anfang des Schleifendurchlaufs,
+            wie in Erhaltung beschrieben, da weder $i$ noch $A$ nach der erfrühten
+            Termination verändert wurde.
+            \label{return:i:description}
+      \item \textbf{Return} \textsc{Nil} (Zeile \ref{return:nil}) wenn
+            $i=n+1$ (bestimmte Modelle von \textbf{for} Enden mit $i=n$;
+            dieselbe Argumentation gilt, aber die Korrektheit muss mühseliger begründet
+            werden).
+            $$I(n+1) := \forall j\in [1,n+1): A[j]\neq v \iff\forall j\in [1,n]: A[j]\neq v$$
+            $I(n+1)$ gilt, da sonst Terminationsfall \ref{return:i:description} erreicht würde.
+            Also: $v$ ist nicht in $A$ enthalten, also wird \textsc{Nil} zurückgegeben.
+            \label{return:nil:description}
+    \end{enumerate}
+    Der Terminationsfall \ref{return:i:description} korrespondieren zum Fall, dass $i$ mit $x_i=v$ zurückgegeben wird.
+    Der Terminationsfall \ref{return:nil:description} korrespondieren zum Fall, dass $\textbf{Nil}$ mit $\not\exists i\in [1,n]: x_i=v$ zurückgegeben wird.
+    Damit erfüllt der Algorithmus das gewünschte Verhalten.
+    \qed
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    Laufzeitbestimmung
+    \begin{algorithm}[H]
+      \caption{\textsc{LinSearch}($A[1, \dots, n], v$)}
+      \begin{algorithmic}[1]
+        \For{$i \gets 1 \to n$} \Comment{$\sum_{i=1}^nT(I)$}
+        \If{$A[i]=v$} \Comment{$O(1)$}
+        \State \textbf{Return} $i$ \Comment{$O(1)$}
+        \EndIf
+        \EndFor
+        \State \textbf{Return} \textsc{Nil} \Comment{$O(1)$}
+      \end{algorithmic}
+    \end{algorithm}
+    Laufzeit: $$\sum_{i=1}^n(O(1)+O(1))+O(1)=O(n)$$
+  \end{teilaufgabe}
+\end{aufgabe}
+\end{document}

@@ -1,0 +1,337 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{fancyhdr}
+\usepackage{fancyheadings}
+\usepackage[ngerman,german]{babel}
+\usepackage[utf8]{inputenc}
+%\usepackage[latin1]{inputenc}
+\usepackage[active]{srcltx}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{ifthen}
+\usepackage{listings}
+\usepackage{struktex}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{gauss}
+\usepackage{dsfont}
+\usepackage{amssymb}
+\usepackage{minted}
+\usepackage{stmaryrd}
+
+\newcommand{\x}{\cdot}
+\newcommand{\ran}[2]{\langle #1,#2\rangle}
+\renewcommand{\Re}{\mathbb{R}}
+\makeatletter
+\newcommand{\Spvek}[2][r]{%
+  \gdef\@VORNE{1}
+  \left(\hskip-\arraycolsep%
+  \begin{array}{#1}\vekSp@lten{#2}\end{array}%
+  \hskip-\arraycolsep\right)}
+
+\def\vekSp@lten#1{\xvekSp@lten#1;vekL@stLine;}
+\def\vekL@stLine{vekL@stLine}
+\def\xvekSp@lten#1;{\def\temp{#1}%
+  \ifx\temp\vekL@stLine
+  \else
+  \ifnum\@VORNE=1\gdef\@VORNE{0}
+  \else\@arraycr\fi%
+  #1%
+  \expandafter\xvekSp@lten
+  \fi}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%% EDIT THIS PART %%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\Fach}{Programmiersprachen}
+\newcommand{\Name}{Name:Björn Bick, Max Herting, Miriam Nippel, Eli Kogan-Wang}
+\newcommand{\Semester}{WS 21/22}
+\newcommand{\Uebungsblatt}{3} %  <-- UPDATE ME
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\parindent}{0em}
+\topmargin -1.0cm
+\oddsidemargin 0cm
+\evensidemargin 0cm
+\setlength{\textheight}{9.2in}
+\setlength{\textwidth}{6.0in}
+
+%%%%%%%%%%%%%%%
+%% Aufgaben-COMMAND
+\newcommand{\Aufgabe}[1]{
+  {
+  \vspace*{0.5cm}
+  \textsf{\textbf{Aufgabe #1}}
+  \vspace*{0.2cm}
+
+  }
+}
+%%%%%%%%%%%%%%
+\hypersetup{
+    pdftitle={\Fach{}: Übungsblatt \Uebungsblatt{}},
+    pdfauthor={\Name},
+    pdfborder={0 0 0}
+}
+
+\lstset{ %
+language=java,
+basicstyle=\footnotesize\tt,
+showtabs=false,
+tabsize=2,
+captionpos=b,
+breaklines=true,
+extendedchars=true,
+showstringspaces=false,
+flexiblecolumns=true,
+}
+
+
+
+\title{Übungsblatt \Uebungsblatt{}}
+\author{\Name{}}
+
+\begin{document}
+\pagestyle{fancy}
+\lhead{\sf \large \Fach{} \\ \small \Name{}}
+\rhead{\sf \Semester{} \\}
+\vspace*{0.2cm}
+\begin{center}
+  \LARGE \sf \textbf{Übungsblatt \Uebungsblatt{}}
+\end{center}
+\vspace*{0.2cm}
+
+\newcommand{\dd}{\text{d}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Insert your solutions here %%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In diesem Übungsblatt sind die Programmieraufgaben in
+``Schreibe dein Programm'' geschrieben.
+
+\Aufgabe{1}
+
+\begin{minted}{racket}
+(: pattern-a-n-m (natural natural -> string))
+
+(define pattern-a-n-m
+  (lambda (n m)
+    (cond ((= n 0) "")
+          ((= m 1) (string-append "#" (pattern-a-n-m (- n 1) 1)))
+          (else (string-append (pattern-a-n-m n 1) "\n"
+                               (pattern-a-n-m n (- m 1)))))))
+
+(: pattern-a-n (natural -> string))
+
+(define pattern-a-n
+  (lambda (n) (string-append (pattern-a-n-m n n) "\n")))
+
+
+(define pattern-a (lambda () (write-string (pattern-a-n 10))))
+
+(write-string "Pattern A:\n")
+(pattern-a)
+
+(: repeat-n (natural string -> string))
+
+
+
+
+(define pattern-b (lambda () (write-string (pattern-b-n 10))))
+
+(: pattern-b-n (natural -> string))
+
+(define pattern-b-n
+  (lambda (n) (pattern-b-from-n 1 10)))
+
+(define repeat-n
+  (lambda (n s)
+    (cond ((= n 0) "")
+          (else (string-append (repeat-n (- n 1) s) s)))))
+
+(: pattern-b-from-n (natural natural -> string))
+
+(define pattern-b-from-n
+  (lambda (from n)
+    (cond ((= from 1) (string-append
+                        (repeat-n n "#")
+                        "\n"
+                        (pattern-b-from-n (+ from 1) n)))
+          ((= from n) (string-append (repeat-n n "#") "\n"))
+          (else (string-append "#" (repeat-n (- n 2) " ") "#\n"
+                                (pattern-b-from-n (+ from 1) n))))))
+
+(write-string "Pattern B:\n")
+(pattern-b)
+
+
+(define pattern-c (lambda () (write-string (pattern-c-n 10))))
+
+(: pattern-c-n (natural -> string))
+
+(define pattern-c-n (lambda (n) (pattern-c-from-n 1 n)))
+
+(: pattern-c-from-n (natural natural -> string))
+
+(define pattern-c-from-n
+  (lambda (from n)
+    (cond ((= from 1) (string-append
+                        (repeat-n n "#")
+                        "\n"
+                        (pattern-c-from-n (+ from 1) n)))
+          ((= from n) (string-append (repeat-n n "#") "\n"))
+          (else (string-append
+                  "#"
+                  (repeat-n (- from 2) " ")
+                  "#"
+                  (repeat-n
+                    (-
+                      (- n 2)
+                      (+ (- from 2) 1))
+                      " ")
+                  "#\n"
+                  (pattern-c-from-n (+ from 1) n))))))
+
+(write-string "Pattern C:\n")
+(pattern-c)
+\end{minted}
+
+\Aufgabe{2}
+
+\begin{minted}{racket}
+; binomial
+(: binomial (natural natural -> natural))
+
+(define binomial
+  (lambda (n k)
+    (cond ((= k 0) 1)
+          ((= k n) 1)
+          (else (+ (binomial (- n 1) k) (binomial (- n 1) (- k 1)))))))
+
+; pascal triangle
+(: pascal-triangle (natural -> string))
+(: pascal-row (natural -> string))
+(: pascal-row-helper (natural natural -> string))
+
+(define pascal-triangle
+  (lambda (n)
+    (cond ((= n 0) (pascal-row 0))
+          (else (string-append (pascal-triangle (- n 1)) "\n" (pascal-row n))))))
+
+(define pascal-row-helper ; n = row, k = columns to print left
+  (lambda (n k)
+    (cond ((= k 0) (number->string (binomial n k)))
+          (else
+            (string-append
+              (pascal-row-helper n (- k 1))
+              " "
+              (number->string (binomial n k)))))))
+
+(define pascal-row (lambda (n)
+  (pascal-row-helper n n)))
+
+; (write-string (pascal-triangle 10))
+
+; read : (-> any)
+
+; read number then print pascal triangle
+(define read-pascal-triangle (lambda ()
+  (write-string (string-append (pascal-triangle (read)) "\n"))))
+
+(read-pascal-triangle)
+\end{minted}
+
+\Aufgabe{3}
+
+\begin{minted}{racket}
+; random : (natural -> natural)
+
+(: integrate ((real -> real) natural real real -> real))
+; takes function to integrate, number of samples, lower bound, upper bound
+
+(: random-real (real real -> real))
+
+; use random natural smaller than 1000000000
+
+(: random-precision natural)
+
+(define random-precision 1000000000)
+
+(define random-real
+  (lambda (lower upper)
+    (+
+      lower
+      (*
+        (- upper lower)
+        (/
+          (random random-precision)
+          random-precision)))))
+
+(define integrate
+  (lambda (f n a b)
+    (cond
+      ((= n 1) (f (random-real a b)))
+      (else
+        (/
+          (+
+            (* (integrate f (- n 1) a b) (- n 1))
+            (f (random-real a b)))
+          n)))))
+
+; integral from 0 to 1 of \frac{4}{1+x^2}
+
+(write-string
+  (number->string
+    (exact->inexact
+      (integrate
+        (lambda (x)
+          (/ 4 (+ 1 (* x x))))
+          50
+          0
+          1))))
+\end{minted}
+
+\Aufgabe{4}
+\begin{enumerate}[a)]
+  \item Seiteneffekt sind nicht wünschenswert, weil Seiteneffekte
+        die Analyse von Programmabläufen erschweren.
+        Die Seiteneffekte verändern den globalen Zustand des Programms,
+        sodass das Verhalten der Programmabläufe nicht unbedingt
+        gleich dem vorherigen Verhalten ist.
+  \item Es ist nicht praktikabel ganz auf Seiteneffekte zu verzichten,
+        weil ein Programm für viele Anwendungsfälle Seiteneffekte
+        ausführen muss. Will man beispielsweise das Ergebnis einer
+        Berechnung ausgeben, so verwendet man Seiteneffekte um den
+        Zustand des Ausgabegeräts zu verändern.
+  \item Der Zusammenhang zwischen globalen Variablen und Seiteneffekten
+        ist der, dass sowohl das Verändern als auch Einlesen von globalen
+        Variablen einen Seiteneffekt entspricht. Durch die Verwendung von
+        globalen Variablen kann das Verhalten des Programmes von anderen
+        Programmteilen beeinflusst werden.
+\end{enumerate}
+
+\Aufgabe{5}
+% John schreibt ein Programm, das Logmeldungen in eine Datei schreibt. Allerdings wird eine beim Start
+% des Programms bereits existierende Logdatei überschrieben. Beschreiben Sie dieses Szenario mit den in
+% der Vorlesung besprochenen Ausprägungen des Fehlerbegriffs. (3 P.)
+
+Beim Start des Programms wird die bereits existierende Logdatei überschrieben.
+Dies kann als systematischer Design-Fehler interpretiert werden, da durch
+das Verhalten, dass die Logdatei überschrieben wird Informationen über den
+vorherigen Programmablauf verloren gehen.
+
+Üblicherweise schreibt man auftretende Fehler und Exceptions in eine Logdatei,
+sodass in diesem Fall die Fehler und Exceptions des vorherigen Programmablaufs
+verloren gehen.
+
+Man kann vermuten, dass der Programmentwickler nicht erwartet hat, dass eine Logdatei
+schon vorhanden ist. Das Überschreiben der vorherigen Logdatei ist in diesem Fall
+unerwartetes Verhalten und beschreibt einen Fehlerablauf mit abschließendem Fehlerzustand.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+
+
+
+

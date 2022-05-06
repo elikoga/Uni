@@ -1,0 +1,275 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+% Pseudocode
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\setlength{\parindent}{0in}
+
+\newcommand{\uebungsGruppe}{1}
+\newcommand{\zettelNummer}{2}
+\newcommand{\studierenderEins}{Eli Kogan-Wang (7251030)}
+\newcommand{\studierenderZwei}{David Noah Stamm (7249709)}
+\newcommand{\studierenderDrei}{Daniel Heins (7213874)}
+\newcommand{\studierenderVier}{Tim Wolf (7269381)}
+
+\newcounter{AufgabenCounter}
+\setcounter{AufgabenCounter}{1}
+\newcounter{TeilaufgabenCounter}
+\newenvironment{aufgabe}{\section*{Aufgabe \theAufgabenCounter}\setcounter{TeilaufgabenCounter}{1}}{\stepcounter{AufgabenCounter}}
+\newenvironment{teilaufgabe}{\paragraph*{\alph{TeilaufgabenCounter})}}{\stepcounter{TeilaufgabenCounter}}
+
+\renewcommand{\to}{\textnormal{ to }}
+\newcommand{\bigO}{\mathcal{O}}
+
+\newcommand{\qed}{\hfill$\square$}
+
+\begin{document}
+
+\title{Datenstrukturen und Algorithmen \\ Heimübung \zettelNummer{}}
+\author{\studierenderEins{} \\
+  \studierenderZwei{} \\
+  \studierenderDrei{} \\
+  \studierenderVier{}}
+
+\maketitle
+
+% Aufgabe 1
+\begin{aufgabe}
+
+  % Teilaufgabe a)
+  \begin{teilaufgabe}
+
+    $f(n) \subseteq \Omega(g(n)) \\ \Leftrightarrow g(n) \subseteq \mathcal{O}(f(n))$ \\
+    $\Leftrightarrow \exists c, n_0 >0$, so dass $\forall n \ge n_0: g(n) \leq c \cdot f(n) \leq c \cdot f(n)^4$ \\
+    $\Leftrightarrow g(n) \subseteq \mathcal{O}(f(n)^4)$ \\ \\
+    ($ c \cdot f(n) \leq c \cdot f(n)^4$ gilt, da f(n) streng monoton wachsend und positiv ist, für alle $n \ge n_0$)
+
+
+  \end{teilaufgabe}
+
+  % Teilaufgabe b)
+  \begin{teilaufgabe}
+    Zu Zeigen: $\mathcal{O}(f(n)+ g(n))\subseteq \mathcal{O}(f(n))$ falls $g(n) \subseteq \mathcal{O}(f(n))$ \\ \\
+    Sei h: $N \to N$ weitere monotone Funktion mit $h(n) \subseteq {O}(f(n)+ g(n))$ \\ \\
+    Es gilt: \\ \\
+    $g(n) \subseteq \mathcal{O}(f(n))$ \\ \\
+    $\Leftrightarrow \exists c_1, n_1 > 0 $ so dass $\forall n \ge n_1: g(n) \leq c_1 \cdot f(n) $ \\ \\
+    $h(n) \subseteq \mathcal{O}(f(n)+g(n))$ \\ \\
+    $\Leftrightarrow \exists c_2, n_2 > 0 $ so dass $\forall n \ge n_2: h(n) \leq c_2 \cdot (f(n)+g(n)) $ \\ \\
+    $ \rightarrow \exists c_0, n_0 > 0 $ so dass $\forall n \ge n_0: h(n) \leq c_2 \cdot (f(n) + c_2 \cdot (g(n) \leq c_2 \cdot f(n) + c_2\cdot c_1 \cdot f(n) = c_0 \cdot f(n)$ mit $c_0 = (c_2 \cdot c_1 + c_2)$ und $n_0 = max \{n_1,n_2\}$ \\ \\
+    $\Leftrightarrow h(n) \subseteq \mathcal{O}(f(n)) $
+  \end{teilaufgabe}
+
+\end{aufgabe}
+
+% Aufgabe 2
+\begin{aufgabe}
+
+  Wir haben den folgenden Algorithmus entworfen:
+
+
+  \begin{algorithm}[H]
+    \renewcommand{\thealgorithm}{}
+    \caption{FindeLängsteAbsteigendeFolge($A[1, \dots, n]$)}
+    \begin{algorithmic}[1]
+      \State $currentRun \gets 1$ \Comment{$O(1)$}
+      \State $longestRun \gets 1$ \Comment{$O(1)$}
+      \For{$i \gets 1 \to n-1$} \Comment{$\sum_{i=1}^{n-1} T(I)$}
+      \If{$A[i] > A[i+1]$}
+      \State $currentRun \gets currentRun + 1$ \label{increment:currentRun}\Comment{$O(1)$}
+      \If{$currentRun > longestRun$}
+      \State $longestRun \gets currentRun$ \label{set:currentRun} \Comment{$O(1)$}
+      \EndIf
+      \Else
+      \State $currentRun \gets 1$ \label{reset:currentRun} \Comment{$O(1)$}
+      \EndIf
+      \EndFor
+      \State \textbf{Return} $longestRun$ \Comment{$O(1)$}
+    \end{algorithmic}
+  \end{algorithm}
+
+  \textbf{Laufzeitanalyse:}
+  $$O(1)+\sum_{i=1}^{n-1} O(1) = O(1) + O(n) = O(n)$$
+  Alle Operationen in der Schleife benötigen $\mathcal{O}(1)$. Die Schleife wird $n$ mal ausgeführt, weshalb die Asymptotische Worst-Case Laufzeit $\mathcal{O}(n)$ beträgt.\\
+
+  \textbf{Korrektheit:}
+
+  Hilfsdefinitionen:
+
+  $$\begin{aligned}
+       & currentRun_{right}                                                \\
+       & := \max\left(\left\{right-left \left|
+      \begin{aligned}
+           & left\in[1,right)                        \\
+           & \forall j\in[left,right]: A[j] > A[j+1] \\
+        \end{aligned}
+      \right.\right\}\cup\left\{1\right\}\right)                           \\
+       & = \text{maximale Länge eines bei A[right] endendem Teilintervalls
+        mit absteigenden Zahlen}
+    \end{aligned}$$
+
+  $$\begin{aligned}
+       & longestRun_i                                   \\
+       & := \max\left(\left\{
+      currentRun_{right} \left|
+      \begin{aligned}
+         & right\in(1,i] \\
+      \end{aligned}
+      \right.\right\}\cup\left\{1\right\}\right)        \\
+       & =\text{maximale Länge eines Teilintervalls mit
+        absteigenden Zahlen von A[1] bis A[i]}
+    \end{aligned}$$
+
+
+
+  Invariante:
+  $$\begin{aligned}
+      I(i) & :=                      \\
+           & longestRun=longestRun_i \\
+      \land                          \\
+           & currentRun=currentRun_i \\
+    \end{aligned}$$
+
+  \textbf{Initialisierung:}
+  $currentRun=1$\\
+  $longestRun=1$\\
+  $i=1$
+  $$\begin{aligned}
+      I(1) & :=                                                       \\
+           & longestRun = 1 = \max(\emptyset\cup\{1\}) = longestRun_i \\
+      \land                                                           \\
+           & currentRun = 1 = \max(\emptyset\cup\{1\}) = currentRun_i \\
+    \end{aligned}$$
+
+  \textbf{Erhaltung:}
+
+  Angenommen $I(i)$. \\
+  Falls $A[i] > A[i+1]$, so existiert ein bei $A[i+1]$ endendes Teilintervall mit absteigenden Zahlen,
+  dessen Länge um $1$ länger ist, als das Teilintervall mit absteigenden Zahlen, dass bei $A[i]$ endet.
+  Damit setzt Zeile \ref{increment:currentRun} $currentRun$ auf $currentRun_{i+1}$.
+
+  Falls $currentRun$ nun größer ist als $longestRun$, so setzt Zeile \ref{reset:currentRun} $longestRun$ auf $currentRun$.
+  Also wird $longestRun$ auf $longestRun_{i+1}$ gesetzt (Aussagen über $\max$ zu beweisen wird dem Leser überlassen).
+
+  Falls nicht $A[i] > A[i+1]$, so existiert kein bei $A[i+1]$ endendes Teilintervall mit absteigenden Zahlen,
+  dessen Länge um $1$ länger ist, als das Teilintervall mit absteigenden Zahlen, dass bei $A[i]$ endet. Das Teilintervall,
+  mit absteigenden Zahlen, dass bei $A[i+1]$ endet hat also Länge $1$. Damit setzt Zeile \ref{reset:currentRun} $currentRun$ auf $currentRun_{i+1}$.
+
+  In diesem Fall können wir auch festellen, dass $longestRun_i = longestRun_{i+1} = longestRun$.
+  (Aussagen über $\max$ zu beweisen wird dem Leser überlassen)
+
+  Also gilt nach dem Schleifendurchlauf $I(i+1)$.
+
+  \textbf{Termination:}
+
+  Die Schleife endet nach $n-1$ Durchläufen.
+  Danach gilt $I((n-1)+1) = I(n)$.
+  Damit ist $longestRun=longestRun_n$, was zurückgegeben wird.
+
+  \qed
+
+\end{aufgabe}
+
+% Aufgabe 3
+\begin{aufgabe}
+  Für diese Beweise nehme ich an das Log Base e ist. \\
+  1. $3^{n \cdot \log(n^{3})}$ = $3^{3 \cdot n \cdot \log(n)}$ = $(3^3)^{n \cdot \log(n)}$
+  = $ 27^{n \cdot \log(n)}$ = $e^{log(27^{n \cdot \log(n)})} $ \\ \\
+  = $e^{ n \cdot log(n) \cdot log(27)} \subseteq \mathcal{O}(e^{ n \cdot log(n)log(27)})$ \\ \\
+  2. $101010 \subseteq \mathcal{O}(1)$, da $101010 < 101011 \cdot 1 $  \\ \\
+  3. $\sqrt[3]{n}^{\log n} = n^{\frac{1}{3}log(n)} = e^{log(n^{\frac{1}{3}log(n)})} = e^{\frac{1}{3}log(n)log(n)} = e^{\frac{1}{3}log^2(n)} \subseteq \mathcal{O}(e^{log^2(n)}) $ \\ \\
+  4. $2^{20} n^{15} \subseteq \mathcal{O}(n^{15})$,da $2^{20} n^{15} < 2^{42} n^{15} $ \\ \\
+  5. $5^{n-1}$ = $\frac{1}{5} 5^{n} \subseteq \mathcal{O}(5^{n}) \leftrightarrow \mathcal{O}(e^{nlog(5)}) $, da $ \forall n  $ $\frac{1}{5} 5^{n} < 5^{n} $ \\ \\
+  $\rightarrow$ Ordnung der Funktionen:   2,4,3,5,1, da $\mathcal{O}(1) \subseteq \mathcal{O}(n^{15}) \subseteq \mathcal{O}(e^{log^2(n)}) \subseteq \mathcal{O}(e^{n \cdot log(5)}) \subseteq \mathcal{O}(e^{ n \cdot log(n)log(27)}) $
+
+\end{aufgabe}
+
+% Aufgabe 4
+\begin{aufgabe}
+  %Teilaufgabe a
+  \begin{teilaufgabe}
+    Der Algorithmus beginnt bei dem letzten Element im Array und verschiebt es immer weiter nach vorne, bis kein Element weiter vorne im Array größer ist als das aktuelle Element. Dies wird mit jedem Element wiederholt.
+  \end{teilaufgabe}
+
+  % Teilaufgabe b)
+  \begin{teilaufgabe}
+    Invariante innere Schleife: $I_1(i): A[n-i]$ ist das kleinste Element im Array (n-i,n]\\
+    Beweis:
+    \begin{enumerate}
+      \item Intialisierung: $I(1) = A[n-1]$ ist kleinstes Element in $(n-1, n]$, wahr, da die Menge ein elementig ist.
+      \item Erhaltung: Sei die Bedingungen im  Schleifendurchlauf korrekt \\
+            Z.z. : Invariante ist im k + 1 Schleifendurchlauf korrekt \\
+            Fallunterscheidung: \\
+            Fall 1 :$A[n-(k+1)] < A[n-k] \land A[n-k]$ ist kleinstes Element in $A(n-k, n]\\
+              \Rightarrow A[n-(k+1)] $ist kleinstes Element in$ A(n-(k+1),n] =: I(k+1)$\\
+            Fall 2 :$A[n-(k+1)] > A[n-k]$\\
+            $\Rightarrow A[n-(k+1)] \leftrightarrow A[n-k]$\\
+            $\Rightarrow A[n-(k+1)] $ist kleinstes Element in$ A(n-(k+1),n] =: I(k+1)$\\
+            $\rightarrow$ Die Bedingung ist im k + 1 Schleifendurchlaufkorrekt.
+      \item Terminierung: Die Schleife terminiert, wenn $j=i$\\
+            $\Rightarrow A[i] $ist kleinstes Element in $A(i-k,n]$
+    \end{enumerate}
+    Invariante äußere Schleife: $I_2[l]:= [1, \dots, l]$ ist aufsteigend sortiert \\
+    $\Leftrightarrow A[m] $ist das kleinste Element von $ A[m,\dots,a] \forall a \in [1,l)$
+    \begin{enumerate}
+      \item Initialisierung: l = 1 $\rightarrow$  A[m] ist das kleinste Element von $ A[m,\dots,a] \forall k \in [1,1)$ ist wahr.
+      \item Erhaltung: Die Schleifeninvariante ist zu Beginn des i Schleifendurchlaufs korrekt \\
+            Z.z. : Invariante ist im i + 1 Schleifendurchlauf korrekt \\ \\
+            Es gilt:
+            $A[m] $ist das kleinste Element von $ A[m,\dots,a] \forall a \in [1,i)$ \\ (nach Induktionsbehauptung.)  $\land$
+            $A[m] $ist das kleinste Element von $ A[m,\dots,i] $ (folgt aus der inneren Schleifen invariante.) \\ \\
+            $\rightarrow$ $A[m] $ist das kleinste Element von $ A[m,\dots,a] \forall a \in [1,i] $ =:  $I_2[i+1]$ \\
+            $\Rightarrow$ Die Schleifeninvariante ist zu Beginn der i+1-Schleifedurchlaufs korrekt.
+      \item Terminierung: \\ $i=n-1$ \\
+            $A[m] $ist das kleinste Element von $ A[m,\dots,a] \forall a \in [1,n-1)$ $\land$ \\
+            $A[m] $ist das kleinste Element in $ A[m,\dots,n]$
+            $\rightarrow$ $A[m]$ist das kleinste Element von $ A[m,\dots,a] \forall a \in [1,n)$
+            $\Leftrightarrow$ $[1, \dots, n]$ ist aufsteigend sortiert
+    \end{enumerate}
+  \end{teilaufgabe}
+
+  % Teilaufgabe c)
+  \begin{teilaufgabe}
+
+    \begin{algorithm}[H]
+      \renewcommand{\thealgorithm}{}
+      \caption{Sort($A[1\dots n]$)}
+      \begin{algorithmic}[1]
+        \For{$i\gets 1$ to length($A$) $- 1$} \Comment{$\sum_{i=1}^{n-1}T(I)$}
+        \For{$j\gets$ length($A$) downto $i+1$} \Comment{$\sum^{j=n}_{i+1}T(J)$}
+        \If{$A[j] < A[j-1]$} \Comment{1x Compare: $\Theta(1)$}
+        \State$A[j-1] \leftrightarrow A[j]$ \Comment{1x Swap: $\Theta(1)$}
+        \EndIf
+        \EndFor
+        \EndFor
+      \end{algorithmic}
+    \end{algorithm}
+
+    $$T(J):=\Theta(1)+\Theta(1)=\Theta(1)$$
+
+    $$\begin{aligned}
+          & \sum_{i=1}^{n-1}\sum^{j=n}_{i+1}1                                             \\
+        = & (n-1)+(n-2)+\dots+2+1                                                         \\
+        \\
+        = & \frac{\begin{aligned}
+                        & (n- & 1 & )  +  (n- & 2 & )  +     \dots  + & 2 & +         & 1 &   \\
+                      + &     & 1 & +         & 2 & +  \dots  +  (n-  & 2 & )  +  (n- & 1 & ) \\
+                    \end{aligned}}{2} \\
+        = & \frac{\overbrace{n+n+\dots+n+n}^{n-1}}{2}                                     \\
+        = & \frac{n\cdot (n-1)}{2}
+      \end{aligned}$$
+
+    Es werden also $\frac{n\cdot (n-1)}{2}$ Swaps und dieselbe Anzahl von Vergleichen benötigt.
+
+    $$\Theta\left(\frac{n\cdot (n-1)}{2}\right)=\Theta\left(n^2\right)$$
+
+  \end{teilaufgabe}
+\end{aufgabe}
+
+\end{document}

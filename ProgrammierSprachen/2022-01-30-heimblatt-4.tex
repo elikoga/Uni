@@ -1,0 +1,299 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{fancyhdr}
+\usepackage{fancyheadings}
+\usepackage[ngerman,german]{babel}
+\usepackage[utf8]{inputenc}
+%\usepackage[latin1]{inputenc}
+\usepackage[active]{srcltx}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{ifthen}
+\usepackage{listings}
+\usepackage{struktex}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{gauss}
+\usepackage{dsfont}
+\usepackage{amssymb}
+\usepackage{minted}
+\usepackage{stmaryrd}
+
+\newcommand{\x}{\cdot}
+\newcommand{\ran}[2]{\langle #1,#2\rangle}
+\renewcommand{\Re}{\mathbb{R}}
+\makeatletter
+\newcommand{\Spvek}[2][r]{%
+  \gdef\@VORNE{1}
+  \left(\hskip-\arraycolsep%
+  \begin{array}{#1}\vekSp@lten{#2}\end{array}%
+  \hskip-\arraycolsep\right)}
+
+\def\vekSp@lten#1{\xvekSp@lten#1;vekL@stLine;}
+\def\vekL@stLine{vekL@stLine}
+\def\xvekSp@lten#1;{\def\temp{#1}%
+  \ifx\temp\vekL@stLine
+  \else
+  \ifnum\@VORNE=1\gdef\@VORNE{0}
+  \else\@arraycr\fi%
+  #1%
+  \expandafter\xvekSp@lten
+  \fi}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%% EDIT THIS PART %%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\Fach}{Programmiersprachen}
+\newcommand{\Name}{Name:Björn Bick, Max Herting, Miriam Nippel, Eli Kogan-Wang}
+\newcommand{\Semester}{WS 21/22}
+\newcommand{\Uebungsblatt}{4} %  <-- UPDATE ME
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\parindent}{0em}
+\topmargin -1.0cm
+\oddsidemargin 0cm
+\evensidemargin 0cm
+\setlength{\textheight}{9.2in}
+\setlength{\textwidth}{6.0in}
+
+%%%%%%%%%%%%%%%
+%% Aufgaben-COMMAND
+\newcommand{\Aufgabe}[1]{
+  {
+  \vspace*{0.5cm}
+  \textsf{\textbf{Aufgabe #1}}
+  \vspace*{0.2cm}
+
+  }
+}
+%%%%%%%%%%%%%%
+\hypersetup{
+    pdftitle={\Fach{}: Übungsblatt \Uebungsblatt{}},
+    pdfauthor={\Name},
+    pdfborder={0 0 0}
+}
+
+\lstset{ %
+language=java,
+basicstyle=\footnotesize\tt,
+showtabs=false,
+tabsize=2,
+captionpos=b,
+breaklines=true,
+extendedchars=true,
+showstringspaces=false,
+flexiblecolumns=true,
+}
+
+
+
+\title{Übungsblatt \Uebungsblatt{}}
+\author{\Name{}}
+
+\begin{document}
+\pagestyle{fancy}
+\lhead{\sf \large \Fach{} \\ \small \Name{}}
+\rhead{\sf \Semester{} \\}
+\vspace*{0.2cm}
+\begin{center}
+  \LARGE \sf \textbf{Übungsblatt \Uebungsblatt{}}
+\end{center}
+\vspace*{0.2cm}
+
+\newcommand{\dd}{\text{d}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Insert your solutions here %%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Aufgabe{1}
+
+\begin{enumerate}[a)]
+  \item \begin{minted}{prolog}
+istStudi('Alice', 'Jäckel').
+istStudi('Pius', 'Hölzenbeck').
+istStudi('Adina', 'Walter').
+istStudi('Kathi', 'Meister').
+istStudi('Valeska', 'Warmer').
+istStudi('Sönke', 'Römer').
+istStudi('Leonard', 'Koch').
+
+hatMatrikelnummer('Alice', 'Jäckel', 9523343).
+hatMatrikelnummer('Pius', 'Hölzenbeck', 9523377).
+hatMatrikelnummer('Adina', 'Walter', 9523418).
+hatMatrikelnummer('Kathi', 'Meister', 8533463).
+hatMatrikelnummer('Valeska', 'Warmer', 9523888).
+hatMatrikelnummer('Sönke', 'Römer', 9523574).
+hatMatrikelnummer('Leonard', 'Koch', 8925543).
+
+userZurMatrikelnummer(ajaekel, 9523343).
+userZurMatrikelnummer(phoelzer, 9523377).
+userZurMatrikelnummer(adwalter, 9523418).
+userZurMatrikelnummer(kmeister, 8533463).
+userZurMatrikelnummer(vwarmer, 9523888).
+userZurMatrikelnummer(sroemer, 9523574).
+userZurMatrikelnummer(leokoch, 8925543).
+
+haeltVorlesung('Einführung in Geschichte', 'Rogge').
+haeltVorlesung('Philosophie', 'Oestrovsky').
+haeltVorlesung('Alte Sprachen', 'Eckbauer').
+haeltVorlesung('Latein', 'Finke').
+haeltVorlesung('Mathematik', 'Benthin').
+haeltVorlesung('Englisch', 'Finke').
+haeltVorlesung('Kunstgeschichte', 'Eckbauer').
+
+hoertVorlesung(ajaekel, 'Einführung in Geschichte').
+hoertVorlesung(ajaekel, 'Philosophie').
+hoertVorlesung(phoelzer, 'Philosophie').
+hoertVorlesung(adwalter, 'Einführung in Geschichte').
+hoertVorlesung(adwalter, 'Alte Sprachen').
+hoertVorlesung(adwalter, 'Latein').
+hoertVorlesung(kmeister, 'Mathematik').
+hoertVorlesung(kmeister, 'Englisch').
+hoertVorlesung(vwarmer, 'Mathematik').
+hoertVorlesung(vwarmer, 'Kunstgeschichte').
+hoertVorlesung(sroemer, 'Einführung in Geschichte').
+hoertVorlesung(sroemer, 'Philosophie').
+hoertVorlesung(sroemer, 'Latein').
+hoertVorlesung(leokoch, 'Mathematik').
+hoertVorlesung(leokoch, 'Alte Sprachen').
+hoertVorlesung(leokoch, 'Latein').
+  \end{minted}
+  \item \begin{minted}{prolog}
+hoert(Vorlesung, Vorname, Nachname) :-
+    istStudi(Vorname, Nachname),
+    hatMatrikelnummer(Vorname, Nachname, Matrikelnummer),
+    userZurMatrikelnummer(User, Matrikelnummer),
+    hoertVorlesung(User, Vorlesung).
+
+schreibtPruefung(Vorlesung, User) :-
+    userZurMatrikelnummer(User, Matrikelnummer),
+    Matrikelnummer >= 9000000,
+    hoertVorlesung(User, Vorlesung).
+
+wasHoerenDieStudentenNoch(Professor, Vorlesung) :-
+    haeltVorlesung(EineVorlesung, Professor),
+    hoertVorlesung(User, EineVorlesung),
+    hoertVorlesung(User, Vorlesung),
+    \+ haeltVorlesung(Vorlesung, Professor).
+  \end{minted}
+\end{enumerate}
+
+\Aufgabe{2}
+
+\begin{enumerate}[a)]
+  \item \begin{minted}{prolog}
+istInListe(Liste, Elem) :-
+    Liste = [Elem | _].
+
+istInListe(Liste, Elem) :-
+    Liste = [_ | Rest],
+    istInListe(Rest, Elem).
+  \end{minted}
+  \item \begin{minted}{prolog}
+istLetztesElement(Liste, Elem) :-
+    Liste = [Elem].
+
+istLetztesElement(Liste, Elem) :-
+    Liste = [_ | Rest],
+    istLetztesElement(Rest, Elem).
+
+gibAusLetztesElement(Liste) :-
+    istLetztesElement(Liste, Elem),
+    write(Elem).
+  \end{minted}
+  \item \begin{minted}{prolog}
+laengeListe(Liste, Laenge) :-
+    Liste = [] -> Laenge is 0;
+    Liste = [_ | Rest],
+    laengeListe(Rest, LaengeRest),
+    Laenge is LaengeRest + 1.
+  \end{minted}
+  \item \begin{minted}{prolog}
+konkatenationListe(Liste1, Liste2, Liste3) :-
+    Liste1 = [],
+    Liste2 = Liste3.
+
+konkatenationListe(Liste1, Liste2, Liste3) :-
+    Liste1 = [Elem | Rest],
+    konkatenationListe(Rest, Liste2, Rest2),
+    Liste3 = [Elem | Rest2].
+  \end{minted}
+\end{enumerate}
+
+\Aufgabe{3}
+\begin{enumerate}[a)]
+  \item \begin{minted}{prolog}
+fibonacci(Index, Fibonacci) :-
+  Index = 0 -> Fibonacci is 0;
+  Index = 1 -> Fibonacci is 1;
+  Index > 1,
+  Index1 is Index - 1,
+  Index2 is Index - 2,
+  fibonacci(Index1, Fibonacci1),
+  fibonacci(Index2, Fibonacci2),
+  Fibonacci is Fibonacci1 + Fibonacci2.
+\end{minted}
+  \item \begin{minted}{prolog}
+hanoi(0, _, _, _).
+
+hanoi(Anzahl, Start, Ziel, Hilf) :-
+    Anzahl > 0,
+    Anzahl1 is Anzahl - 1,
+    hanoi(Anzahl1, Start, Hilf, Ziel),
+    write(Start),
+    write(' -> '),
+    write(Ziel),
+    nl,
+    hanoi(Anzahl1, Hilf, Ziel, Start).
+
+% Aufruf mit bspw. ?- hanoi(4, 'A', 'B', 'C').
+  \end{minted}
+\end{enumerate}
+
+\Aufgabe{4}
+
+\begin{enumerate}[a)]
+  \item \begin{minted}{prolog}
+sagtWahrheitWennLügt(milan, yasmin).
+sagtWahrheitWennLügt(yasmin, samuel).
+
+lügtWennSagtWahrheit(milan, yasmin).
+lügtWennSagtWahrheit(yasmin, samuel).
+\end{minted}
+  \item \begin{minted}{prolog}
+lügtWennSagtWahrheit(samuel, milan).
+lügtWennSagtWahrheit(samuel, yasmin).
+\end{minted}
+  \item \begin{minted}{prolog}
+werLügt(X) :-
+  lügtWennSagtWahrheit(X, Y),
+  sagtWahrheitWennLügt(Y, Z),
+  lügtWennSagtWahrheit(Z, Y).
+% Y sagt die Wahrheit.
+\end{minted}
+\end{enumerate}
+
+\Aufgabe{5}
+\begin{minted}{prolog}
+die_sonne_scheint. % R1
+das_wetter_ist_gut :- die_sonne_scheint. % R2
+\end{minted}
+\begin{minted}{text}
+Beweis:
+-das_wetter_ist_gut % Q
+das_wetter_ist_gut, -die_sonne_scheint % R2
+----
+-die_sonne_scheint.
+die_sonne_scheint % R1
+----
+[] Widerspruch
+\end{minted}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+
+
+
+
