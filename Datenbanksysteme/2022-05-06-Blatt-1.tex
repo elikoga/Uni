@@ -1,0 +1,81 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage[top=1in, bottom=1.25in, left=1.25in, right=1.25in]{geometry}
+\usepackage{fancyhdr}
+\usepackage{titling}
+\usepackage{amssymb}
+\usepackage{mathtools}
+
+
+\renewcommand{\footrulewidth}{0.4pt}
+
+\setlength\headheight{15pt}
+\setlength{\parskip}{1em}
+
+\title{Datenbanksysteme Blatt 1}
+\author{
+  Eli Kogan-Wang, elikoga, 7251030
+  \and
+  Niklas Bäumker, niba, 7165553
+}
+\date{\today}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\thetitle}
+\rhead{\thedate}
+\lfoot{\theauthor}
+\rfoot{Seite \thepage}
+
+\newcounter{AufgabenCounter}
+\setcounter{AufgabenCounter}{1}
+\newcounter{TeilaufgabenCounter}
+\newenvironment{aufgabe}{\section*{Aufgabe \theAufgabenCounter}\setcounter{TeilaufgabenCounter}{1}}{\stepcounter{AufgabenCounter}}
+% \newenvironment{teilaufgabe}{\paragraph*{\alph{TeilaufgabenCounter})}}{\stepcounter{TeilaufgabenCounter}}
+\newenvironment{teilaufgabe}{\paragraph*{\theTeilaufgabenCounter.}}{\stepcounter{TeilaufgabenCounter}}
+
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\begin{aufgabe}
+  \begin{teilaufgabe}
+    Geben Sie die Namen aller Held:innen aus.
+
+    $\pi_{\mathrm{Name}}(\mathrm{Held})$
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    Geben Sie die IDs aller Beschützer:innen aus, die eine Verteidigungsstärke von weniger
+    als 100 haben.
+
+    $\pi_{\mathrm{BesID}}(\sigma_{\mathrm{VertStaerke}<100}(\mathrm{Beschuetzer}))$
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    Geben Sie die IDs aller Beschützer:innen aus, die ein Verlies mit einem Schatzniveau
+    von weniger als 10 beschützen.
+
+    $\pi_{\mathrm{BesID}}(
+      \sigma_{\mathrm{SchatzNiveau}<10}(
+      \mathrm{Beschuetzer}\bowtie_{
+        \mathrm{Beschuetzt}=\mathrm{VerID}
+      }\mathrm{Verlies}
+      )
+      )$
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    Geben Sie die Namen aller Held:innen aus, die keine besondere Stärke gegen irgendwel-
+    che Beschützer:innen haben.\\
+    \textbf{Hinweis}: Es darf ausgenutzt werden, dass die Namen der Held:innen sowie der Be-
+    schützer:innen eindeutig sind.
+
+    $\pi_{\mathrm{Name}}(\mathrm{Held}\bowtie_{
+        \mathrm{Beschuetzt}=\mathrm{VerID}
+      }\mathrm{Verlies}
+      )$
+
+  \end{teilaufgabe}
+\end{aufgabe}
+
+\end{document}

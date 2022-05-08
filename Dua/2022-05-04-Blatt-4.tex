@@ -56,8 +56,8 @@
            & = 4 \cdot T\left(4^{k-1}\right) + 2^{k} \cdot c_2                                                                                            \\
            & = 4 \left(4 \cdot T\left(4^{k-2}\right)+ 2^{k-1} \cdot c_2\right) + 2^{k} \cdot c_2                                                          \\
            & = 4^{2} \underbrace{T\left(4^{k-2}\right)}_\text{sukzessives Einsetzen} + 2^{k+1} \cdot c_2 + 2^{k} \cdot c_2                                \\
-           & = 4^{k} c_1 + \left(\sum_{j=0}^{k-1} 2^{k+i}\right)c_2                                                        & | \text{ geometrische Summe} \\
-           & = 4^{k} c_1 + \left(2^{k} \cdot \sum_{j=0}^{k-1} 2^{i}\right)c_2                                                                             \\
+           & = 4^{k} c_1 + \left(\sum_{j=0}^{k-1} 2^{k+i}\right)c_2                                                                                       \\
+           & = 4^{k} c_1 + \left(2^{k} \cdot \sum_{j=0}^{k-1} 2^{i}\right)c_2                                              & | \text{ geometrische Summe} \\
            & = 4^{k} c_1 +  2^{k} \left(\frac{1-2^{k}}{1-2}\right)c_2                                                                                     \\
            & = 4^{k} c_1 +  2^{k} \left(2^{k}-1\right)c_2                                                                                                 \\
            & = 4^{k} \left(c_1 + c_2\right) - 2^{k}c_2
@@ -67,13 +67,13 @@
   Korrektheitsbeweis der Formel durch vollständige Induktion:  \\
   Beh. : $$T(n) = T(4^{k}) = 4^{k} (c_1 + c_2) - 2^{k}c_2 $$
 
-  IA: $n = 1$
+  I.A.: $n = 1$
 
   $T(1) = T(4^{0}) = c_1 = 4^{0} (c_1 + c_2) - 2^{0}c_2 $
 
-  Iv: Es gilt: $T(n) = T(4^{k-1}) = 4^{k-1} (c_1 + c_2) - 2^{k-1}c_2 $
+  I.V.: Es gilt: $T(4^{k-1}) = 4^{k-1} (c_1 + c_2) - 2^{k-1}c_2 $
 
-  Is: Zu Zeigen: $T(n) = T(4^{k}) = 4^{k} (c_1 + c_2) - 2^{k}c_2 $
+  I.S.: Zu Zeigen: $T(n) = T(4^{k}) = 4^{k} (c_1 + c_2) - 2^{k}c_2 $
 
   Nach Definition von $T(n)$ gilt (da $n > 1$ ist):
 
@@ -92,37 +92,38 @@
 
 \end{aufgabe}
 \begin{aufgabe}
-  Aus der Rekursionsgleichung folgt: $a = 2,  b = 2 $ und $f(n) = n\log n$ n\\
+  Aus der Rekursionsgleichung folgt: $a = 2,  b = 2 $ und $f(n) = n\log n$\\
   $\Rightarrow $ $n^{\log_b(a)} = n^{\log_2(2)} = n^1$ \\
-  $f(n) = n\log n = n^{\log_n(n\log_2n)} = n^{\log_n(n)+\log_2(n)} = n^{1+\log_2(n)}$ \\
+  $f(n) = n\log n = n^{\log_n(n\log_2n)} = n^{\log_n(n)+\log_n\log_2(n)} = n^{1+\log_n\log_2(n)}$ \\
   Das Mastertheorem kann nur angewendet werden, \\
-  falls f(n) $\subset\mathcal{O}(n^{1- \varepsilon }) \lor f(n) \subset \Theta(n)
-    \lor (f(n) \subset \Omega(n^{1+\varepsilon}) \land a\cdot f(\frac{n}{b}) \leq c \cdot f(n))   $
+  falls f(n) $\in\mathcal{O}(n^{1- \varepsilon }) \lor f(n) \in \Theta(n)
+    \lor (f(n) \in \Omega(n^{1+\varepsilon}) \land a\cdot f(\frac{n}{b}) \leq c \cdot f(n))   $
 
   Es gilt trivialerweise:
   $$
     \begin{aligned}
-      n^{1 + \log_2(n)}                 & \not\subset\mathcal{O}(n)                    \\
-      \Rightarrow n^{1 + \log_2(n)}     & \not\subset\mathcal{O}(n^{1- \varepsilon } ) \\
-      \text{und\quad }n^{1 + \log_2(n)} & \not\subset \Theta(n)
+      n^{1 + \log_n\log_2(n)}                 & \not\in\mathcal{O}(n)                    \\
+      \Rightarrow n^{1 + \log_n\log_2(n)}     & \not\in\mathcal{O}(n^{1- \varepsilon } ) \\
+      \text{und\quad }n^{1 + \log_n\log_2(n)} & \not\in \Theta(n)
     \end{aligned}
   $$
-  Ist $f(n) \subset \Omega(n^{1+\varepsilon})$ ? \\
-  $\iff \exists c, n_0 >0$, so dass $\forall n: n^{1+\log_2(n)} \ge n_0: \geq c \cdot n^{1+\varepsilon} $ \\
+  Ist $f(n) \in \Omega(n^{1+\varepsilon})$ ? \\
+  $\iff \exists c, n_0>0$, so dass $\forall n \geq n_0: n^{1+\log_n\log_2(n)} \geq c \cdot n^{1+\varepsilon} $ \\
   Dies für $ c = 1 $ und $ \varepsilon = \frac{1}{10}$ erfüllt \\
-  $ \Rightarrow f(n) \subset \Omega(n^{1+\varepsilon}) $, aber die zweite Bedingung ist nicht erfüllt\\
-  $2 \cdot \frac{n}{2} \log(\frac{n}{2})= \leq c \cdot n \cdot log (n)  $ \\
-  $n \cdot \log(\frac{n}{2}) \leq c \cdot n \cdot log (n)  $ \\
+  $ \Rightarrow f(n) \in \Omega(n^{1+\varepsilon}) $, aber die zweite Bedingung ist nicht erfüllt\\
+  $2 \cdot \frac{n}{2} \log(\frac{n}{2}) \leq c \cdot n \cdot \log (n)  $ \\
+  $n \cdot \log(\frac{n}{2}) \leq c \cdot n \cdot \log (n)  $ \\
   Diese Bedingung wird nur von c = 1 erfüllt, da
 
   $ \displaystyle \lim_{n \rightarrow \infty} \frac{n \cdot \log(\frac{n}{2})}{n \cdot log (n)}$ \\
-  $ = \displaystyle \lim_{n \rightarrow \infty} \frac{\log(\frac{n}{2})}{log (n)}$ \\
+  $ = \displaystyle \lim_{n \rightarrow \infty} \frac{\log(\frac{n}{2})}{\log (n)}$ \\
   Da $\displaystyle \lim_{n \rightarrow \infty} \log(\frac{n}{2}) = \infty$
   $ \land \displaystyle \lim_{n \rightarrow \infty} \log(n) = \infty$ gilt, \\
   kann die Regel vom Krankenhaus angewendet werden :°) \\
-  $\displaystyle \lim_{n \rightarrow \infty} \frac{\log(\frac{n}{2})}{log (n)} $
-  $ = \displaystyle \lim_{n \rightarrow \infty} \frac{ \frac{\mathrm{d} }{\mathrm{d}n} \log(\frac{n}{2})}{ \frac{\mathrm{d} }{\mathrm{d}n}log (n)}$\\
-  $\displaystyle \lim_{n \rightarrow \infty} \frac{\frac{1}{n}}{\frac{1}{n}} = \displaystyle \lim_{n \rightarrow \infty} 1 = 1 $\\
+  $\displaystyle \lim_{n \rightarrow \infty} \frac{\log(\frac{n}{2})}{\log (n)} $
+  $ = \displaystyle \lim_{n \rightarrow \infty} \frac{ \frac{\mathrm{d} }{\mathrm{d}n} \log(\frac{n}{2})}{ \frac{\mathrm{d} }{\mathrm{d}n}log (n)}
+    =\displaystyle \lim_{n \rightarrow \infty} \frac{ \frac{\mathrm{d} }{\mathrm{d}n} \log(n) - \log(2)}{ \frac{\mathrm{d} }{\mathrm{d}n}log (n)}$\\
+  $\displaystyle \lim_{n \rightarrow \infty} \frac{\frac{1}{n}}{\frac{1}{n}} = \displaystyle \lim_{n \rightarrow \infty} 1 = 1 \quad\left[\text{d.h. sie sind asympt. äquiv.}\right]$\\
   $\Rightarrow c = 1 \lightning c < 1  $ \\
   $\Rightarrow$ Die Rekursionsgleichung kann nicht mit dem allgemeinen Master-Theorem analysiert werden
 \end{aufgabe}
