@@ -6,7 +6,11 @@
 \usepackage{titling}
 \usepackage{amssymb}
 \usepackage{mathtools}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage{makecell}
 
+\renewcommand\theadfont{}
 
 \renewcommand{\footrulewidth}{0.4pt}
 
@@ -57,7 +61,7 @@
     von weniger als 10 beschützen.
 
     $\pi_{\mathrm{BesID}}(
-      \sigma_{\mathrm{SchatzNiveau}<10}(
+      \sigma_{\mathrm{Schatzniveau}<10}(
       \mathrm{Beschuetzer}\bowtie_{
         \mathrm{Beschuetzt}=\mathrm{VerID}
       }\mathrm{Verlies}
@@ -65,16 +69,223 @@
       )$
   \end{teilaufgabe}
   \begin{teilaufgabe}
-    Geben Sie die Namen aller Held:innen aus, die keine besondere Stärke gegen irgendwel-
-    che Beschützer:innen haben.\\
+    Geben Sie die Namen aller Held:innen aus, die keine besondere Stärke gegen irgendwelche
+    Beschützer:innen haben.\\
     \textbf{Hinweis}: Es darf ausgenutzt werden, dass die Namen der Held:innen sowie der Be-
     schützer:innen eindeutig sind.
 
-    $\pi_{\mathrm{Name}}(\mathrm{Held}\bowtie_{
-        \mathrm{Beschuetzt}=\mathrm{VerID}
-      }\mathrm{Verlies}
-      )$
+    Im Text steht: ``Sie enthält auch
+    Held:innen die noch kein Verlies plündern wollen und/oder keine besondere Stärke gegen eine
+    Beschützer:in haben.'' Das wird interpretiert als: `WS' und `SG' können NULL enthalten. Selbiges
+    gilt auch für das Feld `BS'.
 
+    Es werden Anfragen geschrieben, die vermeiden `NULL' zu verwenden, da in den Beispieldaten der Wert `-' angegeben ist.
+
+    $$\begin{aligned}
+         & \pi_{\mathrm{HeldName}}(\beta_{[\mathrm{HeldName}\gets \mathrm{Name}]}(\mathrm{Held})) \\
+         & -\pi_{\mathrm{HeldName}}(
+        (
+        \beta_{[\mathrm{HeldName}\gets \mathrm{Name}]}(\mathrm{Held})
+        )\bowtie_{\mathrm{StarkGegen}=\mathrm{BesID}}(
+        \mathrm{Beschuetzer}
+        )
+        )
+      \end{aligned}$$
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    Geben Sie die IDs aller Verliese aus,
+    die von mindestens zwei Held:innen geplündert
+    werden.
+
+    $$\begin{aligned}
+         & \pi_{\mathrm{VerID}}(                                                                                                                                                 \\
+         & \quad(\beta_{[\mathrm{HeldIDA}\gets\mathrm{HeldID},\mathrm{WillPluendernA}\gets\mathrm{WillPluendern}]}(\pi_{\mathrm{HeldID},\mathrm{WillPluendern}}(\mathrm{Held}))) \\
+         & \quad\quad\bowtie_{\mathrm{HeldIDA}\neq\mathrm{HeldID}\land\mathrm{WillPluendernA}=\mathrm{WillPluendern}}                                                            \\
+         & \quad(\pi_{\mathrm{HeldID},\mathrm{WillPluendern}}(\mathrm{Held}))                                                                                                    \\
+         & )                                                                                                                                                                     \\
+      \end{aligned}$$
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    Geben Sie für alle Held:innen, bei denen mindestens eine der folgenden Bedingungen
+    erfüllt ist, die Namen und deren Waffenstärke aus.
+
+    \begin{enumerate}[(a)]
+      \item Die Waffenstärke ist geringer als 20.
+            $\pi_{\mathrm{Name},\mathrm{WaffenStaerke}}(\sigma_{\mathrm{WaffenStaerke}<20}(\mathrm{Held}))$
+      \item Wollen ein Verlies plündern, welches ein Schatzniveau von mehr als 80 besitzt.
+            $$\begin{aligned}
+                 & \pi_{\mathrm{Name},\mathrm{WaffenStaerke}}(                                        \\
+                 & \quad(\mathrm{Held})                                                               \\
+                 & \quad\quad\bowtie_{\mathrm{SchatzNiveau}>80,\mathrm{WillPluendern}=\mathrm{VerID}} \\
+                 & \quad(\mathrm{Verlies})                                                            \\
+                 & )                                                                                  \\
+              \end{aligned}$$
+    \end{enumerate}
+  \end{teilaufgabe}
+\end{aufgabe}
+
+\begin{aufgabe}
+  \begin{teilaufgabe}
+    $$R\cup (S\cap T)=(R\cup S)\cap (R\cup T)$$
+
+    Sei $t$ ein Tupel, dass $r$-mal in $R$ vorkommt, $s$-mal in $S$ vorkommt und $t$-mal in $T$ vorkommt.
+
+    Das Tupel kommt $\min(s,t)$-mal in $S\cap T$ vor. Damit kommt das Tupel $r+\min(s,t)$-mal in $R\cup (S\cap T)$ vor.
+
+    Das Tupel kommt $r+s$-mal in $R\cup S$ vor. Das Tupel kommt $r+t$-mal in $R\cup T$ vor. Damit kommt das Tupel $\min(r+s,r+t)$-mal in $(R\cup S)\cap (R\cup T)$ vor.
+
+    \textbf{Bemerkung}: $\min(r+s,r+t)=r+\min(s,t)$
+
+    Das algebraische Gesetz gilt auch für Bags.
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    $$(R\cup S)-(R\cap S)=(R-S)\cup (S-R)$$
+
+    Sei $t$ ein Tupel, dass $r$-mal in $R$ vorkommt, $s$-mal in $S$ vorkommt.
+
+    Also $t^r\in R$ und $t^s\in S$.
+
+    Nun: $t^{r+s}\in (R\cup S)$ und $t^{\min(r,s)}\in (R\cap S)$.
+
+    Daraus: $t^{\max(0,(r+s)-\min(r,s))}\in (R\cup S)-(R\cap S)$.
+
+    Auch: $t^{\max(0,r-s)}\in (R-S)$ und $t^{\max(0,s-r)}\in (S-R)$.
+
+    Daraus: $t^{\max(0,r-s)+\max(0,s-r)}\in (R-S)\cup (S-R)$.
+
+    \OE: Ohne Einschränkung der Allgemeinheit (da r,s symetrie) wird angenommen, dass $r\geq s$.
+
+    Nun: $\max(0,(r+s)-\min(r,s))=\max(0,(r+s)-s)=\max(0,r)=r$.
+
+    Und: $\max(0,r-s)+\max(0,s-r)=r-s+0=r-s$.
+
+    \textbf{Bemerkung}: $r\neq r-s$
+
+    Das algebraische Gesetz gilt demnach nicht für Bags.
+  \end{teilaufgabe}
+
+\end{aufgabe}
+
+\begin{aufgabe}
+  \begin{teilaufgabe}
+    Held (H):\\
+    \begin{tabular}{|l|l|l|l|l|}
+      \hline
+      % HeldID (HID) & WillPluendern (WP) & StarkGegen (SG) & Name (N) & Waffenstärke (WS) \\
+      \thead{HeldID                   \\(HID)} & \thead{WillPluendern\\(WP)} & \thead{StarkGegen\\(SG)} & \thead{Name\\(N)} & \thead{Waffenstärke\\(WS)} \\
+      \hline
+      1 & 1 & 1 & \textbf{Held 1} & 1 \\
+      \hline
+    \end{tabular}
+
+    Beschuetzer (B):\\
+    % BesID Beschuetzt Name VertStaerke
+    % (BID) (B) (N) (VS)
+    \begin{tabular}{|l|l|l|l|l|}
+      \hline
+      \thead{BesID                 \\(BID)} & \thead{Beschuetzt\\(BS)} & \thead{Name\\(N)} & \thead{VertStaerke\\(VS)} \\
+      \hline
+      1 & 1 & \textbf{B...r 1} & 1 \\
+      \hline
+    \end{tabular}
+    % \begin{enumerate}[a)]
+    \begin{enumerate}[wide, label=\alph*)]
+      \item Held $\times$ Beschuetzer\\
+            \tiny
+            \begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
+              \hline
+              \thead{HeldID                                                  \\(HID)} & \thead{WillPluendern\\(WP)} & \thead{StarkGegen\\(SG)} & \thead{H.Name\\(H.N)} & \thead{Waffenstärke\\(WS)}& \thead{BesID \\(BID)} & \thead{Beschuetzt\\(BS)} & \thead{B.Name\\(B.N)} & \thead{VertStaerke\\(VS)} \\
+              \hline
+              1 & 1 & 1 & \textbf{Held 1} & 1 & 1 & \textbf{B...r 1} & 1 & 1 \\
+              \hline
+            \end{tabular}
+            \normalsize
+      \item Held $\bowtie$ Beschuetzer\\
+            \tiny
+            \begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
+              \hline
+              \thead{HeldID \\(HID)} & \thead{WillPluendern\\(WP)} & \thead{StarkGegen\\(SG)} & \thead{Name\\(N)} & \thead{Waffenstärke\\(WS)}& \thead{BesID \\(BID)} & \thead{Beschuetzt\\(BS)} & \thead{VertStaerke\\(VS)} \\
+              \hline
+              \hline
+            \end{tabular}
+    \end{enumerate}
+
+    \textbf{Bemerkung}: Definition verallgemeinert, damit Algebra-Aufgaben einfacher lösbar werden
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    Beide Anfragen geben alle `Verlies', `Held' Kombinationen zurück.
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    %   Verlies (V):
+    % VerID NaechsteEbene Ort SchatzNiveau
+    % (VID) (NE) (O) (SN)
+    Verlies (V):\\
+    \begin{tabular}{|l|l|l|l|}
+      \hline
+      \thead{VerID   \\(VID)} & \thead{NaechsteEbene\\(NE)} & \thead{Ort\\(O)} & \thead{SchatzNiveau\\(SN)} \\
+      \hline
+      1 & 1 & 1 & 1  \\
+      \hline
+      2 & 1 & 1 & 13 \\
+      \hline
+    \end{tabular}
+
+    \begin{enumerate}[a)]
+      \item Verlies $\ltimes$ ($\sigma_{\text{Schatzniveau>12}}$(Verlies))\\
+            \begin{tabular}{|l|l|l|l|}
+              \hline
+              \thead{VerID   \\(VID)} & \thead{NaechsteEbene\\(NE)} & \thead{Ort\\(O)} & \thead{SchatzNiveau\\(SN)} \\
+              \hline
+              1 & 1 & 1 & 1  \\
+              \hline
+              2 & 1 & 1 & 13 \\
+              \hline
+            \end{tabular}
+      \item $\sigma_{\text{Schatzniveau>12}}$(Verlies)\\
+            \begin{tabular}{|l|l|l|l|}
+              \hline
+              \thead{VerID   \\(VID)} & \thead{NaechsteEbene\\(NE)} & \thead{Ort\\(O)} & \thead{SchatzNiveau\\(SN)} \\
+              \hline
+              2 & 1 & 1 & 13 \\
+              \hline
+            \end{tabular}
+    \end{enumerate}
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    Alle Beschützer-Verlies Paare, bei denen der Beschützer das Verlies beschützt, und das Verlies eine Verteidigungsstärke kleiner als 20 hat.
+  \end{teilaufgabe}
+\end{aufgabe}
+\begin{aufgabe}
+  \begin{teilaufgabe}
+    \begin{tabular}{|l|}
+      \hline
+      \thead{Name \\(N)} \\
+      \hline
+      Peter       \\
+      \hline
+    \end{tabular}
+
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    \begin{tabular}{|l|}
+      \hline
+      ID \\
+      \hline
+      23 \\
+      \hline
+    \end{tabular}
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    Es findet ein Vergleich zwischen `VertStaerke'-Inhalten (Integer) und `fuenfzig' (Text) statt.
+    Das Ergebnis ist für uns undefiniert.
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    \begin{tabular}{|l|l|}
+      \hline
+      HeldID & WillPluendern \\
+      \hline
+      \hline
+    \end{tabular}
   \end{teilaufgabe}
 \end{aufgabe}
 
