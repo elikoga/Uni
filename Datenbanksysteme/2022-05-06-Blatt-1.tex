@@ -114,13 +114,23 @@
             $\pi_{\mathrm{Name},\mathrm{WaffenStaerke}}(\sigma_{\mathrm{WaffenStaerke}<20}(\mathrm{Held}))$
       \item Wollen ein Verlies plündern, welches ein Schatzniveau von mehr als 80 besitzt.
             $$\begin{aligned}
-                 & \pi_{\mathrm{Name},\mathrm{WaffenStaerke}}(                                        \\
-                 & \quad(\mathrm{Held})                                                               \\
-                 & \quad\quad\bowtie_{\mathrm{SchatzNiveau}>80,\mathrm{WillPluendern}=\mathrm{VerID}} \\
-                 & \quad(\mathrm{Verlies})                                                            \\
-                 & )                                                                                  \\
+                 & \pi_{\mathrm{Name},\mathrm{WaffenStaerke}}(                                            \\
+                 & \quad(\mathrm{Held})                                                                   \\
+                 & \quad\quad\bowtie_{\mathrm{SchatzNiveau}>80\land\mathrm{WillPluendern}=\mathrm{VerID}} \\
+                 & \quad(\mathrm{Verlies})                                                                \\
+                 & )                                                                                      \\
               \end{aligned}$$
     \end{enumerate}
+
+    a) $\cup$ b):
+    $$
+      \begin{aligned}
+         & \pi_{\mathrm{Name},\mathrm{WaffenStaerke}}(                                                          \\
+         & \quad(\mathrm{Held})                                                                                 \\
+         & \quad\quad\bowtie_{\mathrm{SchatzNiveau}>80\land\mathrm{WillPluendern}=\mathrm{VerID}}               \\
+         & \quad(\mathrm{Verlies})                                                                              \\
+         & ) \cup \pi_{\mathrm{Name},\mathrm{WaffenStaerke}}(\sigma_{\mathrm{WaffenStaerke}<20}(\mathrm{Held})) \\
+      \end{aligned}$$
   \end{teilaufgabe}
 \end{aufgabe}
 
@@ -128,7 +138,7 @@
   \begin{teilaufgabe}
     $$R\cup (S\cap T)=(R\cup S)\cap (R\cup T)$$
 
-    Sei $t$ ein Tupel, dass $r$-mal in $R$ vorkommt, $s$-mal in $S$ vorkommt und $t$-mal in $T$ vorkommt.
+    Sei $u$ ein Tupel, dass $r$-mal in $R$ vorkommt, $s$-mal in $S$ vorkommt und $t$-mal in $T$ vorkommt.
 
     Das Tupel kommt $\min(s,t)$-mal in $S\cap T$ vor. Damit kommt das Tupel $r+\min(s,t)$-mal in $R\cup (S\cap T)$ vor.
 
@@ -162,6 +172,89 @@
     \textbf{Bemerkung}: $r\neq r-s$
 
     Das algebraische Gesetz gilt demnach nicht für Bags.
+
+    \textbf{Gegenbeispiel}:
+
+    R:
+    \begin{tabular}{|l|}
+      \hline
+      \thead{A} \\
+      \hline
+      1         \\
+      \hline
+    \end{tabular}
+
+    S:
+    \begin{tabular}{|l|}
+      \hline
+      \thead{A} \\
+      \hline
+      1         \\
+      \hline
+    \end{tabular}
+
+    (R$\cup$S):
+    \begin{tabular}{|l|}
+      \hline
+      \thead{A} \\
+      \hline
+      1         \\
+      \hline
+      1         \\
+      \hline
+    \end{tabular}
+
+    (R$\cap$S):
+    \begin{tabular}{|l|}
+      \hline
+      \thead{A} \\
+      \hline
+      1         \\
+      \hline
+    \end{tabular}
+
+    (R$\cup$S)-(R$\cap$S):
+    \begin{tabular}{|l|}
+      \hline
+      \thead{A} \\
+      \hline
+      1         \\
+      \hline
+    \end{tabular}
+
+    (R-S):
+    \begin{tabular}{|l|}
+      \hline
+      \thead{A} \\
+      \hline
+    \end{tabular}
+
+    (S-R):
+    \begin{tabular}{|l|}
+      \hline
+      \thead{A} \\
+      \hline
+    \end{tabular}
+
+    (R-S)$\cup$(S-R):
+    \begin{tabular}{|l|}
+      \hline
+      \thead{A} \\
+      \hline
+    \end{tabular}
+
+    \begin{tabular}{|l|}
+      \hline
+      \thead{A} \\
+      \hline
+    \end{tabular} $\neq$ \begin{tabular}{|l|}
+      \hline
+      \thead{A} \\
+      \hline
+      1         \\
+      \hline
+    \end{tabular}
+
   \end{teilaufgabe}
 
 \end{aufgabe}
