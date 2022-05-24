@@ -1,0 +1,117 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper,lmargin={2cm},rmargin={2cm},tmargin={2cm},bmargin = {2cm}]{geometry}
+\usepackage[normalem]{ulem}
+\usepackage{paralist}
+\usepackage{bm}
+\usepackage{a4wide}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{amssymb}%Mengensymbole%
+\usepackage[nosumlimits]{amsmath}
+\usepackage{marvosym}
+\usepackage{dsfont}
+\usepackage{graphicx}
+\}
+\usepackage{comment}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{pgfplots}
+\usepackage{amsmath}
+\usepackage{stmaryrd}
+\usepackage{tikz}
+
+% Pseudocode
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\setlength{\parindent}{0in}
+
+
+
+\begin{document}
+
+\title{Dbms \\ Heimübung 2}
+
+\maketitle
+
+\section*{Aufgabe 1}
+\subsection*{1)}
+SELECT N, WS\\
+\vspace{0.1em}\hspace{1em}FROM Held\\
+
+\subsection*{2)}
+SELECT DISTINCT N\\
+\vspace{0.1em}\hspace{1em}FROM Held\\
+\vspace{0.1em}\hspace{1em}WHERE N LIKE "Aqua\%" OR N LIKE "\%man\\
+
+
+\subsection*{3)}
+SELECT HID, BID\\
+\vspace{0.1em}\hspace{1em}FROM Held JOIN Beschuetzer\\
+\vspace{0.1em}\hspace{2em}ON Held.N = Beschuetzer.N\\
+\\
+SELECT HeldID, BesID\\
+\vspace{0.1em}\hspace{1em}FROM Held NATURAL JOIN Beschuetzer\\
+
+\newpage
+
+\subsection*{4)}
+SELECT N AS N2\\
+\vspace{0.1em}\hspace{1em}FROM H JOIN ( \\
+\vspace{0.1em}\hspace{4em}SELECT * FROM V WHERE SN $> 50$)\\
+\vspace{0.1em}\hspace{2em}ON WP = VID\\
+\vspace{0.1em}\hspace{1em}JOIN (\\
+\vspace{0.1em}\hspace{4em}SELECT * FROM B WHERE VS BETWEEN 25 AND 75)\\
+\vspace{0.1em}\hspace{2em}ON BS = VID\\
+
+\subsection*{5)}
+SELECT VerID, Ort\\
+\vspace{0.1em}\hspace{1em}FROM(\\
+\vspace{0.1em}\hspace{2em}SELECT * FROM Verlies\\
+\vspace{0.1em}\hspace{2em}EXEPCT\\
+\vspace{0.1em}\hspace{2em}SELECT VID, O, SN, NE FROM Verlies JOIN Beschützer\\
+\vspace{0.1em}\hspace{3em}ON VID = BS\\
+\vspace{0.1em}\hspace{2em})\\
+
+\subsection*{6)}
+SELECT Name, Stärke, Ident\\
+\vspace{0.1em}\hspace{1em}FROM(\\
+\vspace{0.1em}\hspace{2em}SELECT N, WS as Stärke, WP$=$"Held:in" as Ident FROM Held\\
+\vspace{0.1em}\hspace{2em}UNION\\
+\vspace{0.1em}\hspace{2em}SELECT N, VS, BS$=$"Beschützer:in" FROM Beschützer)\\
+
+\subsection*{7)}
+SELECT VID\\
+\vspace{0.1em}\hspace{1em}FROM Beschützer, Verlies\\
+\vspace{0.1em}\hspace{1em}WHERE BS = VID
+\vspace{0.1em}\hspace{1em}GROUP BY VID\\
+\vspace{0.1em}\hspace{1em}HAVING COUNT(BS) = 3
+
+\subsection*{8)}
+
+\subsection*{9)}
+
+\section*{Aufgabe 2}
+\subsection*{1)}
+\begin{tabular}{|c|}
+\hline
+Name(N)\\
+\hline
+Merlin\\
+Percy\\
+\hline
+\end{tabular}\\
+Gibt die Namen aller Helden mit einer Waffenstärke von mehr als 35 aus.
+
+\subsection*{2)}
+\begin{tabular}{|c|c|}
+\hline
+VerID & COUNT(BesID) \\
+\hline
+ &\\
+\hline
+\end{tabular}\\
+Gibt die Verlies ID und die Anzahl dessen Beschützer für alle Verliese mit mehr als 2 Beschützern aus.
+\subsection*{3)}
+\end{document}
