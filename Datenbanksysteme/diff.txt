@@ -121,7 +121,7 @@ SELECT N, S, T
   ORDER BY S ASC, N DESC;
     \end{minted}
   \end{teilaufgabe}
-  \newpage
+ \newpage
   \begin{teilaufgabe}
     \begin{minted}{SQL}
 SELECT VID
@@ -141,22 +141,22 @@ SELECT VID, O, count(BID), sum(VS)
     \end{minted}
   \end{teilaufgabe}
 
-  %  \begin{teilaufgabe}
-  %    \begin{minted}{SQL}
-  %SELECT CAST(summe AS REAL) / anzahl
-  %  FROM (SELECT sum(max_vs) AS summe
-  %  FROM (
-  %    SELECT MAX(VS) AS max_vs
-  %      FROM V
-  %      JOIN B ON BS = VID
-  %      GROUP BY VID
-  %    )), (SELECT count(VID) AS anzahl
-  %      FROM V);
-  %    \end{minted}
-  %    Indem man den Durchschnitt ``Zu Fuß'' (mit summe/anzahl) %rechnet, anstatt mit
-  %    \mintinline{SQL}{avg}, rechnet man die Verliese ohne %Beschützer:innen als 0 mit.
-  %  \end{teilaufgabe}
-  %\end{aufgabe}
+%  \begin{teilaufgabe}
+%    \begin{minted}{SQL}
+%SELECT CAST(summe AS REAL) / anzahl
+%  FROM (SELECT sum(max_vs) AS summe
+%  FROM (
+%    SELECT MAX(VS) AS max_vs
+%      FROM V
+%      JOIN B ON BS = VID
+%      GROUP BY VID
+%    )), (SELECT count(VID) AS anzahl
+%      FROM V);
+%    \end{minted}
+%    Indem man den Durchschnitt ``Zu Fuß'' (mit summe/anzahl) %rechnet, anstatt mit
+%    \mintinline{SQL}{avg}, rechnet man die Verliese ohne %Beschützer:innen als 0 mit.
+%  \end{teilaufgabe}
+%\end{aufgabe}
 
   \begin{teilaufgabe}
     \begin{minted}{SQL}

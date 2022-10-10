@@ -1,0 +1,75 @@
+\documentclass{article}
+\usepackage{amsmath,amsthm}
+\usepackage{amssymb,latexsym}
+\usepackage{float}
+\usepackage{fullpage}
+\usepackage{times}
+
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{example}{Example}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{alg}[theorem]{Algorithm}
+
+\newcommand{\set}[1]{{\left\{#1\right\}}}    % braces for set notation
+\newcommand{\ve}[1]{\mathbf{#1}}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\poly}{\operatorname{poly}}
+\newcommand{\complex}{{\mathbb C}}
+\newcommand{\reals}{{\mathbb R}}
+\newcommand{\ints}{{\mathbb Z}}
+\newcommand{\nats}{{\mathbb N}}
+\newcommand{\proj}[1]{\mbox{$|#1\rangle \!\langle #1 |$}}
+\newcommand{\enc}[1]{\left<#1\right>}
+\newcommand{\spa}[1]{\mathcal{#1}}
+\newcommand{\ayes}{A_{\rm yes}}
+\newcommand{\ano}{A_{\rm no}}
+\newcommand{\bra}[1]{\langle #1|}
+\newcommand{\ket}[1]{|#1\rangle}
+\newcommand{\braket}[2]{\langle #1|#2\rangle}
+\newcommand{\ketbra}[2]{\ket{#1}{\bra{#2}}}
+
+\newcommand{\C}{C}
+\newcommand{\trace}{\operatorname{Tr}} %CHECK
+\newcommand{\Id}{Id} %CHECK
+\newcommand{\Exs}[2]{E_{#1}[#2]} %CHECK
+
+
+\begin{document}
+
+\title{
+  CMSC 491 Introduction to Quantum Computation, VCU\\
+  %Fill in the assignment number below
+  Assignment: (Insert assignment number here)\\
+  %Fill in your name below
+  Name: (Insert your name here)}
+
+\date{}
+
+%The command below creates the title page
+\maketitle
+\vspace{-10mm}
+
+%Enter your answers below
+\begin{enumerate}
+  \item Answer question $1$ here.
+  \item Answer question $2$ here, etc\ldots. Here is some math, $3-4=-1$, and here is an equation:
+        \begin{equation}
+          3^2=9=4+5=\sum_{i=9}^9 i.
+        \end{equation}
+  \item This is a state vector $\ket{\psi}\in\alpha\ket{0}+\beta\ket{1}$ for $\alpha,\beta\in\complex^2$ for $\abs{\alpha}^2+\abs{\beta}^2=1$.
+  \item The inner product $\braket{\psi}{\phi}=\sum_{i}\psi_i^*\phi_i$.
+  \item The outer product $\ketbra{\psi}{\psi}$ and tensor product $\ket{\psi}\otimes \ket{\phi}$.
+  \item Here is the trace $\trace(\rho)$.
+\end{enumerate}
+
+\end{document}
