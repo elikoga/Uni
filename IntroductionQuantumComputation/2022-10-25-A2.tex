@@ -1,0 +1,321 @@
+\documentclass{article}
+\usepackage{amsmath,amsthm}
+\usepackage{amssymb,latexsym}
+\usepackage{epsfig}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{fullpage}
+\usepackage{enumerate}
+\usepackage{paralist}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{quantikz}
+
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{alg}[theorem]{Algorithm}
+\newtheorem{protocol}[theorem]{Protocol}
+\newtheorem{problem}[theorem]{Problem}
+
+\newcommand{\ip}[2]{\left\langle #1 , #2\right\rangle}
+\newcommand{\tr}{\trace}
+\newcommand{\setft}[1]{\mathrm{#1}}
+\newcommand{\lin}[1]{\setft{L}\left(#1\right)}
+\newcommand{\density}[1]{\setft{D}\left(#1\right)}
+\newcommand{\unitary}[1]{\setft{U}\left(#1\right)}
+\newcommand{\herm}[1]{\setft{Herm}\left(#1\right)}
+\newcommand{\pos}[1]{\setft{Pos}\left(#1\right)}
+\newcommand{\sep}[1]{\setft{Sep}\left(#1\right)}
+\newcommand{\rank}[1]{\operatorname{rank}(#1)}
+\newcommand{\ex}{\paragraph{Exercise.}}
+
+\def\I{I}
+\def\({\left(}
+\def\){\right)}
+\def\X{\mathcal{X}}
+\def\Y{\mathcal{Y}}
+\def\Z{\mathcal{Z}}
+\def\W{\mathcal{W}}
+\def\yes{\text{yes}}
+\def\no{\text{no}}
+\def\blog{\textup{log}}
+\newcommand{\A}{\spa{A}}
+\newcommand{\B}{\spa{B}}
+\newcommand{\UA}{U_A}
+
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\epssdp}{\varepsilon_{\rm sdp}}
+% \newcommand{\bra}[1]{\langle #1|}
+% \newcommand{\ket}[1]{|#1\rangle}
+% \newcommand{\braket}[2]{\langle #1|#2\rangle}
+% \newcommand{\ketbra}[2]{\ket{#1}{\bra{#2}}}
+\newcommand{\ketbra}[2]{|#1\rangle\!\langle #2|}
+\newcommand{\lmin}[1] {\lambda_{\operatorname{min}}(#1)}
+\newcommand{\lmax}[1] {\lambda_{\operatorname{max}}(#1)}
+\newcommand{\lhyes} {\operatorname{LH_{yes}}}
+\newcommand{\lhno} {\operatorname{LH_{no}}}
+\newcommand{\CQ}{\mathcal{CQ}}
+\newcommand{\lh}{\operatorname{LH}}
+\newcommand{\flh}{\operatorname{5-LH}}
+\newcommand{\klhh}{\operatorname{k-LH}}
+\newcommand{\qma}{\operatorname{QMA}}
+\newcommand{\enc}[1]{\left<#1\right>}
+
+\newcommand{\C}{C}
+\newcommand{\Id}{Id} %CHECK
+\newcommand{\Exs}[2]{E_{#1}[#2]} %CHECK
+
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+
+\newcommand{\trace}{{\rm Tr}}
+
+%\newcommand{\dim}{\operatorname{dim}}
+\newcommand{\norm}[1]{\left\|\,#1\,\right\|}       % norm
+\newcommand{\pnorm}[1]{\left\|\,#1\,\right\|_p}       % norm
+\newcommand{\onorm}[1]{\norm{#1}_{\mathrm{1}}}      % Euclidean norm for vectors
+\newcommand{\enorm}[1]{\norm{#1}_{\mathrm{2}}}      % Euclidean norm for vectors
+\newcommand{\trnorm}[1]{\norm{#1}_{\mathrm {tr}}}  % trace norm
+\newcommand{\fnorm}[1]{\norm{#1}_{\mathrm {F}}}    % frobenius norm
+\newcommand{\snorm}[1]{\norm{#1}_{\mathrm {\infty}}}    % spectral norm
+
+\newcommand{\set}[1]{{\left\{#1\right\}}}    % braces for set notation
+\newcommand{\ve}[1]{\mathbf{#1}}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+% \newcommand{\swap}{\operatorname{SWAP}}
+\newcommand{\poly}{\operatorname{poly}}
+\newcommand{\cc}{d^{\frac{k}{2}}}
+\newcommand{\OPT}{{\rm OPT}}
+\newcommand{\QMA}{{\rm QMA}}
+\newcommand{\MQA}{{\rm MQA}}
+\newcommand{\NP}{{\rm NP}}
+\newcommand{\PP}{{\rm P}}
+\newcommand{\PH}{{\rm PH}}
+\newcommand{\BPP}{{\rm BPP}}
+\newcommand{\BQP}{{\rm BQP}}
+
+\newcommand{\CNOT}{{\rm CNOT}}
+
+\newcommand{\complex}{{\mathbb C}}
+\newcommand{\reals}{{\mathbb R}}
+\newcommand{\ints}{{\mathbb Z}}
+\newcommand{\nats}{{\mathbb N}}
+
+\newcommand{\spa}[1]{\mathcal{#1}}
+\newcommand{\dens}{\mathcal{D}(\spa{A}\otimes\spa{B})}
+
+\newcommand{\LL}{\mathcal{L}}
+\newcommand{\DD}{\mathcal{D}}
+\newcommand{\HH}{\mathcal{H}}
+\newcommand{\UU}{\mathcal{U}}
+
+\mathchardef\mhyphen="2D
+
+\newcommand{\ayes}{A_{\rm yes}} %CHECK
+\newcommand{\ano}{A_{\rm no}} %CHECK
+
+\bibliographystyle{alpha}
+
+\begin{document}
+
+\title{\vspace{-10mm}Introduction to Quantum Computation, UPB\\Winter 2022, Assignment 2\\{\large To be completed by: Thursday, October 27}
+\\Eli Kogan-Wang}
+\date{}
+\maketitle
+
+\section{Exercises}
+\begin{enumerate}
+  \item %($4$ marks)
+        Use the spectral decompositions of $X$ and $Z$ to prove that $HXH^\dagger=Z$. (Do not simply write out the matrices and multiply!) Why does this immediately also yield that $HZH^\dagger=X$?
+
+        $$X=(\ketbra{+}{+}-\ketbra{-}{-})$$
+        $$Z=(\ketbra{0}{0}-\ketbra{1}{1})$$
+
+        Since for $H$ we have $H=H^\dagger=H^{-1}$, we can write $HXH^\dagger=HXH$.
+
+        For the Hadamard gate, we have $H\ket{0}=\ket{+}$ and $H\ket{1}=\ket{-}$, so we can write:
+        $$H=\ketbra{+}{0}+\ketbra{-}{1}\quad\text{(trivial, since Orthonormal-Change-of-Basis)}$$
+
+        Additionally, we have $H\ket{+}=\ket{0}$ and $H\ket{-}=\ket{1}$, so we can write:
+        $$H=\ketbra{0}{+}+\ketbra{1}{-}\quad\text{(trivial, since Orthonormal-Change-of-Basis)}$$
+
+        Now, we can write:
+
+        $$\begin{aligned}
+            HXH^\dagger & =H(\ketbra{+}{+}-\ketbra{-}{-})H                                                           \\
+                        & = (\ketbra{0}{+}+\ketbra{1}{-})(\ketbra{+}{+}-\ketbra{-}{-})(\ketbra{+}{0}+\ketbra{-}{1})  \\
+            \rlap{\text{We will not write out the $\braket{-}{+}$ and $\braket{+}{-}$ terms, since they are zero.}}  \\
+                        & = (\ket{0}\braket{+}{+}\braket{+}{+}\bra{0}+\ket{1}\bra{-}(-1)\ket{-}\braket{-}{-}\bra{1}) \\
+                        & = (\ketbra{0}{0}-\ketbra{1}{1})                                                            \\
+                        & = Z
+          \end{aligned}$$
+
+        From this it immediately follows, that $HZH^\dagger=X$:
+
+        $$\begin{aligned}
+                 & HXH^\dagger = Z \quad & | & \cdot H \quad\text{(since $H=H^\dagger=H^{-1}$)} \\
+            \iff & HX = ZH \quad         & | & \, H^\dagger\cdot                                \\
+            \iff & X=HZH^\dagger
+          \end{aligned}$$
+  \item %($6$ marks)
+        \begin{enumerate}
+          \item %($2$ marks)
+                Write out the 4-dimensional vector for $(\alpha\ket{0}+\beta\ket{1})\otimes(\gamma\ket{0}+\delta\ket{1})$.
+                $$\begin{bmatrix}
+                    \alpha\cdot\begin{bmatrix}
+                                 \gamma \\
+                                 \delta \\
+                               \end{bmatrix} \\
+                    \beta\cdot\begin{bmatrix}
+                                \gamma \\
+                                \delta \\
+                              \end{bmatrix}  \\
+                  \end{bmatrix}=\begin{bmatrix}
+                    \alpha\gamma \\
+                    \alpha\delta \\
+                    \beta\gamma  \\
+                    \beta\delta  \\
+                  \end{bmatrix}=\alpha\gamma\ket{00}+\alpha\delta\ket{01}+\beta\gamma\ket{10}+\beta\delta\ket{11}$$
+          \item %($4$ marks)
+                Let $\mathcal{B}_1=\set{\ket{\psi_1},\ket{\psi_2}}$ and $\mathcal{B}_2=\set{\ket{\phi_1},\ket{\phi_2}}$ be two orthonormal bases for $\complex^2$. Prove that
+                \[
+                  \mathcal{B}_3 = \set{\ket{\psi_1}\otimes\ket{\phi_1},\ket{\psi_1}\otimes\ket{\phi_2},\ket{\psi_2}\otimes\ket{\phi_1},\ket{\psi_2}\otimes\ket{\phi_2}}
+                \]
+                is an orthonormal basis for $\complex^4$. In other words, show that for each $\ket{v}\in\mathcal{B}_3$, $\enorm{\ket{v}}=1$, and for all pairs of distinct $\ket{v},\ket{w}\in\mathcal{B}_3$, $\braket{v}{w}=0$.
+                \vspace{0.5cm}
+
+                Every $\ket{v}\in\mathcal{B}_3$ is of the form $\ket{\psi_i}\otimes\ket{\phi_j}$, where $i,j\in\set{1,2}$.
+
+                Let $i,j\in\set{1,2}$. Now let:
+
+                $$\ket{\psi_i}=\begin{bmatrix}
+                    \alpha \\
+                    \beta  \\
+                  \end{bmatrix}$$
+
+                $$\ket{\phi_j}=\begin{bmatrix}
+                    \gamma \\
+                    \delta \\
+                  \end{bmatrix}$$
+
+                Since $\mathcal{B}_1,\mathcal{B}_2$ are orthonormal bases, we have $\alpha^2+\beta^2=1$ and $\gamma^2+\delta^2=1$.
+
+                Since:
+
+                $$\ket{\psi_i}\otimes\ket{\phi_j}=\begin{bmatrix}
+                    \alpha\gamma \\
+                    \alpha\delta \\
+                    \beta\gamma  \\
+                    \beta\delta  \\
+                  \end{bmatrix}$$
+
+                We need to show that $\alpha^2\gamma^2+\alpha^2\delta^2+\beta^2\gamma^2+\beta^2\delta^2=1$.
+
+                $$\begin{aligned}
+                    \alpha^2\gamma^2+\alpha^2\delta^2+\beta^2\gamma^2+\beta^2\delta^2
+                     & = \alpha^2\cdot(\gamma^2+\delta^2)+\beta^2\cdot(\gamma^2+\delta^2) \\
+                     & = \alpha^2\cdot 1+\beta^2\cdot 1                                   \\
+                     & = 1
+                  \end{aligned}$$
+
+                We have shown that, for each $\ket{v}\in\mathcal{B}_3$, $\enorm{\ket{v}}=1$.
+
+                Now, let $\ket{v},\ket{w}\in\mathcal{B}_3$ be distinct.
+                Then, $\ket{v},\ket{w}$ are of the form $\ket{\psi_i}\otimes\ket{\phi_j}$ and $\ket{\psi_k}\otimes\ket{\phi_l}$, respectively, where $i,j,k,l\in\set{1,2}$.
+                And $(i,j)\neq(k,l)$ or in other words, $i\neq k$ or $j\neq l$.
+
+                Now:
+
+                $$\begin{aligned}
+                    \braket{v}{w}
+                     & = (\bra{\psi_i}\otimes\bra{\phi_j})(\ket{\psi_k}\otimes\ket{\phi_l})                \\
+                     & = \braket{\psi_i}{\psi_k}\cdot\braket{\phi_j}{\phi_l}                               \\
+                    \rlap{\text{Since $i\neq k$ or $j\neq l$ and the $\psi$s and $\phi$s are orthogonal,}} \\
+                     & = 0
+                  \end{aligned}$$
+
+                We have succesfully shown, that $\mathcal{B}_3$ is an orthonormal basis for $\complex^4$.
+        \end{enumerate}
+  \item %($10$ marks)
+        \begin{enumerate}
+          %\item %($2$ marks)
+          %Write out the $4\times 4$ matrix representing $Y\otimes Y$.
+          \item %($2$ marks)
+                Prove that $(Z\otimes Y)^\dagger=Z\otimes Y$. Do not write out any matrices explicitly; rather, you must use the properties of the tensor product, dagger, and $Y$.
+                \vspace{0.5cm}
+                $$\begin{aligned}
+                    (Z\otimes Y)^\dagger
+                     & = Z^\dagger\otimes Y^\dagger \quad & | & \text{$\dagger$ distributes over $\otimes$} \\
+                     & = Z\otimes Y \quad                 & | & \text{$Z$,$Y$ are self-adjoint}
+                  \end{aligned}$$
+          \item %($6$ marks)
+                In class, we saw a quantum circuit which, given starting state $\ket{0}\otimes\ket{0}$, prepared the Bell state $\ket{\Phi^+}=\frac{1}{\sqrt{2}}(\ket{00}+\ket{11})$. In fact, that circuit is a change of basis matrix, mapping the standard basis $\ket{00},\ket{01},\ket{10},\ket{11}$ to the Bell basis $\ket{\Phi^+},\ket{\Psi^+},\ket{\Phi^-},\ket{\Psi^-}$.
+                \vspace{0.5cm}
+
+                In fact, in class we saw:
+
+                \begin{quantikz}
+                  \lstick{$\ket{\psi}=\ket{0}$}  &\gate{H} &\ctrl{1} &\qw\rstick[wires=2]{$\ket{\Phi^+}$}\\
+                  \lstick{$\ket{\phi}=\ket{0}$}  &\qw      &\targ{}  &\qw\\
+                \end{quantikz}
+
+                Which is equivalent to:
+
+                $$\begin{aligned}
+                    \CNOT(H\otimes I)\ket{0}\ket{0}
+                     & = \ket{\Phi^+}
+                  \end{aligned}$$
+
+                \begin{enumerate}
+                  \item %($3$ marks)
+                        Write down a quantum circuit which maps $\ket{\Phi^+}$ to $\ket{0}\otimes\ket{0}$. (Hint: Write out the circuit from class as a sequence of matrix operations. Then, recalling that the inverse of any unitary operation $U$ is given by $U^\dagger$, take the inverse of this entire sequence by taking the dagger.)
+
+                        $$\begin{aligned}
+                            (\CNOT(H\otimes I))^{-1}
+                             & = ((H\otimes I)^{-1}\CNOT^{-1})       \\
+                             & = ((H\otimes I)^\dagger\CNOT^\dagger) \\
+                             & = ((H^\dagger\otimes I^\dagger)\CNOT) \\
+                             & = (H\otimes I)\CNOT                   \\
+                          \end{aligned}$$
+
+                        This corresponds to the diagram:
+
+                        \begin{quantikz}
+                          \lstick[wires=2]{$\ket{\Phi^+}$}  &\ctrl{1} &\gate{H} &\qw\rstick[wires=2]{$\ket{00}$}\\
+                          \iffalse                       \fi&\targ{}  &\qw      &\qw\\
+                        \end{quantikz}
+
+
+                  \item %($3$ marks)
+                        Your circuit from 3(b)(i) is actually a change of basis which maps the Bell basis \emph{back} to the standard basis. To verify this, run your circuit from 3(b)(i) on input $\ket{\Psi^-}$ and check that the output is $\ket{1}\otimes\ket{1}$.
+
+                        $$\begin{aligned}
+                            (H\otimes I)\CNOT\ket{\Psi^-}
+                             & = (H\otimes I)\CNOT\frac{1}{\sqrt{2}}(\ket{01}-\ket{10})            \\
+                             & = (H\otimes I)\frac{1}{\sqrt{2}}\CNOT(\ket{01}-\ket{10})            \\
+                             & = (H\otimes I)\frac{1}{\sqrt{2}}(\CNOT\ket{01}-\CNOT\ket{10})       \\
+                             & = (H\otimes I)\frac{1}{\sqrt{2}}(\ket{01}-\ket{11})                 \\
+                             & = (H\otimes I)\frac{1}{\sqrt{2}}((\ket{0}-\ket{1})\otimes\ket{1})   \\
+                             & = (H\otimes I)((\frac{1}{\sqrt{2}}(\ket{0}-\ket{1}))\otimes\ket{1}) \\
+                             & = (H\otimes I)(\ket{-}\otimes\ket{1})                               \\
+                             & = ((H\ket{-})\otimes (I\ket{1}))                                    \\
+                             & = \ket{1}\otimes\ket{1}                                             \\
+                             & = \ket{11}
+                          \end{aligned}$$
+
+                \end{enumerate}
+        \end{enumerate}
+\end{enumerate}
+
+\end{document}
