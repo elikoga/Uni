@@ -1,0 +1,151 @@
+\documentclass[answers]{submit}
+\homework
+
+%TODO: Hier Gruppennummer, Namen, sowie Matrikelnummern einfügen.
+\exercisegroup{27}{  Eli Kogan-Wang (7251030) \\David Noah Stamm (7249709) \\ Bogdan Rerich (7248483) \\Jan Schreiber(7253698)}
+
+% Folgendes braucht nicht geändert werden
+\exercisetl{Universität Paderborn \\ Prof. Dr. Johannes Blömer}
+\exerciselecture{Berechenbarkeit und Komplexität -- WS 2022/2023}
+\exercisenumber{2}
+\exercisehandin{31. Oktober 2022 -- 13:00 Uhr}
+
+\input{commands.tex} % Diverse praktische Kommandos aus Vorlesungsskript und Übungen
+
+
+\begin{document}
+\exerciseheader
+\exercisetitle
+
+\begin{exercise}[6]{Akzeptieren und Entscheiden von Sprachen}
+  Betrachten Sie die folgende DTM $M$ mit Eingabealphabet $\Sigma=\{0,1\}$.
+
+  \begin{center}
+    \begin{tabular}{c|c|c|c|c}
+      $\delta$ & $0$         & $1$              & $\sqcup$         & $\rhd$         \\\hline
+      $s$      & $(q_0,0,R)$ & $(q_2,\sqcup,R)$ & $(\qa,\sqcup,L)$ & $(s,\rhd,R)$   \\\hline
+      $q_0$    & $(\qr,1,R)$ & $(q_1,1,R)$      & $(\qr,1,R)$      & $(\qr,\rhd,R)$ \\\hline
+      $q_1$    & $(\qr,0,R)$ & $(s,1,R)$        & $(\qr,\sqcup,R)$ & $(\qr,\rhd,R)$ \\\hline
+      $q_2$    & $(q_2,0,R)$ & $(q_2,\sqcup,R)$ & $(q_2,1,R)$      & $(\qr,\rhd,R)$
+    \end{tabular}
+  \end{center}
+
+  \begin{enumerate}
+    \item Was ist die von $M$ akzeptierte Sprache $L$?
+          Erläutern Sie, warum $M$ die Sprache $L$ nicht entscheidet.
+          Geben Sie ein Wort $x\not\in L$ an, welches $M$ nicht ablehnt.
+    \item Ändern Sie $M$ so ab, dass die Sprache $L$ von Ihrer geänderten DTM entschieden wird.
+  \end{enumerate}
+  \answer{
+    \\ 1. Die von der Turingmaschine akzeptierte Sprache ist: \\
+    L(M) = $\{ w \in \{0,1\}^* | w =(011)^n $ mit n $ \in \N_{0} \}$ \\
+    M entscheidet die Sprache nicht, da z.B. 1 $\notin $ L(M) nicht ablehnt. \\ \\
+    2. \\
+    \begin{tabular}{c|c|c|c|c}
+      $\delta$ & $0$         & $1$              & $\sqcup$         & $\rhd$         \\\hline
+      $s$      & $(q_0,0,R)$ & $(\qr,\sqcup,R)$ & $(\qa,\sqcup,L)$ & $(s,\rhd,R)$   \\\hline
+      $q_0$    & $(\qr,1,R)$ & $(q_1,1,R)$      & $(\qr,1,R)$      & $(\qr,\rhd,R)$ \\\hline
+      $q_1$    & $(\qr,0,R)$ & $(s,1,R)$        & $(\qr,\sqcup,R)$ & $(\qr,\rhd,R)$ \\\hline
+    \end{tabular}
+  }
+\end{exercise}
+
+\begin{exercise}[6]{Definiton Turingmaschine}
+  Betrachten Sie die folgende alternative Definition einer Turingmaschine.
+  Das Band der DTM ist in beide Richtungen unendlich, und nicht durch $\rhd$ zu einer Seite hin begrenzt (es gilt also auch $\rhd\not\in\Gamma$).
+  Die Eingabe der DTM steht auf dem Band an beliebiger Position und das Band enthält links und rechts der Eingabe nur $\sqcup$.
+  Es gilt immer noch $\sqcup\not\in\Sigma$.
+  Die Startkonfiguration ist nun die Konfiguration, bei der die DTM sich im Startzustand befindet und der Kopf auf dem ersten Symbol der Eingabe steht.
+  Beweisen Sie, dass es zu jeder DTM mit dieser Definition des Bands eine DTM gibt, die die Definition des Vorlesungsskripts erfüllt, sodass beide Maschinen dieselbe Sprache akzeptieren bzw. entscheiden.
+
+  \answer{
+    Sei DTM $M$ gegeben als $4$-Tupel $(Q,\Sigma,\Gamma,\delta)$, welche die Sprache L(M) akzeptiert auf einem beidseitigen unendlichen Band \\
+    Wir simulieren die DTM M mit einer $\tilde{M}$, welche der Band Definition aus der Vorlesung, wie folgt definiert ist
+
+    \includegraphics[width=\textwidth]{2022_10_27_19_45_Office_Lens.jpg}
+  }
+\end{exercise}
+
+\begin{exercise}[6]{$2$-Band-DTM Konstruieren}
+  Beschreiben Sie eine $2$-Band Turingmaschine, die bei Eingabe der Binärdarstellung zweier Zahlen $a,b\in\N$ die Binärdarstellung der Zahl $a+b$ berechnet.
+  Gehen Sie davon aus, dass $a$ bereits auf dem ersten Band und $b$ auf dem zweiten Band steht und bauen Sie Ihre DTM so, dass das Ergebnis $a+b$ am Ende auf Band 1 steht.
+  Es genügt, wenn Sie Ihre Turingmaschine informell beschreiben.
+  Begründen Sie, warum Ihre DTM das Gewünschte leistet.
+  Analysieren Sie die Laufzeit im $\cO$-Kalkül, unter der Annahme, dass weder $a$ noch $b$ mit führenden Nullen angegeben sind.
+  \answer{
+  O.B.d.A. die Binärzahlen kommen in LSB-First Reihenfolge auf das Band. \\
+
+  Wir geben den DTM $M=(Q=\{q_0,q_1,q_{\text{accept}},q_{\text{reject}}\},\Sigma=\{0,1\},\Gamma=\{\rhd,0,1,\sqcup\},\delta)$.
+
+  Wobei $\delta$ gegeben ist durch:
+
+  \begin{center}
+    \begin{tabular}{c|c|c|c|c|c|c}
+      Zustand inp & IB1      & IB2      & OB1      & OB2      & Zustand out         & Bewegung \\\hline
+      $q_0$       & $\rhd$   & $\rhd$   & $\rhd$   & $\rhd$   & $q_0$               & $R$      \\\hline
+      $q_0$       & $0$      & $0$      & $0$      & $0$      & $q_0$               & $R$      \\\hline
+      $q_0$       & $0$      & $1$      & $1$      & $0$      & $q_0$               & $R$      \\\hline
+      $q_0$       & $1$      & $0$      & $1$      & $0$      & $q_0$               & $R$      \\\hline
+      $q_0$       & $1$      & $1$      & $0$      & $0$      & $q_1$               & $R$      \\\hline
+      $q_0$       & $\sqcup$ & $\sqcup$ & $\sqcup$ & $\sqcup$ & $q_{\text{accept}}$ & $R$      \\\hline
+      $q_0$       & $\sqcup$ & $0$      & $0$      & $\sqcup$ & $q_0$               & $R$      \\\hline
+      $q_0$       & $\sqcup$ & $1$      & $1$      & $\sqcup$ & $q_0$               & $R$      \\\hline
+      $q_0$       & $0$      & $\sqcup$ & $0$      & $\sqcup$ & $q_0$               & $R$      \\\hline
+      $q_0$       & $1$      & $\sqcup$ & $1$      & $\sqcup$ & $q_0$               & $R$      \\\hline
+      $q_1$       & $0$      & $0$      & $1$      & $0$      & $q_0$               & $R$      \\\hline
+      $q_1$       & $0$      & $1$      & $0$      & $0$      & $q_1$               & $R$      \\\hline
+      $q_1$       & $1$      & $0$      & $0$      & $0$      & $q_1$               & $R$      \\\hline
+      $q_1$       & $1$      & $1$      & $1$      & $0$      & $q_1$               & $R$      \\\hline
+      $q_1$       & $\sqcup$ & $\sqcup$ & $1$      & $\sqcup$ & $q_{\text{accept}}$ & $R$      \\\hline
+      $q_1$       & $\sqcup$ & $0$      & $1$      & $\sqcup$ & $q_0$               & $R$      \\\hline
+      $q_1$       & $\sqcup$ & $1$      & $0$      & $\sqcup$ & $q_1$               & $R$      \\\hline
+      $q_1$       & $0$      & $\sqcup$ & $1$      & $\sqcup$ & $q_{\text{accept}}$ & $R$      \\\hline
+      $q_1$       & $1$      & $\sqcup$ & $0$      & $\sqcup$ & $q_1$               & $R$      \\\hline
+    \end{tabular}
+  \end{center}
+
+  Wobei Bewegung: $R$ dafür steht, dass man auf beiden Bändern nach rechts geht.
+
+  Wenn nicht angegeben: $q_{\text{reject}}$ und $R$.
+
+  Wir gehen jeden Zeitschritt nach rechts und "Full-Adden"-die Bandelemente und speichern in Band 1.
+
+  Den Carry speichern wir im Zustand.
+
+  Wenn $b$ zuende ist, terminieren wir sobald der carry losgeworden ist.
+
+  Damit ist die Worst Case Laufzeit im $\mathcal{O}$-Kalkül $\mathcal{O}(\max(\log a, \log b))$.
+
+  Die Laufzeit ist nicht in $\mathcal{O}(\log b)$, da das hintere Ende von $a$ mit 1en gefüllt werden kann, die bis zum
+  Ende zum carry führen.
+
+  }
+\end{exercise}
+
+
+\begin{exercise}[6]{Symmetrische Differenz}
+  Die symmetrische Differenz $L_1\Delta L_2$ zweier Sprachen $L_1,L_2\subseteq \Sigma^*$ ist die Menge aller Worte aus $\Sigma^*$, die in genau einer der beiden Sprachen liegen.
+
+  Zeigen Sie: Sind $L_1,L_2$ entscheidbar, so ist auch $L_1\Delta L_2$ entscheidbar.
+  Geben Sie dazu explizit eine DTM $M$ als $4$-Tupel $(Q,\Sigma,\Gamma,\delta)$ an, die $L_1\Delta L_2$ entscheidet.
+  Gehen Sie dabei davon aus, dass für jedes $L_i$, $i\in\{1,2\}$, eine DTM $M_i = (Q_i, \Sigma,\Gamma_i,\delta_i)$ gegeben ist, die $L_i$ entscheidet.
+
+  \answer{
+    Offensichtlicherweise gilt: \\ \\ $L_1\Delta L_2$ = $(L_1 \textbackslash L_2) \cup (L_2 \textbackslash L_1) $ = $ (L_1 \cup L_2) \textbackslash (L_1 \cap L_2) $ (*)\\ \\
+    Nach Satz 1.10 (ii) und (iii) existieren Turingmaschinen, welche die Sprache $L_1 \cup L_2$ und $ L_1 \cap L_2$ entscheiden, falls $L_1$ und $L_2$ entscheidbar sind. Das ist hier nach Annahme der Fall, also seien $M_\cup $und $M_\cap$ mit $M_i = (Q_i, \Sigma,\Gamma_i,\delta_i)$ für $i\in\{\cup,\cap\}$. Nun ist nur noch zu Zeigen, dass eine Turingmaschiene $M_{\cup\setminus\cap}$ existiert, welche die Differenz zweier Entscheidbarer Sprachen entscheidet. \\
+    Wir konstruieren die 2-Band-DTM $M_{\cup\setminus\cap}$, die wie folgt arbeitet: \\ \\
+    • Kopiere den Input auf Band 2. \\
+    • Arbeite parallel wie $M_\cup$ auf Band 1 und wie $M_\cap $ auf Band 2. \\ \\
+    Formaler ist $M_{\cup\setminus\cap}$ folgendermaßen definiert: Die Zustandsmenge Q von M enthält
+    $Q_\cup$×$Q_\cap$. Weiter enthält die Menge Q Zustände, die für das Kopieren der Eingabe
+    auf das zweite Band zuständig sind. Schließlich definieren wir für  $q1 \in Q_\cup$, $q2 \in Q_\cap$, alle a_1 $\in \Sigma_1$, a_2 $\in \Sigma_2$ und D_i $\in {L, R, S}$ die Übergangsfunktion $ \delta $ von $M_{\cup\setminus\cap}$
+    durch: $\delta ([q_1, q_2], a_1, a_2) = ([p_1, p_2], b_1, b_2, D_1, D_2)$, falls $\delta_1(q_1, a_1) = (p_1, b_1, D_1)$
+    und $\delta_2(q_2, a_2) = (p_2, b_2, D_2)$. Weiter sind Regeln vorhanden, die dafür sorgen,
+    dass, wenn $M_\cup$ bereits im Zustand $q_a$ gehalten hat, die Rechnung von $M_\cap$
+    weitergefuhrt wird, und umgekehrt.\\
+    $M_{\cup\setminus\cap}$ akzeptiert eine Eingabe, falls $M_\cup$ die Eingabe akzeptiert und  $M_\cap$ die Eingabe akzeptieren, d. h. der Zustand [$q_a, q_r$] erreicht wird. \\
+    Folglich ist nun die gesuchte DTM M genau die DTM $M_{\cup\setminus\cap}$ nach (*). $\qed$
+  }
+\end{exercise}
+
+\end{document}
