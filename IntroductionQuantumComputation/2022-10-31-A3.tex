@@ -268,24 +268,34 @@
           \end{aligned}$$
 
         $$\begin{aligned}
-            \ket{\phi_2} & =(H\otimes I\otimes I)\ket{\phi_1}                             \\
-                         & =\alpha\ket{+}\ket{00}+\beta\ket{-}\ket{10}                    \\
-                         & =\alpha\ket{000}+\alpha\ket{100}+\beta\ket{010}-\beta\ket{110} \\
+            \ket{\phi_2} & =(H\otimes I\otimes I)\ket{\phi_1}                                                                                                     \\
+                         & =\alpha\ket{+}\ket{00}+\beta\ket{-}\ket{10}                                                                                            \\
+                         & =\frac{1}{\sqrt{2}}\alpha\ket{000}+\frac{1}{\sqrt{2}}\alpha\ket{100}+\frac{1}{\sqrt{2}}\beta\ket{010}-\frac{1}{\sqrt{2}}\beta\ket{110} \\
           \end{aligned}$$
 
         Alice measures $B=\{\ketbra{00}{00}\otimes I,\ketbra{01}{01}\otimes I,\ketbra{10}{10}\otimes I,\ketbra{11}{11}\otimes I\}$
 
 
-        For outcome $\ket{00}$ we have $\Pr=\abs{\alpha}^2$ and $\ket{\psi'}=\frac{\alpha}{\abs{\alpha}}\ket{0}$.
+        For outcome $\ket{00}$ we have $\Pr=\frac{1}{2}\abs{\alpha}^2$ and $\ket{\psi'}=\frac{\alpha}{\abs{\alpha}}\ket{0}$.
 
-        For outcome $\ket{01}$ we have $\Pr=\abs{\beta}^2$ and $\ket{\psi'}=\frac{\beta}{\abs{\beta}}\ket{0}$.
+        For outcome $\ket{01}$ we have $\Pr=\frac{1}{2}\abs{\beta}^2$ and $\ket{\psi'}=\frac{\beta}{\abs{\beta}}\ket{0}$.
 
-        For outcome $\ket{10}$ we have $\Pr=\abs{\alpha}^2$ and $\ket{\psi'}=\frac{\alpha}{\abs{\alpha}}\ket{0}$.
+        For outcome $\ket{10}$ we have $\Pr=\frac{1}{2}\abs{\alpha}^2$ and $\ket{\psi'}=\frac{\alpha}{\abs{\alpha}}\ket{0}$.
 
-        For outcome $\ket{11}$ we have $\Pr=\abs{\beta}^2$ and $\ket{\psi'}=\frac{-\beta}{\abs{\beta}}\ket{0}$.
+        For outcome $\ket{11}$ we have $\Pr=\frac{1}{2}\abs{\beta}^2$ and $\ket{\psi'}=\frac{-\beta}{\abs{\beta}}\ket{0}$.
+
+        After applying controlled $X$ and $Z$ gates we have
+
+        For outcome $\ket{00}$ we have $\ket{\psi'}=\frac{\alpha}{\abs{\alpha}}\ket{0}$.
+
+        For outcome $\ket{01}$ we have $\ket{\psi'}=\frac{\beta}{\abs{\beta}}\ket{1}$.
+
+        For outcome $\ket{10}$ we have $\ket{\psi'}=\frac{\alpha}{\abs{\alpha}}\ket{0}$.
+
+        For outcome $\ket{11}$ we have $\ket{\psi'}=\frac{\beta}{\abs{\beta}}\ket{1}$.
 
 
-        We have transmitted no information and have destroyed our entangled pair.
+        We have essentially measured the qubit and have transferred the resulting state with global phase to Bob. This is not teleportation.
 
         \vspace{0.5cm}\hrule\vspace{0.5cm}
 
@@ -318,8 +328,8 @@
                          & =\frac{1}{\sqrt{2}}                                                                                                            \\
                          & \cdot(\alpha\sqrt{2/5}\ket{000}+\beta\sqrt{3/5}\ket{001}                                                                       \\
                          & +\alpha\sqrt{3/5}\ket{011}+\beta\sqrt{2/5}\ket{010}                                                                            \\
-                         & -\alpha\sqrt{2/5}\ket{100}-\beta\sqrt{3/5}\ket{101}                                                                            \\
-                         & -\alpha\sqrt{3/5}\ket{111}-\beta\sqrt{2/5}\ket{110})                                                                           \\
+                         & +\alpha\sqrt{2/5}\ket{100}-\beta\sqrt{3/5}\ket{101}                                                                            \\
+                         & +\alpha\sqrt{3/5}\ket{111}-\beta\sqrt{2/5}\ket{110})                                                                           \\
           \end{aligned}$$
 
         We shall consider the measurement outcomes:
@@ -336,6 +346,16 @@
           \end{aligned}$$
 
         The other measurement outcomes behave similarly. We will write them out in their un-normalized form:
+
+        The new state for the third qubit is
+
+        Outcome $\ket{00}$: $\alpha\sqrt{2/5}\ket{0}+\beta\sqrt{3/5}\ket{1}$
+
+        Outcome $\ket{01}$: $\alpha\sqrt{3/5}\ket{1}+\beta\sqrt{2/5}\ket{0}$
+
+        Outcome $\ket{10}$: $\alpha\sqrt{2/5}\ket{0}-\beta\sqrt{3/5}\ket{1}$
+
+        Outcome $\ket{11}$: $\alpha\sqrt{3/5}\ket{1}-\beta\sqrt{2/5}\ket{0}$
 
         As before, we may apply the $X$-gate, controlled by the measurement of the second qubit, to the third qubit.
 

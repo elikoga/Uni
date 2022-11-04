@@ -37,6 +37,8 @@
   }
 }
 
+\setlength{\parindent}{0in}
+
 \begin{document}
 % \maketitle
 % \thispagestyle{fancy}
@@ -51,16 +53,62 @@
 \newcommand{\df}{\rm{Diefläche}}
 \newcommand{\dd}{\rm{Defektdichte}}
 
+
+\tiny
 $$\begin{aligned}
     \kpd
-    =                     & \frac{\kpw}{\dpw\times \Ausbeute}                                                                                               \\
-    =                     & \frac{\kpw}{\lparen\frac{\wf}{\df}\rparen\times \Ausbeute}                                                                      \\
-    =                     & \frac{\kpw\times \df}{\wf\times \Ausbeute}                                                                                      \\
-    =                     & \frac{\kpw\times \df}{\wf\times\lparen\frac{1}{\lparen1+\lparen\dd\times\df\times\frac{1}{\alpha}\rparen\rparen^\alpha}\rparen} \\
-    \overset{\alpha=2}{=} & \frac{\kpw\times \df}{\wf\times\lparen\frac{1}{\lparen1+\lparen\dd\times\df\times\frac{1}{2}\rparen\rparen^2}\rparen}           \\
-    =                     & \frac{\kpw\times \df\times \lparen1+\lparen\dd\times\df\times\frac{1}{2}\rparen\rparen^2}{\wf}                                  \\
-    =                     & \frac{\kpw\times \df\times \lparen1+\lparen\dd\times\df\times\frac{1}{2}\rparen\rparen^2}{\wf}                                  \\
-    =                     & \frac{\kpw\times \df\times \lparen1+2\times\dd\times\df\times\frac{1}{2}\rparen}{\wf}                                           \\
+    =                     & \frac{\kpw}{\dpw\times \Ausbeute}                                                                                              \\
+    =                     & \frac{\kpw}{\lparen\frac{\wf}{\df}\rparen\times \Ausbeute}                                                                     \\
+    =                     & \frac{\kpw\times\df}{\wf\times \Ausbeute}                                                                                      \\
+    =                     & \frac{\kpw\times\df}{\wf\times\lparen\frac{1}{\lparen1+\lparen\dd\times\df\times\frac{1}{\alpha}\rparen\rparen^\alpha}\rparen} \\
+    \overset{\alpha=2}{=} & \frac{\kpw\times\df}{\wf\times\lparen\frac{1}{\lparen1+\lparen\dd\times\df\times\frac{1}{2}\rparen\rparen^2}\rparen}           \\
+    =                     & \frac{\kpw\times\df\times \lparen1+\lparen\dd\times\df\times\frac{1}{2}\rparen\rparen^2}{\wf}                                  \\
+    =                     & \frac{\kpw\times\df\times \lparen1+\lparen\dd\times\df\times\frac{1}{2}\rparen\rparen^2}{\wf}                                  \\
+    =                     & \frac{\kpw\times\df\times \lparen1+2\times\dd\times\df\times\frac{1}{2}+\frac{1}{2^2}\times\dd^2\times\df^2\rparen}{\wf}       \\
+    =                     & \frac{\kpw\times\df\times \lparen1+\dd\times\df+\frac{1}{4}\times\dd^2\times\df^2\rparen}{\wf}                                 \\
   \end{aligned}$$
+
+\normalsize
+
+Wir sehen $\kpd\in\mathcal{O}(\df^3)$.
+
+(2):
+
+Wir dürfen einen Faktor $\frac{\df}{\wf}$ mit $\frac{1}{165}$ ersetzen um \\
+die Annäherung $\dpw=165$ umzukehren.
+
+Nun: \\
+$\kpw=\$\,1000$, \\
+$\dd=1((10^{-2}m)^2)^{-1}$, \\
+$\df=250(10^{-3}m)^2$
+
+Also:
+
+$$\begin{aligned}
+    \frac{\$\,1000\times (1+1((10^{-2}m)^2)^{-1}\times250(10^{-3}m)^2+\frac{1}{4}\times(1((10^{-2}m)^2)^{-1})^2\times(250(10^{-3}m)^2)^2)}{165}
+  \end{aligned}$$
+
+
+$$\begin{aligned}
+    1((10^{-2}m)^2)^{-1}\times250(10^{-3}m)^2 & =250((10^{-2}m)^{-2})(10^{-3}m)^2 \\
+                                              & =250((10^4m^{-2})(10^{-6}m^2)     \\
+                                              & =250(10^{-2})                     \\
+                                              & =2,50                             \\
+  \end{aligned}$$
+
+$$\begin{aligned}
+    (1((10^{-2}m)^2)^{-1}\times250(10^{-3}m)^2)^2 & =2,50^2 \\
+                                                  & =6,25   \\
+  \end{aligned}$$
+
+Also:
+
+$$\begin{aligned}
+    \frac{\$\,1000\times (1+2,50+6,25)}{165} & =\$\,1000\times\frac{1+2,50+\frac{1}{4}\times 6,25}{165} \\
+                                             & =\$\,1000\times\frac{1+4,0625}{165}                      \\
+                                             & =\$\,1000\times\frac{5,0625}{165}                        \\
+                                             & =\$\,30,6\overline{81}                                   \\
+  \end{aligned}$$
+
 
 \end{document}
