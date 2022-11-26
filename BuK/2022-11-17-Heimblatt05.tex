@@ -1,0 +1,95 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage[top=1in, bottom=1.25in, left=1.25in, right=1.25in]{geometry}
+\usepackage{minted}
+\usepackage{blindtext}
+\usepackage{fancyhdr}
+\usepackage{titling}
+\usepackage{amssymb}
+\usepackage{mathtools}
+
+\setlength{\parindent}{0in}
+\newcommand{\qed}{\hfill$\square$}
+
+
+
+\renewcommand{\footrulewidth}{0.4pt}
+
+\setlength\headheight{15pt}
+\setlength{\parskip}{1em}
+
+\title{Document Template}
+\author{Eli Kogan-Wang}
+\date{\today}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\thetitle}
+\rhead{\thedate}
+\lfoot{\theauthor}
+\rfoot{Page \thepage}
+
+
+\begin{document}
+
+Sei
+\[ \textsc{2erPotenz}=\left\{\langle M\rangle \middle| \begin{array}{c}M\text{ akzeptiert genau dann, wenn} \\ \text{die Eingabe die Form }10^i, i\geq 0,\text{ hat.} \end{array}\right\} \]
+Zeigen Sie, dass \textsc{2erPotenz} nicht entscheidbar ist.
+
+\vspace{5cm}
+
+Mit $\overline{H}=\{\langle M\rangle x\mid M\text{ hält nicht bei Eingabe }x\}$ ist das Komplement des Halteproblems gemeint.
+
+Wir zeigen ein $f$, sodass
+
+$$w\in \overline{H}\iff f(w)\in \textsc{2erPotenz}$$
+
+Wir definieren:
+
+$$f(w)=\begin{cases}
+    \langle M_{reject}\rangle & \text{wenn }w\text{ nicht der Form }\langle M\rangle x \\
+    \langle M^{(x)}\rangle    & \text{wenn }w\text{ der Form }\langle M\rangle x       \\
+  \end{cases}$$
+
+Wobei $M^{(x)}$ wie folgt bei Eingabe von $y$ vorgeht:
+
+\begin{enumerate}
+  \item Form-Check: Wenn $y$ nicht der Form $10^i$ mit $i\geq 0$ ist, dann lehne ab.
+  \item Nun: $y=10^i$ mit $i\geq 0$. Simuliere $M$ mit $x$ als Eingabe für $i$ Schritte.
+  \item Wenn $M$ nach $i$ Schritten hält, dann lehne ab, ansonsten akzeptiere.
+\end{enumerate}
+
+$f$ ist eine berechenbare Funktion.
+
+Nun, angenommen $w\in\overline{H}$
+
+$$\begin{aligned}
+    w\in \overline{H} & \implies w=\langle M\rangle x \text{ und } M\text{ hält nicht bei Eingabe }x \\
+                      & \implies f(w)=\langle M^{(x)}\rangle\end{aligned}$$
+
+Und $M^{(x)}$ akzeptiert genau dann, wenn $x$ die Form $10^i$ mit $i\geq 0$ hat und $M$ bei Eingabe von $x$ nicht für $i$ Schritte hält.
+
+Da $\langle M\rangle x\in \overline{H}$ genau dann, wenn $M$ nicht bei Eingabe von $x$ hält, wird $M^{(x)}$ für alle Eingaben der Form $10^i$ mit $i\geq 0$ akzeptieren.
+
+Damit ist $f(w)\in \textsc{2erPotenz}$.
+
+Damit $w\in \overline{H}\implies f(w)\in \textsc{2erPotenz}$.
+
+Nun angenommen $w\notin \overline{H}$
+
+Damit ist entweder $w$ nicht der Form $\langle M\rangle x$ $\implies$ $M^{(x)}$ lehnt ab $\implies f(w)\in \textsc{2erPotenz}$
+
+Oder $w=\langle M\rangle x$ und $M$ hält bei Eingabe von $x$.
+
+Damit gibt es ein $i$ sodass $M$ bei Eingabe von $x$ nach $i$ Schritten hält. Damit akzeptiert $M^{(x)}$ das Wort $10^i$ nicht.
+
+Damit ist $f(w)\notin \textsc{2erPotenz}$.
+
+\vspace{1cm}
+
+Wir haben gezeigt, dass $w\in \overline{H}\iff f(w)\in \textsc{2erPotenz}$. Und damit $\overline{H}\leq \textsc{2erPotenz}$.
+
+Damit ist $\textsc{2erPotenz}$ nicht entscheidbar.
+
+\end{document}

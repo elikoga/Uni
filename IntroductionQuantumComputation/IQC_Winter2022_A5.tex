@@ -1,0 +1,163 @@
+\documentclass{article}
+\usepackage{amsmath,amsthm}
+\usepackage{amssymb,latexsym}
+\usepackage{epsfig}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{fullpage}
+\usepackage{enumerate}
+\usepackage{paralist}
+\usepackage{graphicx}
+
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{alg}[theorem]{Algorithm}
+\newtheorem{protocol}[theorem]{Protocol}
+\newtheorem{problem}[theorem]{Problem}
+
+\newcommand{\ip}[2]{\left\langle #1 , #2\right\rangle}
+\newcommand{\tr}{\trace}
+\newcommand{\setft}[1]{\mathrm{#1}}
+\newcommand{\lin}[1]{\setft{L}\left(#1\right)}
+\newcommand{\density}[1]{\setft{D}\left(#1\right)}
+\newcommand{\unitary}[1]{\setft{U}\left(#1\right)}
+\newcommand{\herm}[1]{\setft{Herm}\left(#1\right)}
+\newcommand{\pos}[1]{\setft{Pos}\left(#1\right)}
+\newcommand{\sep}[1]{\setft{Sep}\left(#1\right)}
+\newcommand{\rank}[1]{\operatorname{rank}(#1)}
+\newcommand{\ex}{\paragraph{Exercise.}}
+
+\def\I{I}
+\def\({\left(}
+\def\){\right)}
+\def\X{\mathcal{X}}
+\def\Y{\mathcal{Y}}
+\def\Z{\mathcal{Z}}
+\def\W{\mathcal{W}}
+\def\yes{\text{yes}}
+\def\no{\text{no}}
+\def\blog{\textup{log}}
+\newcommand{\A}{\spa{A}}
+\newcommand{\B}{\spa{B}}
+\newcommand{\UA}{U_A}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\epssdp}{\varepsilon_{\rm sdp}}
+\newcommand{\bra}[1]{\langle #1|}
+\newcommand{\ket}[1]{|#1\rangle}
+\newcommand{\braket}[2]{\langle #1|#2\rangle}
+\newcommand{\ketbra}[2]{\ket{#1}{\bra{#2}}}
+\newcommand{\lmin}[1] {\lambda_{\operatorname{min}}(#1)}
+\newcommand{\lmax}[1] {\lambda_{\operatorname{max}}(#1)}
+\newcommand{\lhyes} {\operatorname{LH_{yes}}}
+\newcommand{\lhno} {\operatorname{LH_{no}}}
+\newcommand{\CQ}{\mathcal{CQ}}
+\newcommand{\lh}{\operatorname{LH}}
+\newcommand{\flh}{\operatorname{5-LH}}
+\newcommand{\klhh}{\operatorname{k-LH}}
+\newcommand{\qma}{\operatorname{QMA}}
+\newcommand{\enc}[1]{\left<#1\right>}
+
+\newcommand{\C}{C}
+\newcommand{\Id}{Id} %CHECK
+\newcommand{\Exs}[2]{E_{#1}[#2]} %CHECK
+
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+
+\newcommand{\trace}{{\rm Tr}}
+
+\newcommand{\norm}[1]{\left\|\,#1\,\right\|}       % norm
+\newcommand{\pnorm}[1]{\left\|\,#1\,\right\|_p}       % norm
+\newcommand{\onorm}[1]{\norm{#1}_{\mathrm{1}}}      % Euclidean norm for vectors
+\newcommand{\enorm}[1]{\norm{#1}_{\mathrm{2}}}      % Euclidean norm for vectors
+\newcommand{\trnorm}[1]{\norm{#1}_{\mathrm {tr}}}  % trace norm
+\newcommand{\fnorm}[1]{\norm{#1}_{\mathrm {F}}}    % frobenius norm
+\newcommand{\snorm}[1]{\norm{#1}_{\mathrm {\infty}}}    % spectral norm
+
+\newcommand{\set}[1]{{\left\{#1\right\}}}    % braces for set notation
+\newcommand{\ve}[1]{\mathbf{#1}}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\optprod}{\OPT_P}
+\newcommand{\opt}{\operatorname{OPT_1}}
+\newcommand{\optt}{\operatorname{OPT_2}}
+\newcommand{\newopt}{\operatorname{NEW-OPT}}
+\newcommand{\swap}{\operatorname{SWAP}}
+\newcommand{\poly}{\operatorname{poly}}
+\newcommand{\cc}{d^{\frac{k}{2}}}
+\newcommand{\OPT}{{\rm OPT}}
+\newcommand{\QMA}{{\rm QMA}}
+\newcommand{\MQA}{{\rm MQA}}
+\newcommand{\NP}{{\rm NP}}
+\newcommand{\PP}{{\rm P}}
+\newcommand{\PH}{{\rm PH}}
+\newcommand{\BPP}{{\rm BPP}}
+\newcommand{\BQP}{{\rm BQP}}
+\newcommand{\TCSP}{{\rm 2-CSP}}
+
+\newcommand{\complex}{{\mathbb C}}
+\newcommand{\reals}{{\mathbb R}}
+\newcommand{\ints}{{\mathbb Z}}
+\newcommand{\nats}{{\mathbb N}}
+
+\newcommand{\spa}[1]{\mathcal{#1}}
+\newcommand{\dens}{\mathcal{D}(\spa{A}\otimes\spa{B})}
+%\newcommand{\unitaries}{U(\spa{A}\otimes\spa{B})}
+
+\newcommand{\LL}{\mathcal{L}}
+\newcommand{\DD}{\mathcal{D}}
+\newcommand{\HH}{\mathcal{H}}
+\newcommand{\UU}{\mathcal{U}}
+
+\newcommand{\ayes}{A_{\rm yes}} %CHECK
+\newcommand{\ano}{A_{\rm no}} %CHECK
+
+
+\begin{document}
+
+\title{\vspace{-10mm}Introduction to Quantum Computation, UPB\\Winter 2022, Assignment 5\\{\large Due: Thursday, November 17, at start of tutorial}}
+\date{}
+\maketitle
+
+
+
+\section{Exercises}
+\begin{enumerate}
+    \item Define $\ket{\psi}=\alpha\ket{0}+\beta\ket{1}\in\complex^2$, and consider projective measurement $M=\set{\ketbra{\psi}{\psi},I-\ketbra{\psi}{\psi}}$ with labels corresponding to outcomes $S=\set{1,-1}$, respectively. Suppose state $\ket{0}\in\complex^2$ is measured via $M$. What is the expected value for the measurement?
+    \item In this question, we consider how well the CHSH game strategy from class fares if we use a \emph{less} entangled state as a shared resource between Alice and Bob. Specifically, imagine we use the same observables as before, but now we replace $\ket{\Phi^+}$ as a shared state with $\ket{\psi}=\alpha\ket{00}+\beta\ket{11}$. Intuitively, as $\alpha$ gets closer to $1$, this state becomes less entangled, and for $\alpha=1$, it becomes a product state (i.e. non-entangled).
+        \begin{enumerate}
+            \item What is the probability of winning the CHSH game with shared state $\ket{\psi}$? (Hint: Recall from Lecture 5 that for \emph{any} $\ket{\psi}$, the quantity $\trace(A\otimes B\ketbra{\psi}{\psi})$ equals $\Pr(\text{output same bits})-\Pr(\text{output different bits})$, i.e. the interpretation of this quantity does not depend on our choice of $\ket{\psi}$.)
+            \item Based on your answer above, what is the probability of Alice and Bob winning with this strategy if $\alpha=1$, i.e. $\ket{\psi}$ is unentangled?
+        \end{enumerate}
+
+    \item This question studies a $3$-player non-local game called the \emph{GHZ game}. There are now three players, Alice, Bob and Charlie, each of which receives a question $q_a$, $q_b$, or $q_c$, respectively, such that $q_aq_bq_c\in\set{000,011,101,110}$. The players each return a bit $r_a,r_b,r_c\in\set{0,1}$, respectively, and win if
+        \[
+            q_a\vee q_b\vee q_c = r_a\oplus r_b\oplus r_c,
+        \]
+        where $\vee$ denotes the binary OR operation.
+
+        An analysis similar to the CHSH game shows that the optimal winning classical strategy yields success probability $3/4$. Your task in this question is to analyze an optimal quantum strategy.
+
+        The $3$-qubit state the players share is
+        \[
+            \ket{\psi}=\frac{1}{2}\left(\ket{000}-\ket{011}-\ket{101}-\ket{110}\right)\in\complex^8.
+        \]
+        Each player will use the same measuring strategy: Given input bit $0$, they will apply local unitary $U_0=I$, and if they get input $1$, they apply local unitary $U_1=H$. They then measure their qubit in the standard basis, and return the answer ($0$ or $1$). As for CHSH, we assume the labels for the measurement outcomes are $+1,-1$ for measurement outcomes $\ketbra{0}{0}$ and $\ketbra{1}{1}$, respectively.
+        \begin{enumerate}
+            \item Suppose Alice gets input $0$. What is her observable? What if she gets input $1$?
+            \item Suppose the questions are $q_Aq_Bq_C=000$. What is the probability the players win?
+            \item Suppose the questions are $q_Aq_Bq_C=011$. What is the probability the players win?
+        \end{enumerate}
+\end{enumerate}
+
+\end{document}

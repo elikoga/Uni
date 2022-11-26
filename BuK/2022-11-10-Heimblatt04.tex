@@ -1,0 +1,244 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage[top=1in, bottom=1.25in, left=1.25in, right=1.25in]{geometry}
+\usepackage{minted}
+\usepackage{blindtext}
+\usepackage{fancyhdr}
+\usepackage{titling}
+\usepackage{amssymb}
+\usepackage{mathtools}
+
+\setlength{\parindent}{0in}
+\newcommand{\qed}{\hfill$\square$}
+
+
+
+\renewcommand{\footrulewidth}{0.4pt}
+
+\setlength\headheight{15pt}
+\setlength{\parskip}{1em}
+
+\title{Document Template}
+\author{Eli Kogan-Wang}
+\date{\today}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\thetitle}
+\rhead{\thedate}
+\lfoot{\theauthor}
+\rfoot{Page \thepage}
+
+
+\begin{document}
+Wir beweisen, dass $\mathcal{P}(\{0,1\}^*)$ überabzählbar ist.
+
+Wir wissen aus der Vorlesung: Es existiert eine Bijektion $\phi: \{0,1\}^*\rightarrow \mathbb{N}$.
+
+Damit müssen wir nur Zeigen, dass $\mathcal{P}(\mathbb{N})$ überabzählbar ist.
+
+Wir demonstrieren eine Bijektion $\psi: \mathcal{P}(\mathbb{N})\rightarrow (\mathbb{N}\rightarrow \{0,1\})$.
+
+$$\psi(M) = n \mapsto \begin{cases} 1 & \text{wenn } n \in M \\ 0 & \text{sonst} \end{cases}$$
+
+Und $$\psi^{-1}(f) = \{n \in \mathbb{N} \mid f(\mathbb{N}) = 1\}$$
+
+$\psi$ ist offensichtlich eine Bijektion.
+
+Nun müssen wir nur noch Zeigen, dass $(\mathbb{N}\rightarrow \{0,1\})$ überabzählbar ist.
+
+Angenommen wir haben also eine beliebig Funktion $f: \mathbb{N}\rightarrow (\mathbb{N}\rightarrow \{0,1\})$.
+
+Nun definieren wir $g: \mathbb{N}\rightarrow \{0,1\}$ durch $g(n) = \overline{f(n)(n)}$.
+
+Wobei $\overline{0} = 1$ und $\overline{1} = 0$.
+
+Nun ist $g(n) \neq (f(n))(n)$ für alle $n \in \mathbb{N}$.
+
+Damit ist $g\notin \mathbf{Image}(f)$. Damit ist $f$ nicht surjektiv. Damit existiert keine Funktion
+$f: \mathbb{N}\rightarrow (\mathbb{N}\rightarrow \{0,1\})$, die surjektiv ist.
+
+Und damit auch kein $(\phi^{-1}\circ\psi^{-1}\circ f): \mathbb{N}\rightarrow \mathcal{P}(\{0,1\}^*)$, die surjektiv ist.
+
+\qed
+
+\vspace{5cm}
+
+Wir definieren die Reduktionsfunktion $f: \{0,1,\#\}^* \rightarrow \{0,1,\#\}^*$:
+
+$$f(w)=\begin{cases}
+    \langle x\rangle\#\langle x\rangle\#\langle y\rangle & \text{wenn }w=\langle x\rangle\#\langle y\rangle \\
+    \epsilon \text{ (leeres Wort)}                       & \text{sonst}
+  \end{cases}$$
+
+Z.z. (i) f ist berechenbar.
+
+(ii) $w \in L_2 \iff f(w) \in L_1$
+
+\vspace{0.5cm}
+
+Zu (i) $f$ ist trivialerweise berechbar, da hierbei $w$ im Fall
+$w$ hat die Form $\langle x\rangle\#\langle y\rangle$ für $x,y\in\mathbb{N}$ nur die Eingabe um ein $\langle x\rangle\#$ erweitert wurde.
+
+Dies kann Beispielsweise durch eine Turingmaschine umgesetzt werden, welche sich $\langle x\rangle$ merkt,
+danach vom Band löscht. Daraufhin eine Kopie des Bandinhalts hinter diesen setzt
+und anschließend wieder $\langle x\rangle$ auf das Band schreibt.
+
+für $w$ hat nicht die Form $\langle x\rangle\#\langle y\rangle$ wird einfach der Bandinhalt gelöscht.
+
+zu (ii): $(w \in L_2 \iff f(w) \in L_1)$
+
+Fall 1: Z.z. $(w \in L_2 \rightarrow f(w) \in L_1)$
+
+Sei $w\in L_2$ beliebig, aber fest.
+
+Nun:
+$$\begin{aligned}
+             & w=\langle x\rangle\#\langle y\rangle                        &  & \text{ und } 2x = y \text{ mit } x,y \in \mathbb{N} \\
+    \implies & f(x) = \langle x\rangle\#\langle x\rangle\#\langle y\rangle                                                          \\
+    \implies & f(w) \in L_1                                                &  & \text{ da } x+x = 2x = y \text{ nach Annahme.}
+  \end{aligned}$$
+
+\vspace{1cm}
+
+Fall 2: $(w \notin L_2 \rightarrow f(w) \notin L_1)$
+
+Sei $w \notin L_2$ beliebig, aber fest.
+
+$w$ ist nicht von der Form $\langle x\rangle\#\langle y\rangle$ oder $w=\langle x\rangle\#\langle y\rangle$, aber $2x \neq y$. (mit $x,y \in \mathbb{N}$)
+Oder: $w=\langle x\rangle\#\langle y\rangle$, aber $2x \neq y$. (mit $x,y \in \mathbb{N}$)
+
+Falls $w$ nicht von der Form $\langle x\rangle\#\langle y\rangle$ ist, wird dieses auf das leere Wort abgebildet.
+Das leere Wort ist nicht in $L_1$. Daher ist $f(w) \notin L_1$. Der Fall der Unform ist damit abgedeckt.
+
+Nun:
+$$\begin{aligned}
+             & \text{Falls } w=\langle x\rangle\#\langle y\rangle\text{, aber } 2x \neq y\,\text{ mit } x,y \in \mathbb{N}                              \\
+    \implies & f(w)=\langle x\rangle\#\langle x\rangle\#\langle y\rangle\text{ und } f(w) \notin L_1\,\text{ da } x+x = 2x \neq y \text{ nach Annahme.} \\
+  \end{aligned}$$
+
+\vspace{1cm}
+
+Wir haben gezeigt, dass $w\in L_2 \iff f(w) \in L_1$. Damit ist $L_2 \leq L_1$.
+
+\qed
+
+\vspace{5cm}
+
+Sei $A$ das Akzeptanzproblem.
+
+Z.z $A \leq L$.
+
+Sei $\langle M\rangle ^{(x)}$ eine DTM mit folgendem Verhalten bei Eingabe $w=\langle M\rangle x$
+\begin{enumerate}
+  \item Merke $x$
+  \item Lösche $x$ vom Band
+  \item Schreibe $q_{accept}$ und danach $x$ auf das Band
+\end{enumerate}
+
+Sei $f: \{0,1\}^* \rightarrow \{0,1,\}^*$
+
+% f(w) = $\langle M\rangle ^{(x)}$ falls $w=\langle M\rangle x$ mit $x\in\{0,1,\#\}^*$ \\
+% f(w) = $<M_{reject}>x$ falls w $\neq\langle M\rangle x$ mit $x\in\{0,1,\#\}^*$ \\
+
+$$f(x)=\begin{cases}
+    \langle M\rangle ^{(x)}     & \text{wenn }x=\langle M\rangle x \text{ mit } x\in\{0,1\}^* \\
+    \langle M_{reject}\rangle x & \text{sonst}
+  \end{cases}$$
+
+Z.z. (i) f ist berechenbar.
+
+(ii) $w \in L_2 \iff f(w) \in L_1$
+
+Zu (i):
+Die Fallunterscheidung in der Abbildungsforschrift ist berechbar, da die Sprache Gödel entscheidbar ist.
+
+Folglich ist nur noch zu Zeigen, dass $\langle M\rangle ^{(x)}$ berechbar ist. 1 und 2 sind trivialerweise berechbar.
+
+3. ist auch berechbar, Aufgrund der Eindeutigen Darstellung der Gödelnummer. Wegen dieser und der Konvention, dass
+$q_{accept}$ in unserer Vorlesung der vorletzte Zustand ist, kann dieser eindeutig ausgelesen werden.
+
+\vspace{1cm}
+
+zu (ii): Z.z. $(w \in L_2 \iff f(w) \in L_1)$
+
+Fall 1: $(w \in A \rightarrow f(w) \in L)$
+
+Sei $w \in A$ beliebig, aber fest. d.h. $w=\langle M\rangle x$ mit die DTM $M$ akzeptiert $x$
+
+$\implies$ $M$ erreicht den Zustand $q_accept$, da das Akzeptanz ist.
+
+$\implies f(w)\in L$
+
+Fall 2: $(w \notin A \rightarrow f(w) \notin L)$
+
+Sei $w \notin A$ beliebig.
+
+Also ist (Fall a) $w$ nicht der Form $w=\langle M\rangle x$ oder (Fall b) $w=\langle M\rangle x$, aber $M$ akzeptiert $x$ nicht
+
+Zu (a) Folglich bildet $f(w)$ auf eine Turingmaschine ab, welche alle Eingaben ablehnt
+
+$\implies$ der Zustand $q_{accept}$ kann niemals erreicht werden
+
+$\implies f(w) \notin L$
+
+\vspace{0.5cm}
+
+Zu (b) Also sei $w=\langle M\rangle x$, aber $M$ akzeptiert $x$ nicht
+
+$\implies f$ bildet $w$ auf $\langle M\rangle ^{(x)}$ ab, aber der Zustand $q_{accept}$ wird nie erreicht, da sonst $w \in A$ sein müsste.
+
+$\implies$ f(w) $\notin$ L
+
+\vspace{1cm}
+
+$\implies A \leq L$
+
+\qed
+
+\vspace{5cm}
+
+b) Behauptung $L_2$ ist nicht rekursiv aufzählbar, da $\overline{H} \leq L_2$
+Beweis:
+
+Wir definieren die Reduktionsfunktion $f: \{0,1,\#\}^* \rightarrow \{0,1,\#\}^*$: \\
+
+$$f(w)=\begin{cases}
+    \langle M^{(Nice)} \rangle & \text{wenn w} \neq \langle M \rangle x \\
+    \langle M^{(x)}\rangle     & \text{wenn w} = \langle M \rangle x
+  \end{cases}$$ \\
+
+Mit $\langle M^{(x)}\rangle$ sei die Turingmaschine aus Satz 2.10.1. \\
+und $\langle M^{(Nice)} \rangle$ sei die Turingmaschiene die nur die Eingabe $1000101$ akzeptiert und bei allen anderen Eingaben in eine Endlosschleife geht. \\
+
+Folglich ist $f(w)$ nach diesem Satz 2.10.1 auch berechbar und es gilt: \\
+M hält bei Eingabe x nicht $\iff M^{(x)}$ hält bei jeder Eingabe z $\{0,1\}^*$. (1) \\
+Z.z. $(w \in \overline{H} \iff f(w) \in L_2)$ \\
+
+Richtung $\implies$: Angenommen $w \in \overline{H}$.
+
+Das heißt, $w=\langle M\rangle x$ mit $M$ hält bei Eingabe $x$ nicht.
+
+Das heißt, dass $\langle M\rangle x$ für alle Schrittweiten $n$, nicht hält.
+
+Damit akzeptiert $\langle M^{(x)}\rangle$ bei jeder Eingabe.
+
+Damit ist $f(w)=\langle M^{(x)}\rangle \in L_2$.
+
+Richtung $\Leftarrow$: Angenommen $w \notin \overline{H}$.
+
+Also ist entweder $w$ von falscher Form oder $M$ hält bei Eingabe $x$.
+
+Ist $w$ von falscher Form, dann ist $f(w)=\langle M^{(Nice)} \rangle \notin L_2$, da $\langle M^{(Nice)} \rangle$ nur die Eingabe $1000101$ akzeptiert.
+
+Ist $w=\langle M\rangle x$ und $M$ hält bei Eingabe $x$, dann:
+
+Es existiert ein $n$ mit $M$ hält bei Eingabe $x$ nach $n$ Schritten.
+
+Und für alle $n'>n$ gilt: $M$ hält bei Eingabe $x$ nach $n'$ Schritten.
+
+Damit wird $\langle M^{(x)}\rangle$ bei jeder Eingabe $n'>n$ in eine Endlosschleife gehen und maximal $n$ Eingaben akzeptieren.
+
+Damit ist $f(w)=\langle M^{(x)}\rangle \notin L_2$.
+\end{document}

@@ -1,0 +1,277 @@
+\documentclass{article}
+\usepackage{amsmath,amsthm}
+\usepackage{amssymb,latexsym}
+\usepackage{epsfig}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{fullpage}
+\usepackage{enumerate}
+\usepackage{paralist}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{quantikz}
+
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{alg}[theorem]{Algorithm}
+\newtheorem{protocol}[theorem]{Protocol}
+\newtheorem{problem}[theorem]{Problem}
+
+\newcommand{\ip}[2]{\left\langle #1 , #2\right\rangle}
+\newcommand{\tr}{\trace}
+\newcommand{\setft}[1]{\mathrm{#1}}
+\newcommand{\lin}[1]{\setft{L}\left(#1\right)}
+\newcommand{\density}[1]{\setft{D}\left(#1\right)}
+\newcommand{\unitary}[1]{\setft{U}\left(#1\right)}
+%\newcommand{\trans}[1]{\setft{T}\left(#1\right)}
+\newcommand{\herm}[1]{\setft{Herm}\left(#1\right)}
+\newcommand{\pos}[1]{\setft{Pos}\left(#1\right)}
+\newcommand{\sep}[1]{\setft{Sep}\left(#1\right)}
+\newcommand{\rank}[1]{\operatorname{rank}(#1)}
+\newcommand{\ex}{\paragraph{Exercise.}}
+
+\def\I{I}
+\def\({\left(}
+\def\){\right)}
+\def\X{\mathcal{X}}
+\def\Y{\mathcal{Y}}
+\def\Z{\mathcal{Z}}
+\def\W{\mathcal{W}}
+\def\yes{\text{yes}}
+\def\no{\text{no}}
+\def\blog{\textup{log}}
+\newcommand{\A}{\spa{A}}
+\newcommand{\B}{\spa{B}}
+\newcommand{\UA}{U_A}
+
+
+\newcommand{\myparagraph}[1]{\paragraph{#1.}}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\epssdp}{\varepsilon_{\rm sdp}}
+% \newcommand{\bra}[1]{\langle #1|}
+% \newcommand{\ket}[1]{|#1\rangle}
+% \newcommand{\braket}[2]{\langle #1|#2\rangle}
+% \newcommand{\ketbra}[2]{\ket{#1}{\bra{#2}}}
+\newcommand{\ketbra}[2]{|#1\rangle\!\langle #2|}
+\newcommand{\lmin}[1] {\lambda_{\operatorname{min}}(#1)}
+\newcommand{\lmax}[1] {\lambda_{\operatorname{max}}(#1)}
+\newcommand{\lhyes} {\operatorname{LH_{yes}}}
+\newcommand{\lhno} {\operatorname{LH_{no}}}
+\newcommand{\CQ}{\mathcal{CQ}}
+\newcommand{\lh}{\operatorname{LH}}
+\newcommand{\flh}{\operatorname{5-LH}}
+\newcommand{\klhh}{\operatorname{k-LH}}
+\newcommand{\qma}{\operatorname{QMA}}
+\newcommand{\enc}[1]{\left<#1\right>}
+
+\newcommand{\C}{C}
+\newcommand{\Id}{Id} %CHECK
+\newcommand{\Exs}[2]{E_{#1}[#2]} %CHECK
+
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+
+\newcommand{\trace}{{\rm Tr}}
+
+%\newcommand{\dim}{\operatorname{dim}}
+\newcommand{\norm}[1]{\left\|\,#1\,\right\|}       % norm
+\newcommand{\pnorm}[1]{\left\|\,#1\,\right\|_p}       % norm
+\newcommand{\onorm}[1]{\norm{#1}_{\mathrm{1}}}      % Euclidean norm for vectors
+\newcommand{\enorm}[1]{\norm{#1}_{\mathrm{2}}}      % Euclidean norm for vectors
+\newcommand{\trnorm}[1]{\norm{#1}_{\mathrm {tr}}}  % trace norm
+\newcommand{\fnorm}[1]{\norm{#1}_{\mathrm {F}}}    % frobenius norm
+\newcommand{\snorm}[1]{\norm{#1}_{\mathrm {\infty}}}    % spectral norm
+
+\newcommand{\set}[1]{{\left\{#1\right\}}}    % braces for set notation
+\newcommand{\ve}[1]{\mathbf{#1}}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\optprod}{\OPT_P}
+\newcommand{\opt}{\operatorname{OPT_1}}
+\newcommand{\optt}{\operatorname{OPT_2}}
+\newcommand{\newopt}{\operatorname{NEW-OPT}}
+% \newcommand{\swap}{\operatorname{SWAP}}
+\newcommand{\poly}{\operatorname{poly}}
+\newcommand{\cc}{d^{\frac{k}{2}}}
+\newcommand{\OPT}{{\rm OPT}}
+\newcommand{\QMA}{{\rm QMA}}
+\newcommand{\MQA}{{\rm MQA}}
+\newcommand{\NP}{{\rm NP}}
+\newcommand{\PP}{{\rm P}}
+\newcommand{\PH}{{\rm PH}}
+\newcommand{\BPP}{{\rm BPP}}
+\newcommand{\BQP}{{\rm BQP}}
+\newcommand{\TCSP}{{\rm 2-CSP}}
+
+\newcommand{\CNOT}{{\rm CNOT}}
+
+\newcommand{\complex}{{\mathbb C}}
+\newcommand{\reals}{{\mathbb R}}
+\newcommand{\ints}{{\mathbb Z}}
+\newcommand{\nats}{{\mathbb N}}
+
+\newcommand{\spa}[1]{\mathcal{#1}}
+\newcommand{\dens}{\mathcal{D}(\spa{A}\otimes\spa{B})}
+%\newcommand{\unitaries}{U(\spa{A}\otimes\spa{B})}
+
+\newcommand{\LL}{\mathcal{L}}
+\newcommand{\DD}{\mathcal{D}}
+\newcommand{\HH}{\mathcal{H}}
+\newcommand{\UU}{\mathcal{U}}
+
+\newcommand{\klh}{MAX-$k$-local Hamiltonian}
+
+\mathchardef\mhyphen="2D
+
+\newcommand{\ayes}{A_{\rm yes}} %CHECK
+\newcommand{\ano}{A_{\rm no}} %CHECK
+\newcommand{\nl} {\mathcal{L}_1}
+
+
+\bibliographystyle{alpha}
+
+\begin{document}
+
+\title{\vspace{-10mm}Introduction to Quantum Computation, UPB\\Winter 2022, Assignment 4\\{\large Eli Kogan-Wang}}
+\date{}
+\maketitle
+
+\section{Exercises}
+\begin{enumerate}
+  \item
+        \begin{enumerate}
+          \item  Let $A,B\in\LL(\complex^d)$ be positive semi-definite matrices. Prove that $A+B$ is positive semi-definite.
+
+                Since $A,B$ positive semi-definite: $\forall \ket{\psi}\in\complex^d$ we have $\bra{\psi}A\ket{\psi}\geq 0$ and $\bra{\psi}B\ket{\psi}\geq 0$.
+
+                Now: $$\begin{aligned}
+                    \bra{\psi}(A+B)\ket{\psi} & = \bra{\psi}A\ket{\psi} + \bra{\psi}B\ket{\psi} \\
+                                              & \geq 0 + 0                                      \\
+                                              & = 0
+                  \end{aligned}$$
+
+                By linearity of the Vector space $\LL(\complex^d)$, we have that $A+B$ is positive semi-definite.
+
+          \item  Prove that if $\rho$ and $\sigma $ density matrices, then so is $p_1\rho+p_2\sigma$ for any $p_1,p_2\geq 0$ and $p_1+p_2=1$.
+
+                Let $\rho$ and $\sigma$ be density matrices. Then $\rho$ and $\sigma$ are positive semi-definite hermitian matrices.
+                Additionally, $\trace(\rho)=\trace(\sigma)=1$.
+
+                Now, let $p_1,p_2\geq 0$ and $p_1+p_2=1$. Then, we have the following:
+
+                Positive semi-definiteness:
+                $$\forall \ket{\psi}\in\complex^d,
+                  \bra{\psi}(p_1\rho+p_2\sigma)\ket{\psi}
+                  =p_1\bra{\psi}\rho\ket{\psi}+p_2\bra{\psi}\sigma\ket{\psi}\geq p_10+p_20=0$$
+
+                Hermitian:
+                $$\begin{aligned}\forall \ket{\psi}\in\complex^d,
+                     & \bra{\psi}(p_1\rho+p_2\sigma)\ket{\psi}^\dagger                            \\
+                     & =p_1\bra{\psi}\rho\ket{\psi}^\dagger+p_2\bra{\psi}\sigma\ket{\psi}^\dagger \\
+                     & =p_1\bra{\psi}\rho^\dagger\ket{\psi}+p_2\bra{\psi}\sigma^\dagger\ket{\psi} \\
+                     & =p_1\bra{\psi}\rho\ket{\psi}+p_2\bra{\psi}\sigma\ket{\psi}                 \\
+                     & =\bra{\psi}(p_1\rho+p_2\sigma)\ket{\psi}                                   \\
+                  \end{aligned}
+                $$
+
+                Trace:
+                $$\begin{aligned}
+                    \trace(p_1\rho+p_2\sigma) & =p_1\trace(\rho)+p_2\trace(\sigma) \\
+                                              & =p_11+p_21                         \\
+                                              & =p_1+p_2                           \\
+                                              & =1
+                  \end{aligned}$$
+        \end{enumerate}
+  \item
+        Suppose that with probability $1/3$, I give you state $\ket{0}\in\complex^2$, and with probability $2/3$, I give you state $\ket{-}$. Write down (i.e. as a $2\times 2$ matrix) the density matrix describing the state in your possession.
+
+        Let $\ketbra{0}{0}$ be the density matrix for $\ket{0}$ and $\ketbra{-}{-}$ be the density matrix for $\ket{-}$.
+
+        We will write out $\ketbra{-}{-}$ in terms of the computational basis $\{\ket{0},\ket{1}\}$:
+
+        $$\ketbra{-}{-}=\frac{1}{2}\left(\ketbra{0}{0}-\ketbra{0}{1}-\ketbra{1}{0}+\ketbra{1}{1}\right)$$
+
+        Then, the density matrix for the state in my possession is:
+
+        $$\begin{aligned}
+            \frac{1}{3}\ketbra{0}{0}+\frac{2}{3}\ketbra{-}{-} & =\frac{1}{3}\begin{bmatrix}1&0\\0&0\end{bmatrix}+\frac{2}{3}\cdot\frac{1}{2}\begin{bmatrix}1&-1\\-1&1\end{bmatrix} \\
+                                                              & =\frac{1}{3}\begin{bmatrix}1&0\\0&0\end{bmatrix}+\frac{1}{3}\begin{bmatrix}1&-1\\-1&1\end{bmatrix}                 \\
+                                                              & =\frac{1}{3}\begin{bmatrix}2&-1\\-1&1\end{bmatrix}                                                                 \\
+                                                              & =\begin{bmatrix}\frac23&\frac{-1}3\\\frac{-1}3&\frac13\end{bmatrix}                                                \\
+          \end{aligned}$$
+  \item  Define bipartite state $\ket{\psi}=\alpha\ket{01}-\beta\ket{10}$. Let $\rho=\frac{1}{2}\ketbra{\Phi^+}{\Phi^+} + \frac{1}{2}\ketbra{\psi}{\psi}$. Compute $\trace_B(\rho)$.
+
+        Remember that $\ket{\Phi^+}=\frac{1}{\sqrt{2}}(\ket{00}+\ket{11})$.
+
+        And that $\trace_B(\rho)=\sum_{i=1}^{d_B}(\I_A\otimes\bra{i})\rho(\I_A\otimes\ket{i})$.
+
+        Further we will inspect the density operator $\ketbra{\Phi^+}{\Phi^+}$:
+
+        $$\begin{aligned}
+            \ketbra{\Phi^+}{\Phi^+} & = \frac{1}{2}(\ket{00}+\ket{11})(\bra{00}+\bra{11})                                           \\
+                                    & = \frac{1}{2}(\ketbra{00}{00}+\ketbra{00}{11}+\ketbra{11}{00}+\ketbra{11}{11})                \\
+                                    & = \frac12\ketbra{00}{00}+\frac12\ketbra{00}{11}+\frac12\ketbra{11}{00}+\frac12\ketbra{11}{11} \\
+          \end{aligned}$$
+
+        And additionally, we will inspect the density operator $\ketbra{\psi}{\psi}$:
+
+        $$\begin{aligned}
+            \ketbra{\psi}{\psi} & = (\alpha\ket{01}-\beta\ket{10})(\alpha\bra{01}-\beta\bra{10})                                         \\
+                                & = \alpha^2\ketbra{01}{01}-\alpha\beta\ketbra{01}{10}-\alpha\beta\ketbra{10}{01}+\beta^2\ketbra{10}{10} \\
+          \end{aligned}$$
+
+        We see that:
+
+        $$\begin{aligned}
+            \trace_B{\rho} & =\sum_{i=0}^1(\I_A\otimes\bra{i})\rho(\I_A\otimes\ket{i})                                                                                                                                                            \\
+                           & =(I_A\otimes\bra{0})\rho(I_A\otimes\ket{0})+(I_A\otimes\bra{1})\rho(I_A\otimes\ket{1})                                                                                                                               \\
+                           & =(I_A\otimes\bra{0})\frac{1}{2}\ketbra{\Phi^+}{\Phi^+} + \frac{1}{2}\ketbra{\psi}{\psi}(I_A\otimes\ket{0})+(I_A\otimes\bra{1})\frac{1}{2}\ketbra{\Phi^+}{\Phi^+} + \frac{1}{2}\ketbra{\psi}{\psi}(I_A\otimes\ket{1}) \\
+                           & =(I_A\otimes\bra{0})\frac{1}{2}\ketbra{\Phi^+}{\Phi^+} + \frac{1}{2}\ketbra{\psi}{\psi}(I_A\otimes\ket{0})                                                                                                           \\
+                           & +(I_A\otimes\bra{1})\frac{1}{2}\ketbra{\Phi^+}{\Phi^+} + \frac{1}{2}\ketbra{\psi}{\psi}(I_A\otimes\ket{1})                                                                                                           \\
+                           & =(I_A\otimes\bra{0})                                                                                                                                                                                                 \\
+                           & \frac{1}{2}(\frac12\ketbra{00}{00}+\frac12\ketbra{00}{11}+\frac12\ketbra{11}{00}+\frac12\ketbra{11}{11})                                                                                                             \\
+                           & + \frac{1}{2}(\alpha^2\ketbra{01}{01}-\alpha\beta\ketbra{01}{10}-\alpha\beta\ketbra{10}{01}+\beta^2\ketbra{10}{10})                                                                                                  \\
+                           & (I_A\otimes\ket{0})                                                                                                                                                                                                  \\
+                           & +(I_A\otimes\bra{1})                                                                                                                                                                                                 \\
+                           & \frac{1}{2}(\frac12\ketbra{00}{00}+\frac12\ketbra{00}{11}+\frac12\ketbra{11}{00}+\frac12\ketbra{11}{11})                                                                                                             \\
+                           & + \frac{1}{2}(\alpha^2\ketbra{01}{01}-\alpha\beta\ketbra{01}{10}-\alpha\beta\ketbra{10}{01}+\beta^2\ketbra{10}{10})                                                                                                  \\
+                           & (I_A\otimes\ket{1})                                                                                                                                                                                                  \\
+                           & =(I_A\otimes\bra{0})\frac{1}{2}(\frac12\ketbra{00}{00})+\frac{1}{2}(\beta^2\ketbra{10}{10})(I_A\otimes\ket{0})                                                                                                       \\
+                           & +(I_A\otimes\bra{1})\frac{1}{2}(\frac12\ketbra{11}{11})+ \frac{1}{2}(\alpha^2\ketbra{01}{01})(I_A\otimes\ket{1})                                                                                                     \\
+                           & =\frac{1}{4}\ketbra{0}{0}+\frac{\beta^2}{2}\ketbra{1}{1}+\frac{1}{4}\ketbra{1}{1}+\frac{\alpha^2}{2}\ketbra{0}{0}                                                                                                    \\
+                           & =\frac{1}{4}\ketbra{0}{0}+\frac{\alpha^2}{2}\ketbra{0}{0}+\frac{\beta^2}{2}\ketbra{1}{1}+\frac{1}{4}\ketbra{1}{1}                                                                                                    \\
+                           & =\frac{1+2\alpha^2}{4}\ketbra{0}{0}+\frac{1+2\beta^2}{4}\ketbra{1}{1}                                                                                                                                                \\
+          \end{aligned}$$
+
+  \item  Let $\ket{\psi}=\alpha_0\ket{a_0}\ket{b_0}+\alpha_1\ket{a_1}\ket{b_1}$ be the Schmidt decomposition of a two-qubit state $\ket{\psi}$. Prove that for any single qubit unitaries $U$ and $V$, $\ket{\psi}$ is entangled if and only if $\ket{\psi'}=(U\otimes V)\ket{\psi}$ is entangled. (Hint: Prove that the Schmidt rank of $\ket{\psi}$ equals that of $\ket{\psi'}$. Also, you might find Lemma 1 of the Lecture 3 notes useful.)
+
+
+        $$\begin{aligned}
+            \ket{\psi'} & =(U\otimes V)\ket{\psi}                                                            \\
+                        & =(U\otimes V)(\alpha_0\ket{a_0}\ket{b_0}+\alpha_1\ket{a_1}\ket{b_1})               \\
+                        & =(U\otimes V)(\alpha_0\ket{a_0}\ket{b_0})+(U\otimes V)(\alpha_1\ket{a_1}\ket{b_1}) \\
+                        & =\alpha_0(U\ket{a_0}\otimes V\ket{b_0})+\alpha_1(U\ket{a_1}\otimes V\ket{b_1})     \\
+          \end{aligned}$$
+
+        Where $\{U\ket{a_0}, U\ket{a_1}\}$ forms an Orthonormal basis for $\mathbb{C}^{d_A}$.
+        And $\{V\ket{b_0}, V\ket{b_1}\}$ forms an Orthonormal basis for $\mathbb{C}^{d_B}$.
+        We have previously shown that a unitary Operator preserves Orthonomality.
+
+        Now we have a Schmidt Decomposition of $\ket{\psi'}$ with coefficients $\alpha_0$ and $\alpha_1$.
+
+        Now $\ket{\psi}$ is entangled if and only if all the coefficients $\alpha_0$ and $\alpha_1$ are non-zero.
+        Now $\ket{\psi'}$ is entangled if and only if all the coefficients $\alpha_0$ and $\alpha_1$ are non-zero.
+        Now we have shown that $\ket{\psi}$ is entangled if and only if $\ket{\psi'}$ is entangled.
+\end{enumerate}
+
+\end{document}
