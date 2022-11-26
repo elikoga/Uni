@@ -1,0 +1,106 @@
+%% Generic %%
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\cO}{\mathcal{O}}
+\newcommand{\abs}[1]{\left\vert #1 \right\vert}
+\newcommand{\norm}[1]{\left\Vert #1 \right\Vert}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\newcommand{\la}{\lambda}
+\newcommand{\p}{{\textup P}}
+\newcommand{\np}{{\textup NP}}
+\newcommand{\cst}{{\tt{cost}}}
+\newcommand{\val}{{\tt{value}}}
+
+
+%% PSEUDOCODE %%%%
+
+\newenvironment{pseudocode}[1]%
+{\vspace*{-0.5\baselineskip} \upshape \begin{tabbing}
+    99 \= bla \= bla \= bla \= bla \= bla \= bla \= bla \= bla \kill
+    #1 \+ \\}%
+    {\end{tabbing}}
+\newcommand{\keyword}[1]{\texttt{#1}}
+\newcommand{\IF}{\keyword{IF} }
+\newcommand{\THEN}{\keyword{THEN} \+ \\}
+\newcommand{\ELSE}{\< \keyword{ELSE} \\}
+\newcommand{\END}{\< \keyword{END} \- \\ }
+\newcommand{\OR}{\keyword{OR} }
+\newcommand{\AND}{\keyword{AND} }
+\newcommand{\RETURN}{\keyword{RETURN} }
+\newcommand{\FOR}{\keyword{FOR} }
+\newcommand{\WHILE}{\keyword{WHILE} }
+\newcommand{\TO}{\keyword{TO} }
+\newcommand{\DO}{\keyword{DO} \+ \\ }
+\newcommand{\REPEAT}{\keyword{REPEAT} \+ \\ }
+\newcommand{\UNTIL}{\< \keyword{UNTIL} \- }
+
+
+\newcommand{\bestl}{{\tt Beste-L"osung}}
+\newcommand{\lb}{{\tt untere-Schranke}}
+\newcommand{\mcut}{{\textsc{MaxCut}}}
+\newcommand{\opt}{{\textup opt}}
+\newcommand{\dt}{{\textup{DTIME}}}
+\newcommand{\sat}{{\textup{SAT}}}
+\newcommand{\satd}{{\textup{3SAT}}}
+\newcommand{\satz}{{\textup{2SAT}}}
+\newcommand{\clique}{{\textup{Clique}}}
+\newcommand{\ggt}{{\textrm{ggT}}}
+\newcommand{\ol}{\overline}
+\newcommand{\tm}{{\textrm T}_M}
+\newcommand{\msb}{\textrm{MSB}}
+\newcommand{\rsopt}{\textrm{RS}_{\textup opt}}
+\newcommand{\rsent}{\textrm{RS}_{\textup ent}}
+\newcommand{\rsval}{\textrm{RS}_{\textup val}}
+\newcommand{\tspopt}{\textrm{TSP}_{\textup opt}}
+\newcommand{\tspent}{\textrm{TSP}_{\textup ent}}
+\newcommand{\etspent}{\textrm{ETSP}_{\textup ent}}
+
+\newcommand{\tspval}{\textrm{TSP}_{\textup val}}
+\newcommand{\etsp}{\textrm{ETSP}}
+\newcommand{\nt}{{\textup{NTIME}}}
+\newcommand{\tn}{{\textrm{T}_N}}
+\newcommand{\ein}{{\textrm{Eintrag}}}
+\newcommand{\phis}{\phi_{\textup Start}}
+\newcommand{\phia}{\phi_{\textup{accept}}}
+\newcommand{\phie}{\phi_{\textup Eintrag}}
+\newcommand{\phim}{\phi_{\textup move}}
+\newcommand{\susu}{{\textup SubsetSum}}
+\newcommand{\ghkreis}{{\textup gH-Kreis}}
+\newcommand{\uhkreis}{{\textup uH-Kreis}}
+\newcommand{\eue}{{\textup Exakte-"Uberdeckung}}
+\newcommand{\kue}{{\textrm{Knoten"uberdeckung}}}
+\newcommand{\clopt}{{\textup Clique}_{\textup opt}}
+\newcommand{\unabopt}{{\textup Unabh"angig}_{\textup opt}}
+\newcommand{\zq}{\Z_q}
+\newcommand{\god}{\textrm{G"odel}}
+\newcommand{\mr}{M^{\textrm{reject}}}
+\newcommand{\diag}{\textrm{Diag}}
+\newcommand{\exo}{\textrm{XOR}}
+\newcommand{\use}{\textrm{Useful}}
+\newcommand{\pot}{{\cal P}(Q)}
+
+\newcommand{\remu}{R(1,3)}
+\newcommand{\remum}{R(1,n)}
+\newcommand{\rsq}{RS(q,m,n)}
+
+\newcommand{\ee}{{\textup e}}
+
+\newcommand{\bigO}{{\cal O}}
+\newcommand{\bit}{\{0,1\}}
+\newcommand{\bits}{\{0,1\}^*}
+
+\newcommand{\rd}{\rhd}
+\newcommand{\qa}{q_{{\textup accept}}}
+\newcommand{\qr}{q_{{\textup reject}}}
+\newcommand{\gehtu}[1]{%
+  \stackrel{#1}{\smash{\rule{0.15mm}{1ex}}\rule[0.5ex]{2em}{0.15mm}}}
+%\newcommand{\Beweis}{{\textbf Beweis.} }
+\newcommand{\bla}{\sqcup}
+\newcommand{\ent}{\stackrel{\wedge}{=}}
+
+\newcommand{\panda}{PANDA}\hyphenation{PANDA}

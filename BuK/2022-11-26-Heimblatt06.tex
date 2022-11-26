@@ -1,0 +1,289 @@
+\documentclass[answers]{submit}
+\homework
+\usepackage{stmaryrd}
+\usepackage{enumitem}
+%TODO: Hier Gruppennummer, Namen, sowie Matrikelnummern einfügen.
+\exercisegroup{27}{Eli Kogan-Wang (7251030) \\David Noah Stamm (7249709) \\ Bogdan Rerich (7248483) \\Jan Schreiber(7253698)}
+
+% Folgendes braucht nicht geändert werden
+\exercisetl{Universität Paderborn \\ Prof. Dr. Johannes Blömer}
+\exerciselecture{Berechenbarkeit und Komplexität -- WS 2022/2023}
+\exercisenumber{6}
+\exercisehandin{28. November 2022 -- 13:00 Uhr}
+
+\input{commands.tex} % Diverse praktische Kommandos aus Vorlesungsskript und Übungen
+
+
+\begin{document}
+\exerciseheader
+\exercisetitle
+
+\begin{exercise}[6]{$\cO$-Kalkül}
+  Welche der folgenden Aussagen sind korrekt? Beweisen Sie Ihre Antwort!
+  \begin{enumerate}
+    \item[a)] $10^{-1000}n^{1.01} \in \Theta(n)$
+    \item[b)] $n^2 \in \cO(n\log(n))$
+    \item[c)] $n \log(n) \in o(n^2)$
+    \item[d)] $n \in \Omega\left(2^{\sqrt{\log(n)}}\right)$
+    \item[e)] $n! \in 2^{\cO(n)}$, das heißt, es existiert $c>0$, sodass $n!\le 2^{cn}$.
+  \end{enumerate}
+  \answer{
+
+    \begin{enumerate}
+      \item[a)] $\lim \limits_{n \to \infty} \frac{10^{-1000}n^{1.01}}{n} = \lim \limits_{n \to \infty} 10^{-1000}n^{0.01} = \infty \Rightarrow  10^{-1000}n^{1.01} \notin \Theta(n)$
+      \item[b)] $\lim \limits_{n \to \infty} \frac{n^2}{nlog(n)} = \lim \limits_{n \to \infty} \frac{n}{log(n)} \xrightarrow[Krankenhaus]{\text{Regel vom}} \lim \limits_{n \to \infty} \frac{\frac{d}{dx} n}{\frac{d}{dx} log(n)} = \lim \limits_{n \to \infty} \frac{1}{\frac{1}{n}} = \lim \limits_{n \to \infty} n = \infty \\ \Rightarrow n^2 \notin \cO(n\log(n)) $
+      \item[c)] $\lim \limits_{n \to \infty} \frac{nlog(n)}{n^2} = \lim \limits_{n \to \infty} \frac{log(n)}{n} \xrightarrow[Krankenhaus]{\text{Regel vom}} \lim \limits_{n \to \infty} \frac{\frac{d}{dx} log(n)}{\frac{d}{dx} n} = \lim \limits_{n \to \infty} \frac{\frac{1}{n}}{1} = \lim \limits_{n \to \infty} \frac{1}{n} = 0  \\ \Rightarrow nlog(n) \in o(n^2)$
+      \item[d)] $2^{\sqrt{\log(n)}} = 2^{(\log(n)^{\frac{1}{2}}} = {(2^{log(n)})}^\frac{1}{2} = \sqrt{n} \\
+          \lim \limits_{n \to \infty} \frac{n}{\sqrt{n}} = \lim \limits_{n \to \infty} \sqrt{n} = \infty \Rightarrow \sqrt{n} \in \cO(n) \iff n \in \Omega(\sqrt{n}) = \Omega\left(2^{\sqrt{\log(n)}}\right) $
+      \item[e)] %%Angenommen es existiert $c>0$, sodass $n!\le 2^{cn} \forall n \geq n_0 \\
+        %%\text{Wähle n} \geq 2^c. \Rightarrow log(n!) = log(n)+log(n-1)+...+log(1) \leq log(n)+ log  $
+        Angenommen: $ n! \in 2^{\cO(n)} \iff log(n!) \in \cO(n) \iff n log(n) \in \cO(n), \text{aber }  n log(n) \notin \cO(n) \lightning  \Rightarrow n! \notin 2^{\cO(n)} $
+    \end{enumerate}
+  }
+\end{exercise}
+
+\begin{exercise}[6]{Sprachen in P}
+  Sei
+  \begin{align*}
+    \textsc{Connected} & = \{\left<G\right> \mid \text{$G$ ist ein ungerichteter zusammenhängender Graph}\} \text{ und} \\
+    \textsc{Triangle}  & = \{\left<G\right> \mid \text{$G$ ist ein ungerichteter Graph mit einer 3-Clique}\} \ .
+  \end{align*}
+  Zeigen Sie, dass beide Sprachen in P liegen.
+  \answer{
+    Für $\textsc{Connected}$:
+
+    Wir zeigen eine Turing Maschine $M_{\textsc{Connected}}$, wobei $\textsc{Connected} = L(M_{\textsc{Connected}})$.
+
+    $M_{\textsc{Connected}}$ lehnt alle Eingaben nicht der Form $\langle G\rangle$ mit $G$ ist ein ungerichteter Graph ab (Form-Check).
+
+    $M_{\textsc{Connected}}$ bei Eingabe $\langle G\rangle$ mit $G = (V, E)$ ist ein ungerichteter Graph:
+    \begin{enumerate}[itemsep=0em]
+      \item Markiere den ersten Knoten $s_1$ \label{start}
+      \item Wiederhole die Folgenden Schritte bis keine Knoten mehr markiert werden können: \label{loop}
+            \begin{enumerate}
+              \item Durchlaufe alle Kanten $\{a, b\}$ des Graphen $G$.
+              \item Ist $a$ markiert, aber $b$ nicht so markiere $b$.
+              \item Ist $b$ markiert, aber $a$ nicht so markiere $a$.
+            \end{enumerate}
+      \item Überprüfe ob alle Knoten markiert sind. Wenn ja, akzeptiere, sonst lehne ab. \label{end}
+    \end{enumerate}
+
+    Mit der Länge eines Weges bezeichnen wir die Anzahl der Knoten auf einem Weg. Ein
+    ungerichteter zusammenhängender Graph ist ein Graph, in dem es von jeden Knoten
+    zu jedem anderen einen Weg gibt.
+
+    Insbesondere genügt es zu zeigen, dass es von einem bestimmten Knoten $s$ zu jedem
+    anderen einen Weg gibt, da daraus alle anderen Wege über $s$ abgeleitet werden können.
+    Die Schritte in \ref{loop} markieren im $k$-ten durchlauf genau die Knoten, die in einem Weg
+    von $k$, aber nicht früher erreicht werden können.
+
+    Nach den Ausführungen von \ref{loop} sind damit alle Knoten markiert, die von s aus erreicht
+    werden können.
+
+    Die Ausgabe in Schritt \ref{end} ist damit korrekt und die DTM $M_{\textsc{Connected}}$ entscheided
+    Connected.
+
+    \vspace{0.2cm}
+
+    Weiter analysieren wir die Laufzeit von $M_{\textsc{Connected}}$.
+
+    Schritt \ref{start} und \ref{end} werden nur einmal ausgeführt. Bei jedem Durchlauf bis auf den letzten
+    der Schritte in \ref{loop} wird mindestenz ein Knoten markiert. Maximal $\abs{V} + 1$ Durchläufe
+    können demnach durchgeführt werden.
+
+    Schritt \ref{start} ist polynomiell ausführbar. Genau so wie mit \ref{end}. Auch \ref{loop} ist polynomiell, da
+    es maximal $\abs{E}\in\mathcal{O}(\abs{V}^2)$ Schritten, $\abs{V} + 1$ mal ausführt.
+
+    Damit ist die Laufzeit von $M_{\textsc{Connected}}$ polynomiell und Connected in P.
+
+    \qed
+
+    \rule{\textwidth}{0.4pt}
+
+    Für $\textsc{Triangle}$.
+
+    Wir zeigen eine Turing Maschine $M_{\textsc{Triangle}}$, wobei $\textsc{Triangle} = L(M_{\textsc{Triangle}})$.
+
+    $M_{\textsc{Triangle}}$ lehnt alle Eingaben nicht der Form $\langle G\rangle$ mit $G$ ist ein ungerichteter Graph ab (Form-Check).
+
+    $M_{\textsc{Connected}}$ bei Eingabe $\langle G\rangle$ mit $G = (V, E)$ ist ein ungerichteter Graph:
+
+    \begin{enumerate}[itemsep=0em]
+      \item Wiederhole die folgenden Schritte für jedes $3$-Tupel von Knoten aus $V$: $(s_a,s_b,s_c)\in V\times V\times V$ \label{tri:loop}
+            \begin{enumerate}[itemsep=0em]
+              \item Wenn nicht $s_a\neq s_b$, $s_b\neq s_c$, $s_c\neq s_a$, gehe zum nächsten Durchlauf. \label{tri:check}
+              \item Prüfe, ob $\{s_a, s_b\}$, $\{s_b, s_c\}$, $\{s_c, s_a\}$ in $E$. Falls alle in $E$, akzeptiere, sonst gehe zum nächsten Durchlauf. \label{tri:search}
+            \end{enumerate}
+      \item Falls wir nicht schon akzeptiert haben, hat der Graph $G$ keine $3$-Clique und wir lehnen ab. \label{tri:reject}
+    \end{enumerate}
+
+    Wir betrachten alle $\abs{V}^3$, $3$-Tupel von Knoten in $V$.
+    Für die Tupel mit 3 paarweise ungleichen Elementen, prüfen wir, ob sie eine $3$-Clique in $G$ bilden.
+
+    Besitzt $G$ eine solche $3$-Clique so finden wir diese in einem Durchlauf von $\ref{tri:loop}$ und akzeptieren in $\ref{tri:search}$.
+
+    Besitzt $G$ keine $3$-Clique, so erreichen wir Schritt \ref{tri:reject} und lehnen ab.
+
+    Damit ist die Ausgabe in Schritt \ref{tri:search} oder \ref{tri:reject} korrekt und $M_{\textsc{Triangle}}$ entscheidet $\textsc{Triangle}$.
+
+    \vspace{0.2cm}
+
+    Weiter analysieren wir die Laufzeit von $M_{\textsc{Triangle}}$:
+
+    Die Schritte in \ref{tri:loop} werden $\abs{V}^3$ mal ausgeführt und sowohl \ref{tri:check} als auch \ref{tri:search} sind polynomiell über $\abs{V}$.
+
+    Der letzte Schritt \ref{tri:reject} auch polynomiell.
+
+    Damit ist die Laufzeit von $M_{\textsc{Triangle}}$ polynomiell und $\textsc{Triangle}$ in P.
+
+    \qed
+  }
+\end{exercise}
+
+\begin{exercise}[6]{Klasse P}
+  Sei $L\in$ P und $L^*=\{\epsilon\}\cup\bigcup_{k\in\N} L^k$.
+  Die formale Definition von $L^k$, der Sprache aller Verkettungen von $k$ Worten aus $L$, finden Sie auf Präsenzübung~3 Aufgabe~2.
+  Zeigen Sie, dass $L^*\in$ P.
+
+  \answer{
+
+    %%Da L $\in P$, gibt es eine DTM $\langle M_{L} \rangle$ welche die Sprache L in Laufzeit $\cO(n^m)$ entscheidet. \\
+
+    Nach Präsenzübung 3 Aufgabe 2 entscheidet die folgende Turingmaschine $\langle M_{L^k} \rangle$ die Sprache $L^k$:
+
+    $\langle M_{L^k} \rangle$ bei Eingabe w $\in \{0,1\}$
+
+    \begin{enumerate}
+      \item Für alle Aufteilungen $v_1, ..., v_k \in L $ von w mache
+            \begin{enumerate}
+              \item Für i = 1...k wiederhole Simulation von $\langle M_{L} \rangle$ mit Eingabe $v_i$
+              \item Falls $\langle M_{L} \rangle$ in jedem Durchgang akzeptiert hat, akzeptiere
+            \end{enumerate}
+      \item Verwerfe.
+    \end{enumerate}
+
+    Laufzeitanalyse von $\langle M_{L^k} \rangle$: \\
+    Da L $\in P$ ist die Laufzeit von $\langle M_{L^k} \rangle$ bei einer Eingabe u höchstens $\cO(|u|^m)$ für ein festes m $\in \mathbf{N}$. Da jedes $v_i$ höchstens so lang wie w, ist die Laufzeit von jeder Simulation in b) höchstens $\cO(|w|^m)$. \\
+
+    Da es insgesamt k Simulation in a) durchgeführt werden und k eine von w unabhängige Konstante kann a) durch $\cO(|w|^m)$ abgeschätzt werden. \\
+
+    b) kann trivialerweise in $\cO(1)$ entschieden werden. \\
+
+    Insgesamt führen wir in 1) maximal $\binom{|w|}{k}$ Schleifendurchläufe durch und 2) kann durch $\cO(1)$ abgeschätzt werden. \\
+
+    Insgesamt hat $\langle M_{L^k} \rangle$ also eine Laufzeit von $\binom{|w|}{k}*\cO(|w|^k)+\cO(1) \in \cO(|w|^k)$ und ist damit also in polynomoieller Zeit entscheidbar, da $\binom{|w|}{k} = \frac{|w|!}{k!*(|w|-k)!}$ eine Konstante bezüglich $\cO(|w|^k)$ ist.  \\
+
+    Behauptung: Falls $L_1 \text{ und } L_2 \in P$, so gilt: $L_1 \cup L_2 \in P$ \\
+
+    Beweis: Nach Aufgabe 3 aus Präsenzübung 6 gilt, dass da $L_1 \text{ und } L_2 \in P$ auch $(L_1)^C \text{und} (L_2)^C \in P$ liegen. \\
+
+    Also nach selbiger Aufgabe auch $(L_1)^C \cap (L_2)^C = L_1 \cup L_2 \in P \qed$ \\
+
+    Dies gilt dann auch dem entsprechend für abzählbare Vereinigungen von Sprachen aus P. \\
+
+    Folglich liegt $L^* \in P$, da $L^*=\{\epsilon\}\cup\bigcup_{k\in\N} L^k$ und damit eine abzählbare Vereinigung von Sprachen aus P ist, da
+    $\{\epsilon\}$ durch die Turingmaschiene: $\langle M_{\{\epsilon\}} \rangle$, welche nur $\{\epsilon\}$ akzeptiert, trivialerweise in polynomieller Zeit entschieden werden kann.
+
+    Folglich ist $L^*\in$ P $\qed$
+
+
+  }
+\end{exercise}
+
+\begin{exercise}[6]{Reduktion mit $\overline{H}$}
+  Beweisen Sie, dass die im Folgenden definierte Sprache des Äquivalenzproblems nicht rekursiv aufzählbar ist.
+  Nutzen Sie in ihrer Reduktion das Komplement des Halteproblems.
+
+
+  \[ L = \{(\langle M \rangle, \langle M' \rangle)\mid L(M)=L(M')\} \]
+
+  \answer{
+    Behauptung $\overline{H} \leq L$
+    Beweis:
+
+    Wir definieren die Reduktionsfunktion $f: \{0,1\}^* \rightarrow \{0,1\}^*$: \\
+
+    $$f(w)=\begin{cases}
+        \langle M^{(reject)} \rangle                    & \text{wenn w} \neq \langle M \rangle x \\
+        (\langle M^{(x)}\rangle,\langle M_{(x)}\rangle) & \text{wenn w} = \langle M \rangle x
+      \end{cases}$$ \\
+
+    Sei $\langle M^{(reject)} \rangle$ die Turingmaschine die jede Eingabe ablehnt. \\
+
+    $\langle M^{(x)}\rangle$ sei eine leicht abgeänderte Turingmaschine aus dem Satz 2.10.1, welche wie folgt definiert ist: \\
+
+    $\langle M^{(x)}\rangle$ bei Eingabe z $\in \{0,1\}^*$
+    \begin{enumerate}
+      \item Berechne |z|.
+      \item Simuliere M bei Eingabe x für |z| Schritte.
+      \item Falls M in |z| Schritten hält, so akzeptiere z.
+      \item Sonst akzeptiere z
+    \end{enumerate}
+    Folglich ist $f(w)$ nach diesem Satz 2.10.1 auch berechbar. \\
+
+    Darüber hinaus gilt die Implikation 2.2: \\
+
+    M hält bei Eingabe x nicht $\Rightarrow M^{(x)}$ hält bei jeder Eingabe z $\{0,1\}^*$ (1) \\
+
+
+    $\langle M_{(x)}\rangle$ sei eine leicht abgeänderte Turingmaschine aus dem Satz 2.10.1, welche wie folgt definiert ist: \\
+
+    $\langle M_{(x)}\rangle$ bei Eingabe z $\in \{0,1\}^*$
+    \begin{enumerate}
+      \item Berechne |z|.
+      \item Simuliere M bei Eingabe x für |z| Schritte.
+      \item Falls M in |z| Schritten hält, so lehne z ab.
+      \item Sonst akzeptiere z
+    \end{enumerate}
+    Folglich ist $f(w)$ nach diesem Satz 2.10.1 auch berechbar. \\
+    Darüber hinaus gilt die Implikation 2.2:
+
+    M hält bei Eingabe x nicht $\Rightarrow M_{(x)}$ hält bei jeder Eingabe z $\{0,1\}^*$ (2) \\
+
+    Z.z. $(w \in \overline{H} \iff f(w) \in L)$ \\
+
+    \setlength{\parskip}{1em}
+
+    Richtung $\implies$: Angenommen $w \in \overline{H}$.
+
+    Das heißt, $w=\langle M\rangle x$ mit $M$ hält bei Eingabe $x$ nicht.
+
+    Also wird w unter f nach $\langle M^{(x)}\rangle,\langle M_{(x)}\rangle$ abgebildet.
+
+    Da M bei keiner Eingabe hält, gilt nach (1) und (2) (alternativ folgt dies aus Zeile 3,4 der jeweiligen DTMS), dass sowohl $\langle M^{(x)}\rangle \text{als auch}\langle M_{(x)}\rangle$ jede Eingabe akzeptiert.
+
+    Dementsprechend ist $L((\langle M^{(x)}\rangle)= L(\langle M_{(x)}\rangle)) \text{und es gilt w}\in f(w)$
+
+    \vspace{1cm}
+
+    Richtung $\Leftarrow$: Angenommen $w \notin \overline{H}$.
+
+    Also ist entweder $w$ von falscher Form oder $M$ hält bei Eingabe $x$.
+
+    Ist $w$ von falscher Form, dann ist $f(w)=\langle M^{(reject)} \rangle \notin L$, da $\langle M^{(reject)} \rangle$ nicht von der Form $(\langle M \rangle, \langle M' \rangle)$
+
+    Ist $w=\langle M\rangle x$ und $M$ hält bei Eingabe $x$, dann:
+
+    Es existiert ein $n$ mit $M$ hält bei Eingabe $x$ nach $n$ Schritten.
+
+    Und für alle $n'>n$ gilt: $M$ hält bei Eingabe $x$ nach $n'$ Schritten.
+
+    Damit werden $\langle M^{(x)}\rangle$ und $\langle M_{(x)}\rangle$ bei jeder Eingabe der Länge $n'>n$ halten und die jeweilige Eingabe akzeptieren, bzw ablehnen.
+
+    Also gilt $L(\langle M^{(x)}\rangle)$ = $\{ z | z \in \{0,1\}^* \text{mit} |n| \leq |z| \} $
+
+    und $L(\langle M_{(x)}\rangle)$ = $\{ z | z \notin \{0,1\}^* \text{mit} |n| \leq |z| \} $
+
+    Folglich gilt: $L(\langle M^{(x)}\rangle) \neq L(\langle M_{(x)}\rangle)$
+
+    Damit ist $f(w)=\langle M^{(x)}\rangle,\langle M_{(x)}\rangle \notin L$.
+
+    $\Rightarrow \overline{H} \leq L$ $\qed$
+  }
+\end{exercise}
+
+
+
+
+
+\end{document}
