@@ -291,3 +291,124 @@ loop:       lb a0, 0(a2) # load content of memory[a1+0] into a0
             li a7, 10    # exit code
             ecall
 ```
+
+---
+
+Aufgabe 4 (Sternchengrafik)
+Auf der Konsole soll folgendes Muster erscheinen
+
+```text
+  **
+ ****
+******
+```
+
+Die Zeilenanzahl (1-9) soll dabei durch eine Eingabe  ̈uber die Tastatur bestimmt werden.
+Eingaben außerhalb des Parameterbereichs sollen abgelehnt werden. Die Grafik soll dabei
+immer am linken Rand erscheinen.
+
+```riscv
+.data
+prompt1: .string "\nEnter number of lines (1-9): "
+message1: .string "\nInvalid input. Please try again.\n"
+buffer:  .zero 1
+oneChar: .string "1"
+nineChar: .string "9"
+newline: .string "\n"
+space: .string " "
+star: .string "*"
+currSpace: .zero 4 # int
+currStar: .zero 4 # int
+
+
+.text
+start:
+li a7, 63 # read
+li a0, 0  # stdin
+la a1, buffer
+li a2, 1  # read 1 byte
+ecall
+
+# we should have a number in buffer[0]
+# check if it is in range
+li t0, 49 # 1
+li t1, 57 # 9
+la t2, buffer
+lb t2, 0(t2) # load buffer[0] into t2
+# if correct, go to check2
+bge t2, t0, check2 # if (t2 >= t0) goto check2, so i >= 1
+# if not, go to error
+j error
+
+check2:
+# if correct, go to check3
+ble t2, t1, check3 # if (t2 <= t1) goto check3, so i <= 9
+# if not, go to error
+j error
+
+check3:
+# Try to print this.
+# we'll use printRepeat (a0 = char, a1 = count)
+la t0, buffer
+lb t0, 0(t0) # load buffer[0] into t0
+sub t0, t2, t0 # t0 = t2 - t0
+li t1, 1 # t1 = 1
+# write t0 spaces, then t1 stars, then t1 stars, then newline
+lineLoop:
+la a0, space
+mv a1, t0
+call printRepeat
+la a0, star
+mv a1, t1
+call printRepeat
+call printRepeat
+la a0, newline
+li a7, 4 # print string
+# save t0 in currSpace
+la t2, currSpace
+sw t0, 0(t2)
+# save t1 in currStar
+la t2, currStar
+sw t1, 0(t2)
+ecall
+# restore
+lw t0, currSpace
+lw t1, currStar
+# decrement t0
+addi t0, t0, -1
+# increment t1
+addi t1, t1, 2
+bne t0, x0, lineLoop
+j end
+
+printRepeat:
+# a0 = char, a1 = count
+# save t0, t1
+la t2, currSpace
+sw t0, 0(t2)
+la t2, currStar
+sw t1, 0(t2)
+# save arguments
+mv t0, a0
+mv t1, a1
+# print a1 times a0
+printLoop:
+mv a0, t0
+li a7, 4 # print string
+ecall
+addi t1, t1, -1
+bne t1, x0, printLoop
+# restore t0, t1
+lw t0, currSpace
+lw t1, currStar
+ret
+
+end:
+li a7, 10 # exit
+ecall
+
+error:
+la a0, message1
+li a7, 4 # print string
+ecall
+```
