@@ -1,0 +1,240 @@
+\documentclass[answers]{submit}
+\homework
+
+%TODO: Hier Gruppennummer, Namen, sowie Matrikelnummern einfügen.
+\exercisegroup{27}{Eli Kogan-Wang (7251030) \\David Noah Stamm (7249709) \\ Bogdan Rerich (7248483) \\Jan Schreiber(7253698)}
+
+% Folgendes braucht nicht geändert werden
+\exercisetl{Universität Paderborn \\ Prof. Dr. Johannes Blömer}
+\exerciselecture{Berechenbarkeit und Komplexität -- WS 2022/2023}
+\exercisenumber{8}
+\exercisehandin{12. Dezember 2022 -- 13:00 Uhr}
+
+\input{commands.tex} % Diverse praktische Kommandos aus Vorlesungsskript und Übungen
+\usepackage{enumerate}
+
+
+\begin{document}
+\exerciseheader
+\exercisetitle
+
+
+\begin{exercise}[6]{$k$-Färbbarkeit in NP}
+  Ein ungerichteter Graphen $G=(V,E)$ heißt \emph{k-färbbar}, wenn es eine Abbildung $c: V \rightarrow \{ 1,2,\dots,k\}$ gibt, sodass $c(u)\neq c(v)$ für alle $\{u,v\}\in E$.
+  Zeigen Sie, dass die Sprache
+  \[
+    \textup{Color} = \{\langle G, k \rangle \; \vert \; G \text{ ist ein ungerichteter Graph, der eine $k$-Färbung besitzt} \}
+  \]
+  in NP liegt.
+  Konstruieren Sie hierfür eine NTM, welche die Sprache in polynomieller Zeit entscheidet, und beweisen Sie deren Korrektheit.
+
+  \answer{
+    Sei im folgenden N eine NTM
+
+    N bei Eingabe x $\in \{0,1\}*$
+    \begin{enumerate}
+      \item (Formcheck) Prüfe, ob x von der Form $\langle G, k \rangle$ ist, wobei G der Kodierung eines Graphen entspricht und k der einer natürlichen Zahl
+      \item Generiere nicht deterministisch Abbildungen $c: V \rightarrow \{ 1,2,\dots,k\}$
+      \item Prüfe $\forall$ $\{u,v\} \in E$, ob c(u) $\neq$ c(v), falls dies nicht der Fall ist verwerfe
+      \item Akzeptiere
+    \end{enumerate}
+    Laufzeit von N
+
+    \begin{enumerate}
+      \item Überprüfen ist in P
+      \item Die Abbildung kann in polynomieller Zeit generiert werden, da jedem Knoten systematisch ein Element aus $\{ 1,2,\dots,k\}$ zugeordnet wird.
+      \item Dies dauert hat im Worst Case eine Laufzeit von  $\lvert V \rvert^2$ also ist diese Polynomiel
+      \item Trivialerweise Polynomiel.
+    \end{enumerate}
+
+    Korrektheit: \\
+
+    Behauptung: L(N) = Color. \\
+
+    1) Color $\subseteq$ L(N) \\
+
+    Angenommen x $\in$ Color
+
+    $\rightarrow \text{ Es existert ein k } \in \mathbb{N} \text{ s.d. x=} \langle G,k \rangle $ und G besitzt eine k-Färbung.
+
+    $\rightarrow$ Es existiert eine Abbildung $w: V \rightarrow \{ 1,2,\dots,k\}$ mit $w(u)\neq w(v)$ für alle $\{u,v\}\in E$.
+
+    $\rightarrow$ x wird in 1 nicht abgelehnt. Die Abbildung w wird in 2 generiert und die Bedingungen in 3 treten nach Voraussetzung ein, folglich wird x in 4 akzeptiert.
+
+    $\rightarrow$ Es existiert eine Berechnung in welcher x akzpetiert wird.
+
+    $\Rightarrow$ x $\in$ L(N) \\
+
+    2)  L(N) $\subseteq$ Color \\
+
+    Abgenommen x $\notin$ Color
+
+    $\rightarrow$ x $ \neq \langle G,k \rangle $, dann wird x in (1) abgelehnt oder x= $\langle G,k \rangle $, aber G ist nicht k färbbar.
+
+    $\rightarrow$ Es kann in 2 keine Abbildung $c: V \rightarrow \{ 1,2,\dots,k\}$ generiert werden für die die Bedingungen aus 3) erfüllt werden können.
+
+    $\rightarrow$ x wird in jeder Berechnung abgelehnt.
+
+    $\Rightarrow$ x $\notin$ L(N).
+
+    $\Rightarrow$ Color=L(N)
+
+    $\Rightarrow$ Color $\in$ NP $\qed$
+  }
+\end{exercise}
+
+
+\begin{exercise}[6]{P und Implikation}
+  Eine aussagenlogische Formel $\phi$ ist in \textit{disjunktiver Normalform} (DNF), wenn sie von der Form $\phi=\bigvee_{i=1}^k\bigwedge_{j=1}^{m_i}x_{ij}$ ist, wobei $x_{ij}$ Literale sind.
+  Betrachten Sie die folgende Sprache
+  \begin{align*}
+    \textsc{DisSat} & =\{\langle\phi\rangle\mid\phi\mbox{ ist eine erfüllbare Formel in disjunktiver Normalform}\} \ .
+  \end{align*}
+  \begin{enumerate}
+    \item Zeigen Sie, dass \textsc{DisSat} in P liegt.
+    \item Jede 3KNF-Formel, das heißt KNF-Formel deren Klauseln aus 3 Literalen bestehen, kann in eine logisch äquivalente DNF-Formel umgeformt werden (wie Sie wahrscheinlich aus der Vorlesung Modellierung wissen).
+          Warum implizieren dieser Fakt und a) \emph{nicht} notwendigerweise, dass auch \textsc{3SAT} in P liegt?
+  \end{enumerate}
+
+  \answer{
+    \begin{enumerate}
+      \item Wir zeigen eine Turing Maschine $M$, die die Sprache \textsc{DisSat} in polynomieller Zeit entscheidet.
+
+            $M$ bei eingabe $w$:
+
+            \begin{enumerate}
+              \item Wenn $w$ nicht von der Form $\langle \phi \rangle$ für eine Formel $\phi$ in DNF ist, wird $w$ abgelehnt.
+              \item $w=\langle \phi \rangle$ für eine Formel $\phi=\bigvee_{i=1}^kK_i$ in DNF.
+                    Wobei $K_i=\bigwedge_{j=1}^{m_i}x_{ij}$ ein Konjunktionsterm ist.
+                    Für jeden Konjunktionsterm $K_i$ wird folgendes getan:
+                    \begin{enumerate}
+                      \item Prüfe für alle Literale $x_{ij}$ in $K_i$, ob $\neg x_{ij}$ nicht in $\phi$ vorkommt.
+                            Wenn es nicht vorkommt, wird $w$ akzeptiert.
+                      \item Wenn $x_{ij}$ und $\neg x_{ij}$ in $\phi$ vorkommt, wird der nächste Konjunktionsterm $K_{i+1}$ betrachtet.
+                    \end{enumerate}
+              \item Wenn alle Konjunktionsterme betrachtet wurden, wird $w$ abgelehnt.
+            \end{enumerate}
+
+            Die Laufzeit von $M$ ist polynomiel, da für jede Formel $\phi$ in DNF nur die Konjunktionsterme in $\phi$ betrachtet werden müssen.
+
+            Die Betrachtung der Konjunktionsterme ist polynomiel, da für jeden Konjunktionsterm $K_i$ nur die Literale in $K_i$ betrachtet werden müssen,
+            und naiverweise nur jedes Paar von Literalen in $K_i$ betrachtet werden muss (quadratische Vergleiche).
+
+            Wenn $M$ die Formel $\phi$ in DNF akzeptiert, dann ist $\phi$ erfüllbar, mit einer Interpretation $I$ die alle Literale des $K_i$ erfüllt,
+            in dem $M$ akzeptiert.
+
+            Wenn $M$ nicht akzeptiert, dann ist entweder:
+            \begin{enumerate}
+              \item Die Eingabe $w$ nicht von der Form $\langle \phi \rangle$ für eine Formel $\phi$ in DNF.
+              \item $\phi$ nicht erfüllbar, da alle Konjunktionsterme wiederspruchsvoll sind.
+            \end{enumerate}
+
+            $\Rightarrow$ \textsc{DisSat} ist in P.
+
+      \item Dieser Fakt impliziert nicht notwendigerweise, dass auch \textsc{3SAT} in P liegt, da die uns bekannte Konversion
+            nicht polynomiel ist.
+
+            Insbesondere wandelt der uns bekannte Algorithmus (Distributivgesetz anwenden) eine 3KNF-Formel $\phi$ in eine DNF-Formel $\phi'$ um,
+            die $\phi$ logisch äquivalent ist, aber $O(3^n)$ (mit $n$ der Anzahl der Klauseln in $\phi$) Terme hat. Bei einer Formel $\phi$ mit $n$ Klauseln
+            ist eine der Terme dann $O(n)$ lang und somit ist die Laufzeit der Reduktion auf $\phi'$ nicht polynomiel.
+
+            Damit ist keine polynomielle Reduktion von \textsc{3SAT} auf \textsc{DisSat} gegeben, und somit ist \textsc{3SAT} nicht notwendigerweise in P.
+    \end{enumerate}
+  }
+\end{exercise}
+
+\begin{exercise}[6]{\textup{SetCover}}
+  Zeigen Sie, dass die folgende Sprache in NP liegt:
+  \[
+    \textup{SetCover} = \left\{\langle A,S_1,\dots,S_n, k \rangle \;\middle|\;
+    \begin{aligned}
+       & S_1,\dots,S_n\subseteq A \land k\in \N \land \exists I\subseteq \{1,\dots,n\} \\
+       & \text{mit } \lvert I \rvert \le k \text{ und } \bigcup_{i\in I} S_i = A
+    \end{aligned}  \right\}
+  \]
+
+  \answer{
+
+    o.B.d.A alle hier betrachten Mengen sind endlich. \\
+
+    Sei V im Folgenden eine DTM \\
+
+    V bei Eingabe $\in \{0,1\}^*$
+    \begin{enumerate}
+      \item (Formcheck) Überprüfe, ob x = $\langle A,S_1,\dots,S_n, k, I \rangle$ mit
+            $ S_1,\dots,S_n\subseteq A \land k\in \N \land  I\subseteq \{1,\dots,n\}
+              \text{mit } \lvert I \rvert \le k$
+      \item Prüfe, ob $\bigcup_{i\in I} S_i = A$, falls nicht verwerfe
+      \item Akzeptiere
+    \end{enumerate}
+
+    Behauptung: V ist ein polynomieller Verifzierer der Sprache SetCover. \\
+
+    Korrektheit: \\
+
+    Angenommen x $\in$ SetCover.
+
+    Also ist x = $\langle A,S_1,\dots,S_n, k \rangle$ mit $S_1,\dots,S_n\subseteq A \land k\in \N$ und es existiert eine Indexmenge I s.d. $\lvert I \rvert \le k$ und $\bigcup_{i\in I} S_i = A$
+
+    Mit I als Zertifikat wird dann dem Entsprechend V in Schritt 1 und 2 die Eingabe nicht verwerfen und somit in 3 akzeptiert.\\
+
+    Angenommen x $\notin$ SetCover.
+
+    Also ist x entweder nicht von der richtigen Form, wird also 1) abgelehnt oder es existiert keine Indexmenge, welche die geforderten Bedingungen nicht erfüllt.
+
+    Also lehnt auch V bei jeder Paarung von x und einer Indexmenge nach 1 und 2 ab, da entweder Bedingungen aus dem Formcheck nicht erfüllt sind oder  $\bigcup_{i\in I} S_i \neq A$, da x sonst $\in$ SetCover.
+
+    $\Rightarrow$ V ist ein Verfizierer von SetCover
+
+    Laufzeit von V:
+    \begin{enumerate}
+      \item Hat polynomielle Laufzeit, da das überprüfen der Mengen Inklusionen in $\cO(\lvert A \rvert)$ möglich ist. Ob k in $\mathbf{N}$ liegt ist auch trivialerweise in polynmieller Zeit möglich, genauso wie
+      \item Dies ist in polynomieller Laufzeit umsetztbar, da die Vereinigung von Mengen in polynomieller Zeit abhängig von der große der Mengen umgesetzt werden kann und der Vergleich in $\cO(\lvert A \rvert)$ berechnet werden kann.
+      \item trivialerweise polynomiell
+    \end{enumerate}
+    Polynomialität von I:\\
+    Da I $\subseteq \{1, \dots, n \}$. Kann dieses maximal n Elemente enthalten und kann somit in $\cO(\lvert A \rvert)$ berechnet werden.
+
+    $\Rightarrow$ V ist polynomieller Verifizierer von SetCover $\Rightarrow \text{SetCover} \in NP$
+  }
+\end{exercise}
+
+\begin{exercise}[6]{Implikationen}
+  Seien $A,B,C,D$ beliebige Sprachen.
+  Nehmen Sie zusätzlich folgende Beziehungen an
+  \begin{itemize}
+    \item Es gibt eine Reduktion von $A$ zu $B$, also $A \le B$.
+    \item Es gibt eine Reduktion von $B$ zu $C$, also $B \le C$.
+    \item Es gibt eine Reduktion von $D$ zu $C$, also $D \le C$.
+  \end{itemize}
+
+  Entscheiden und Begründen Sie für jede der folgenden logischen Aussagen kurz, ob sie
+  \begin{enumerate}[(i)]
+    \item immer wahr ist, also für alle Wahlen von Sprachen erfüllt ist.
+    \item möglicherweise wahr ist, also sowohl eine erfüllende als auch eine widersprechende Wahl von Sprachen existiert.
+    \item immer falsch ist, also für keine Wahl von Sprachen erfüllt ist.
+  \end{enumerate}
+
+  Die Aussagen lauten:
+  \begin{enumerate}[a)]
+    \item $A$ is rekursiv aufzählbar aber nicht entscheidbar, und $C$ ist entscheidbar.
+    \item $A$ ist nicht entscheidbar und $D$ is nicht rekursiv aufzählbar.
+    \item Wenn $C$ entscheidbar ist, dann ist das Komplement von $D$ entscheidbar.
+    \item Wenn $C$ rekursiv aufzählbar ist, dann ist $B\cap D$ rekursiv aufzählbar.
+  \end{enumerate}
+
+  \answer{
+    \begin{enumerate}[a)]
+      \item (iii), da Reduktionen Transitiv sind $\Rightarrow$ A $\leq$ C und C entscheidbar $\xrightarrow{2.8.2}$ A entscheidbar.
+      \item A nicht entscheidbar und A $\leq$ C $\xrightarrow{2.9.1}$ C ist nicht entscheidbar $\iff$ C oder $C^c$ ist nicht rekursiv aufzählbar. \\
+            D nicht rekursiv aufzählbar $\xrightarrow{2.9.1}$ C ist nicht rekursiv aufzählbar.
+            $\Rightarrow$ (ii) ist richtig.
+      \item (i), da D $\leq$ C und C entscheidbar $\xrightarrow{2.8.2}$ D ist entscheidbar $\xrightarrow{2.5.1}$ $D^c$ ist entscheidbar.
+      \item (i), da D $\leq$ C, B $\leq$ C und C rekursiv aufzählbar $\xrightarrow{2.8.2}$ D,B sind rekursiv aufzählbar $\xrightarrow{2.5.2}$ $ B \cap D $ ist rekursiv aufzählbar.
+    \end{enumerate}
+  }
+\end{exercise}
+Angenommen C ist rekursiv aufzählbar + D $\leq$ C $\xrightarrow{}$ D ist aufzählbar.
+Angenommen C ist nicht rekursiv aufzählbar + D $\leq$
+
+\end{document}
