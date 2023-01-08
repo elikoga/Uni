@@ -1,0 +1,948 @@
+\documentclass[answers]{submit}
+\homework
+\usepackage{stmaryrd}
+
+%TODO: Hier Gruppennummer, Namen, sowie Matrikelnummern einfügen.\documentclass[answers]{submit}
+\homework
+\usepackage{stmaryrd}
+
+%TODO: Hier Gruppennummer, Namen, sowie Matrikelnummern einfügen.
+\exercisegroup{27}{Eli Kogan-Wang (7251030) \\David Noah Stamm (7249709) \\ Bogdan Rerich (7248483) \\Jan Schreiber(7253698)}
+
+% Folgendes braucht nicht geändert werden
+\exercisetl{Universität Paderborn \\ Prof. Dr. Johannes Blömer}
+\exerciselecture{Berechenbarkeit und Komplexität -- WS 2022/2023}
+\exercisenumber{9}
+\exercisehandin{19. Dezember 2022 -- 13:00 Uhr}
+
+\input{commands.tex} % Diverse praktische Kommandos aus Vorlesungsskript und Übungen
+\usepackage{enumerate}
+
+
+\begin{document}
+\exerciseheader
+\exercisetitle
+
+\begin{exercise}[3]{NP-Vollständigkeit}
+  In Heimübung~8 Aufgabe ~2 haben wir die disjunktive Normaleform (DNF) einer aussagenlogischen Formel $\phi$ definiert und gezeigt, dass die Sprache aller erfüllbaren DNF--Formeln \textsc{DisSat} in P liegt.
+  Eine solche Formel ist widerlegbar, wenn es (mindestens) eine Belegung gibt, sodass die Formel nicht wahr ist.
+  Betrachten sie folgende Sprache
+
+  \begin{align*}
+    \textsc{DisUnsat} & =\{\langle\phi\rangle\mid\phi\mbox{ ist eine widerlegbare Formel in disjunktiver Normalform}\} \ .
+  \end{align*}
+
+  Zeigen Sie, dass \textsc{DisUnsat} NP-vollständig ist.
+
+  \answer{
+    Z.z.\\
+    1. \textsc{DisUnsat} $\in NP$ \\
+    2. \textsc{3SAT} $\leq_p$ \textsc{DisUnsat} \\
+    \\
+    1. Konstruiere eine DTM M als Verifizierer:
+    \begin{enumerate}
+      \item Prüfe ob w von der Form $\langle \phi , c \rangle$, sodass $\phi$ eine aussagenlogische Formel in DNF und c eine Belegung der Variablen in $\phi$. Wenn nicht, dann lehne ab.
+      \item Wenn die Formel $\phi$ mit der Belegung c falsch ist, dann akzeptiere.
+    \end{enumerate}
+    Jede Variable kommt o.B.d.A. mindestens einmal in $\phi$ vor. In c kommt sie maximal einmal vor. Also liegt die Länge von c polynomiell unter der von $\phi$
+    Korrektheit:\\
+    w $\in $ \textsc{DisUnsat}: \\
+    Dann gibt es eine Belegung, sodass $\phi$ falsch ist.
+    w $\notin$ \textsc{DisUnsat}: \\
+    Wenn w falsch kodiert ist lehnt M ab. Wenn $\phi$ nicht widerlegbar ist, dann lehnt M jedes w ab.\\
+    \\
+    Schritt 1 und Schritt 2 lassen sich beide in linearer Zeit, also unter polynomieller Zeit ausführen.\\
+    \\
+    2. Konstruiere eine polynomielle Reduktion $f$ von \textsc{3SAT} auf \textsc{DisUnsat}: \
+
+    Sei $w$ ein Wort. Wenn $w$ nicht von der Form $\langle \phi \rangle$ mit $\phi$ eine aussagenlogische Formel in 3KNF ist, dann gebe $f(w) = \epsilon$ zurück.\\
+
+    $w$ ist nun von der Form $\langle \phi \rangle$ mit $\phi$ eine aussagenlogische Formel in 3KNF.\\
+
+    Konstruiere eine aussagenlogische Formel $\phi'$ in DNF aus $\phi$ indem man alle $\land$ durch $\lor$ ersetzt und alle $\lor$ durch $\land$ ersetzt
+    und alle Literale durch ihre negierten Versionen ersetzt.\\
+
+    Nun ist $\phi'\iff \neg \phi$ und $\phi'$ ist eine aussagenlogische Formel in DNF.\\
+
+    $f(w) = \langle \phi' \rangle$\\
+
+    Korrektheit:\\
+
+    $w \in \textsc{3SAT}$:\\
+
+    $\phi$ ist eine aussagenlogische Formel in 3KNF.\\
+
+    $\phi'$ ist eine aussagenlogische Formel in DNF.\\
+
+    Ein Erfüllung von $\phi$ ist eine Widerlegung von $\phi'$.\\
+
+    $w \notin \textsc{3SAT}$:\\
+
+    Entweder ist $w$ falsch kodiert oder $w=\langle\phi\rangle$ ist nicht erfüllbar.\\
+
+    Wenn $w$ falsch kodiert ist, dann ist $f(w) = \epsilon$ und $\epsilon \notin \textsc{DisUnsat}$.\\
+
+    Wenn $w=\langle\phi\rangle$ ist nicht erfüllbar, dann ist $\phi'$ nicht widerlegbar und $f(w) = \langle \phi' \rangle$ ist nicht in \textsc{DisUnsat}.\\
+
+    Polynomielle Laufzeit:\\
+
+    Die Länge von $f(w)$ ist polynomiell unter der von $w$.
+
+    Zusätzlich werden nur substitutionen ausgeführt, die polynomiell viele Schritte brauchen.\\
+
+    Damit ist $f$ polynomiell. Und $f$ ist eine Reduktion von \textsc{3SAT} auf \textsc{DisUnsat}: \textsc{3SAT} $\leq_p$ \textsc{DisUnsat}.\\
+
+  }
+\end{exercise}
+
+\begin{exercise}[7]{NP-Vollständigkeit}
+  Betrachten Sie die folgende Sprache
+  \[
+    \textsc{HittingSet} = \left\{\langle X, S,k\rangle \middle|\begin{array}{l}
+      \textrm{$X$ ist eine endliche Menge, $S\subseteq\mathcal{P}(X)$, und es gibt} \\
+      \textrm{$H\subseteq X$ mit $\abs{H}\leq k$, sodass für alle $T\in S: H\cap T\neq \emptyset$.}\end{array}\right\} \ .
+  \]
+  Zeigen Sie, dass \textsc{HittingSet} NP-vollständig ist.
+  Nutzen Sie in Ihrer Reduktion die \emph{NP-vollständige} Sprache \textsc{VertexCover}, welche in Heimübung~7 Aufgabe~1 definiert wurde.
+
+  \answer{
+    Wir zeigen;
+
+    \begin{enumerate}
+      \item \textsc{HittingSet} $\in NP$ \label{hittingsetNP}
+      \item $\textsc{VertexCover}\leq_p \textsc{HittingSet}$ \label{vertexcoverHittingset}
+    \end{enumerate}
+
+    Beweis von \ref{hittingsetNP}:
+
+    Wir zeigen existenz eines Verifizierers $M$ für \textsc{HittingSet}.
+
+    Wir beschreiben $M$ bei Eingabe $w$ wie folgt:
+
+    Wenn $w$ nicht von der Form $\langle \langle X, S, k \rangle, c \rangle$,
+    wobei $X$ eine endliche Menge,
+    $S$ eine endliche Menge von Mengen ist,
+    $k$ eine natürliche Zahl und $c$ eine endliche Menge ist,
+    dann lehne $w$ ab. (Form-Check)
+
+    Nun ist $w$ von der Form $\langle \langle X, S, k \rangle, c \rangle$,
+    wobei $X$ eine endliche Menge,
+    $S$ eine endliche Menge von Mengen ist,
+    $k$ eine natürliche Zahl und $c$ eine endliche Menge ist.
+
+    Nun wird wie folgt verfahren:
+
+    \begin{enumerate}
+      \item Prüfe, ob $S\subseteq\mathcal{P}(X)$ indem man für jedes $T\in S$ prüft ob $T\subseteq X$. Wenn nicht, lehne ab. \label{hittingsetNP1}
+      \item Prüfe, ob $c\subseteq X$ indem man für jedes $x\in c$ prüft ob $x\in X$. Wenn nicht, lehne ab. \label{hittingsetNP2}
+      \item Prüfe, ob $\abs{c}\leq k$. Wenn nicht, lehne ab. \label{hittingsetNP3}
+      \item Prüfe, ob für alle $T\in S$ gilt, dass $c\cap T\neq\emptyset$. Wenn nicht, lehne ab. \label{hittingsetNP4}
+      \item Akzeptiere. \label{hittingsetNP5}
+    \end{enumerate}
+
+    \textbf{Korrektheit:}
+
+    Das Zertifikat $c$ ist ein Hitting-Set für $S$ mit $\abs{c}\leq k$.
+
+    Wenn $\langle X, S, k \rangle\in\textsc{HittingSet}$ ist, dann gibt es ein Hitting-Set $c$ mit $\abs{c}\leq k$ für $S$.
+
+    Wenn $w\notin \textsc{HittingSet}$, dann gibt es kein Hitting-Set für $S$ mit $\abs{c}\leq k$, oder $w$ ist falsch kodiert.
+
+    \textbf{Laufzeit:}
+
+    Schritt \ref{hittingsetNP1} und \ref{hittingsetNP2} iterieren polynomiell über die Eingabe und sind damit polynomiell.
+
+    Schritt \ref{hittingsetNP3} ist trivial polynomiell in der Eingabe.
+
+    Schritt \ref{hittingsetNP4} iteriert polynomiell über die Mengen $T\in S$, als auch über die Elemente $x\in c$ und ist damit polynomiell, sofern $\abs{c}$ polynomieller Größe ist.
+
+    \textbf{Polynomielle Größe von $c$:}
+
+    $\abs{c}$ ist polynomieller Größe, da $x\subseteq X$ geprüft wird und $X$ endlich ist.
+
+    Beweis von \ref{vertexcoverHittingset} ($\textsc{VertexCover}\leq_p \textsc{HittingSet}$):
+
+    Wir zeigen existenz einer polynomiellen Reduktion $f$ von \textsc{VertexCover} auf \textsc{HittingSet}.
+
+    Also: $w\in\textsc{VertexCover}\iff f(w)\in\textsc{HittingSet}$.
+
+    Wir beschreiben $f$ bei Eingabe $w$ wie folgt:
+
+    Wenn $w$ nicht von der Form $\langle G, k \rangle$,
+    wobei $G=(V,E)$ ein ungerichteter Graph ist
+    und $k$ eine natürliche Zahl ist,
+    dann konstruiere eine Invalide Eingabe für \textsc{HittingSet} (bspw. $\epsilon$).
+
+    Nun ist $w$ von der Form $\langle G, k \rangle$,
+    wobei $G=(V,E)$ ein ungerichteter Graph ist
+    und $k$ eine natürliche Zahl ist.
+
+    $f(\langle G=(V,E), k \rangle) = \langle V, E, k \rangle$.
+
+    \textbf{$f$ ist polynomiell:}
+
+    $f$ ist trivial polynomiell, da $f$ nur die Eingabe prüft und diese dann direkt weitergibt (linear in der Eingabe).
+
+    \textbf{Korrektheit:}
+
+    Richtung $\Rightarrow$:
+
+    Wenn $w\in\textsc{VertexCover}$,
+    dann existiert ein $C\subseteq V$ mit $\abs{C}\leq k$ und für alle $e\in E$ gilt $e\cap C\neq\emptyset$.
+
+    Damit ist $H=C$ ein Hitting-Set für $E$ auf $V$ mit $\abs{H}\leq k$.
+
+    Damit ist $f(w)=\langle V, E, k \rangle\in\textsc{HittingSet}$.
+
+    Richtung $\Leftarrow$:
+
+    Wenn $w\notin\textsc{VertexCover}$,
+    dann ist $w$ falsch kodiert,
+    oder es existiert kein $C\subseteq V$ mit $\abs{C}\leq k$ und für alle $e\in E$ gilt $e\cap C\neq\emptyset$.
+
+    Wenn $w$ falsch kodiert ist, dann ist $f(w)$ falsch kodiert.
+
+    Wenn es kein $C\subseteq V$ mit $\abs{C}\leq k$ und für alle $e\in E$ gilt $e\cap C\neq\emptyset$ gibt,
+    dann gibt es auch kein $H\subseteq V$ mit $\abs{H}\leq k$ und für alle $T\in E$ gilt $T\cap H\neq\emptyset$.
+
+    Damit ist $f(w)\notin\textsc{HittingSet}$.
+  }
+\end{exercise}
+
+
+\begin{exercise}[7]{NP-Vollständigkeit}
+  \newcommand{\TSP}{$\mathrm{TSP_{ent}}$}
+  Betrachten Sie die folgende Sprache
+  \[ \textsc{mTSP} = \left\{ (X,d,L) \middle| \begin{array}{c}\mbox{$X$ ist eine endliche Menge, $d$ eine Metrik auf $X$, und $L\in\N$, }\\ \mbox{sodass es eine Rundreise durch alle $x\in X$ der Länge $\leq L$ gibt.}\end{array}\right\} \ . \]
+  Die Definition von \emph{Metrik auf $X$} finden sie auf Präsenzübung~9 Aufgabe~2.
+  Zeigen Sie, dass \textsc{mTSP} NP-vollständig ist.
+  Verwenden Sie dafür eine Reduktion von \TSP{}, welche NP-vollständig ist, auf \textsc{mTSP}.
+
+  \answer{
+  Es ist folgendes zu zeigen: \\
+
+  1) mTSP $\in $ NP \\
+
+  2) $TSP_{ent} \leq_p mTSP$ \\
+
+  Zu 1):
+
+  Sei V eine DTM.
+
+  Betrachte folgenden Verifizierer: \\
+
+  V bei Eingabe x $\in \{0,1\}^*$
+  \begin{enumerate}
+    \item (Formcheck) Prüfe, ob x = (X,d,L,C) mit X endliche Menge (Sei $\abs{X}$= n), d Metrik auf X, L $\in \N$ und C = $(c(x_1),...,c(x_{n}))$ eine Permutation auf X ist.
+    \item Falls $ d(x_n,x_1) + \overset{n}{\underset{k=1}{\Sigma}} d(x_k,x_{k+1}) \leq L$ akzeptiere
+    \item lehne ab
+  \end{enumerate}
+
+  \textbf{Laufzeit von V}: \\
+
+  \begin{enumerate}
+    \item Dies ist in polynomieller Zeit möglich, da X und L trivialerweise in polynomieller Zeit überprüft werden können. Für C und d ist dieses auch möglich, da X endlich ist.
+    \item Da diese Summe endlich ist und ein Vergleich dieser mit L in polynomieller Zeit möglich ist, kann dieser Schritt in polynomieller Zeit umgesetzt werden.
+    \item Trivialerweise in polynomieller Zeit
+  \end{enumerate}
+
+  \textbf{Polynomilität von C}: \\
+
+  Da C eine Permutation auf einer Endlichen Menge ist, kann dieses triviale in konstanter Zeit bezüglich $\abs{X}$ berechnet werden. \\
+
+  \textbf{Behautung:} V ist ein Verifzierer für $mTSP$ \\
+
+  Angenommen x $\in$ mTSP
+
+  $\implies$ Es existiert eine Rundreise, dessen Länge kleiner als L ist.
+  $\implies$ Wähle diese Rundreise als Permutation in C
+  $\implies$ (X,d,L,C) $\in$ L(V).
+
+  Angenommen x $\notin$ mTSP \\
+
+  $\implies$ Es existiert keine Rundreise, dessen Länge kleiner gleich L ist. \\
+
+  $\implies$ Es existiert keine Permutation, welche für C gewählt werden könnte, s.d. (X,d,L,C) $\notin$ L(V). \\
+
+  $\Rightarrow$ V ist ein polynomieller Verifzierer von mTSP \\
+
+  $\Rightarrow$ mTSP $\in$ NP $\qed$ \\
+
+  Zu 2) \\
+
+  Sei  $\emptyset \neq $X= $\{1,...,n \}$die Menge der Städte der Rundreise sind \\
+
+  Betrachte nun folgende Reduktionsfunktion:
+
+  $$f(w)=\begin{cases}
+      (X,d_{\Delta},L) & \text{falls w} = (\Delta ,L) \\
+      (X,d_L,L)        & \text{sonst}
+    \end{cases}$$ \\
+
+  Wobei $\Delta$ =($d_ij$), wie auf Seite 68 im Skript definiert ist. \\
+
+  \textbf{Behauptung}: $d_{\Delta}$ ist eine Metrik auf X, welche durch $\Delta$ wie folgt induziert wird:
+
+  $$d_{\Delta}(x,y)=\begin{cases}
+      d_{xy} & \text{mit 1 } \leq \text{x,y} \leq \text{n} \\
+    \end{cases}$$ \\
+
+  Beweis: \\
+
+  Die $d_{\Delta}$ ist offensichtlicherweise wohldefiniert. Nach den Eigenschaften  für $\Delta$ auf Seite 68 im Skript, folgen die positiv Definitheit ( die Distanz zwischen zwei Unterschiedlichen Städten kann niemals Null sein) und Symmetrie direkt. Folglich ist nur noch die Dreicksungleichung zu zeigen.
+
+  Seien x,y,z $\in$ X beliebig, aber fest. o.B.d.A x $\neq$ y, da sonst trivial \\
+
+  Betrachte nun $d_{\Delta}$(x,z) + $d_{\Delta}$(y,z). \\
+
+  Fallunterscheidung: \\
+
+  Angenommen z $\neq$ x $\lor$ y \\
+
+  $\implies$ $d_{\Delta}$(x,z) + $d_{\Delta}$(z,y) = $d_{x,z}$ + $d_{z,y}$ > $d_{x,y}$ = $d_{\Delta}$(x,y), da im Raum trivialerweise die Dreicksungleichung gilt. \\
+
+  Angenommen z = x $\lor$ y  o.B.d.A z = x\\
+
+  $\implies$ $d_{\Delta}$(x,z) + $d_{\Delta}$(y,z) = $d_{\Delta}$(x,x) + $d_{\Delta}$(x,y) = $d_{\Delta}$(x,y) \\
+
+  $\implies$ $d_{\Delta}$(x,y) $ \leq d_{\Delta}$(x,z) + $d_{\Delta}$(y,z) $\forall x,y,z \in X$  \\
+
+  $\Rightarrow$ $d_{\Delta}$ ist Metrik. \\
+
+  \textbf{Behauptung}: $d_L$ ist eine Metrik auf X mit
+
+  $$d_L(x,y)=\begin{cases}
+      L & \text{falls x} \neq \text{y} \\
+      0 & \text{sonst}
+    \end{cases}$$ \\
+
+  Beweis: \\
+
+  $d_L$ ist trivialerweise wohldefiniert, positiv Definitheit und symmetrisch. Folglich ist nur noch zu zeigen, dass $d_L$ die Dreicksungleichung erfüllt. \\
+
+  Seien x,y,z $\in$ X beliebig, aber fest. o.B.d.A x $\neq$ y, da sonst trivial \\
+
+  $\Rightarrow$ $d_L$(x,y) = L. \\
+
+  Betrachte nun $d_L$(x,z) + $d_L$(y,z). \\
+
+  Fallunterscheidung: \\
+
+  Angenommen z $\neq$ x $\lor$ y \\
+
+  $\implies$ $d_L$(x,z) + $d_L$(y,z) = 2L > $d_L$(x,y) \\
+
+  Angenommen z = x $\lor$ y  o.B.d.A z = x\\
+
+  $\implies$ $d_L$(x,z) + $d_L$(y,z) = L = $d_L$(x,y) \\
+
+  $\implies$ $d_L$(x,y) $ \leq d_L$(x,z) + $d_L$(y,z) $\forall x,y,z \in X$  \\
+
+  $\Rightarrow$ $d_L$ ist Metrik. \\
+
+  \textbf{Behauptung}: f ist eine polynomiel berechenbare Funktion. \\
+
+  Es kann trivialerweise in polynomieller Zeit geprüft werden, ob eine Eingabe von der Form ($\Delta$,L) ist. \\
+
+  Falls x=($\Delta$,L) so wird x auf (X,$d_{\Delta}$,L) abgebildet. Die $d_{\Delta}$ kann in konstanter polynomiellerzeit bezüglich $\cO(n^2)$ berechnet werden, da $\abs{X}$= n und damit endlich ist. \\
+
+  Falls x $ \neq (\Delta$,L) so wird auf (X,$d_L$,L) die Metrik in konstanter polynomiellerzeit bezüglich $\cO(n^2)$ berechnet werden, da $\abs{X}$= n und damit endlich ist. \\
+
+    Folglich ist f polynomiel berechenbar. \\
+
+    \textbf{Behauptung}: w $ \in TSP_{ent} \iff$ f(w) $ \in mTSP$ \\
+
+    Angenommen w $ \in TSP_{ent} $
+
+    d.h. w = ($\Delta$, L) und $\exists$ Permutation auf X s.d. $ d_{x_n,x_1} + \overset{n}{\underset{k=1}{\Sigma}} d_{x_k,x_{k+1}} \leq L$.
+
+  $\implies$ f(w)= (X,$d_{\Delta}$,L). \\
+
+    Nach Definition von $d_{\Delta}$ gilt:  \\
+
+  $d_{x_n,x_1} + \overset{n}{\underset{k=1}{\Sigma}} d_{x_k,x_{k+1}}$ =$d_{\Delta}(x_n,x_1) + \overset{n}{\underset{k=1}{\Sigma}} d_{\Delta}(x_k,x_{k+1}) \leq L$ \\
+
+  $\Rightarrow$ f(w) $\in mTSP$ \\
+
+    Angenommen w $ \notin TSP_{ent} $ \\
+
+    Fallunterscheidung: \\
+
+    i) w $\neq$ ($\Delta$,L) \\
+
+  $\Rightarrow f(w)= (X,d_L,L)$. Da X $\neq \emptyset$ hat jede Rundreise eine Distanz von $\abs{X}$ L, weswegen f(w) $\notin mTSp$ \\
+
+    ii) w = ($\Delta$,L), aber w $\notin TSP_{ent}$ \\
+
+  $\implies$ $\forall$ Permutationen C auf x gilt $ d_{x_n,x_1} + \overset{n}{\underset{k=1}{\Sigma}} d_{x_k,x_{k+1}} > L$ \\
+
+  $\implies$ f(w)= (X,$d_{\Delta}$,L). \\
+
+    Nach Definition von $d_{\Delta}$ gilt: \\
+
+  $d_{x_n,x_1} + \overset{n}{\underset{k=1}{\Sigma}} d_{x_k,x_{k+1}}$ = $d_{\Delta}(x_n,x_1) + \overset{n}{\underset{k=1}{\Sigma}} d_{\Delta}(x_k,x_{k+1}) > L $ $\forall$ Permutationen \\
+
+  $\Rightarrow$ f(w) $\notin mTSp$ \\
+
+  $\Rightarrow$ w $ \in TSP_{ent} \iff$ f(w) $ \in mTSP$ \\
+
+  $\Rightarrow TSP_{ent} \leq_p mTSP \qed$ \\
+
+    Da $TSP_{ent}$ NP-Vollständig folgt nach Satz 3.6.9 mit 1 und 2): \\
+
+    mTsp ist NP vollständig $\qed$ \\
+  }
+\end{exercise}
+
+\begin{exercise}[7]{Varianten von Sprachen in P und NP}
+  Betrachten Sie die folgende Sprache.
+  \[ \textsc{Graph-$k$-Coloring} = \left\{ \langle G \rangle \middle| \begin{array}{c} \mbox{$G=(V,E)$ ist ein ungerichteter Graph} \\ \mbox{und es gibt eine Funktion $c:V\rightarrow\{1,\dots,k\}$,} \\ \mbox{sodass $\forall \{u,v\}\in E: c(u)\neq c(v)$.} \end{array} \right\} \]
+  Zeigen Sie
+  \begin{enumerate}
+    \item \textsc{Graph-$2$-Coloring} $\in$ P.
+    \item Für alle $k\geq 3$ ist \textsc{Graph-$3$-Coloring} $\leq_p$ \textsc{Graph-$k$-Coloring}.
+  \end{enumerate}
+  \answer{
+
+    1) \textbf{Z.z.: \textsc{Graph-$2$-Coloring} $\in$ P} \\
+
+    Fun Fact: Aus Mod/DuA ist bekannt, dass ein Graph genau dann zwei färbbar ist, wenn dieser Bipatit ist. \\
+
+    Sei M im folgenden eine DTM. \\
+
+    M bei Eingabe x $\in \{0,1\}^*$ \\
+
+    \begin{enumerate}
+      \item (Formcheck) Prüfe, ob x = $\langle G \rangle$
+      \item Führe eine Breitensuche mit folgender Modifikation aus: \\
+            Färbe Knoten abwechselnd in einer der zwei Farben. Falls Knoten entdeckt wird, der bereits gefärbt. Überprüfe, ob die Farbe der Knoten gleich der Farbe im aktuellen Interationsschritt ist. Falls dies für einen der Knoten nicht der Fall ist lehne ab.
+      \item Akzeptiere
+    \end{enumerate}
+
+    \textbf{Laufzeit von M}\\
+
+    \begin{enumerate}
+      \item Kann trivialerweise in polynomieller Zeit durchgeführt werden
+      \item Die Breitensuche hat eine Laufzeit von $\cO (\abs{V}+\abs{E})$ da die Modifikationen nur eine Konstanten Laufzeit bezüglich $\cO (\abs{V}+\abs{E})$ verursachen (Jeder Knoten wird nur einmal bei seiner ersten Entdeckung gefärbt. Es gibt maximal $\abs{E}$ vergleiche von Knoten).
+      \item Trivial in polynomieller Zeit
+    \end{enumerate}
+
+    \textbf{Behauptung} L(M) = \textsc{Graph-$2$-Coloring} \\
+
+    i) \textsc{Graph-$2$-Coloring} $\subset$ L(M) \\
+
+    Sie x $\in$ \textsc{Graph-$2$-Coloring} beliebig, aber fest. \\
+
+    d.h. x= $\langle G \rangle$ und G ist 2 färbbar. \\
+
+    Folglich wird x in (1) im Formcheck nicht abgelehnt. \\
+
+    In (2) wird G auch nicht abgelehnt, da der Graph zwei färbbar ist und durch die abwechselnde Färbung bei der Breitensuche genau eine Solche Färbung generiert wird.
+
+    Also wird x nach 3 akzeptiert und es gilt: x $\in$ L(M)
+
+    ii) L(M) $\subset$ \textsc{Graph-$2$-Coloring} \\
+
+    Sei x $\notin$ \textsc{Graph-$2$-Coloring}, also ist x entweder von der Falschen Form wird also in (1) abgelehnt, oder ist nicht zwei färbbar. Also existiert ein Knoten, welchem durch die Breitensuche 2 unterschiedliche Farben zugeordnet werden. Folglich wird x abgelehnt. \\
+
+    Also gilt in allen Fällen x $\notin$ L(M) \\
+
+    $\Rightarrow L(M) $ = \textsc{Graph-$2$-Coloring} $ \Rightarrow $
+    \textsc{Graph-$2$-Coloring} $\in P \qed $ \\
+
+    2) Sei $ k \in \mathbb{N} \text{ und }  k \geq 3$ beliebig, aber fest. \\
+
+    Z.z \textbf{ \textsc{Graph-$3$-Coloring} $\leq_p$ \textsc{Graph-$k$-Coloring}} $\forall$ k \\
+
+    Beweis durch vollständige Induktion über n mit n $\geq$ 3. \\
+
+    IA: n = 3 klar. \\
+
+    IV: Es gelte \textsc{Graph-$3$-Coloring} $\leq_p$ \textsc{Graph-$k$-Coloring} $\forall k \leq n$ \\
+
+    IS: n $\implies$ n+1. \\
+
+    Aufgrund der IV ist nur noch: \textsc{Graph-$k$-Coloring} $\leq_p$ \textsc{Graph-$k+1$-Coloring} \\
+
+    Wir definieren die Reduktionsfunktion $f: \{0,1,\}^* \rightarrow \{0,1,\}^*$: \\
+
+    $$f(w)=\begin{cases}
+        \langle G_w\rangle  & \text{wenn w} = \langle G \rangle \text{, wobei }  \langle G \rangle \text{ die Kodierung eines Graphen ist} \\
+        \langle G_0 \rangle & \text{wenn w} \neq \langle G \rangle \text{ sonst}
+      \end{cases}$$ \\
+
+    mit G = (V,E) und x $\notin$ V \\
+
+    Sei $G_w = (V_w,E_w)$ mit $V_w=V \cup \{ x \}$ und  $E_w= E \cup \{ \{ x, v \} |\forall v \in V \}$  \\
+
+    und sei $G_0 = (V_0,E_0)$ mit $V_0 = V$ und $E_0 = E \cup \{ \{ u,v  \} |\forall u,v \in V \} $ \\
+
+    \textbf{Laufzeit von f(W):} \\
+
+    Zu Prüfen, ob eine Eingabe der Kodierung eines Graphen entspricht ist trivialerweise in polynomieller Zeit berechbar möglich. \\
+
+    Falls w = $\langle G \rangle$, so wird ein Knoten und $\abs{V}$ Kanten hinzugefügt. Dies ist offensichtlicher weise in polynomieller Zeit möglich und berechbar. \\
+
+    Falls w $ \neq\langle G \rangle$, so werden maximal $\abs{V}$ neue Kanten hinzugefügt. Dies ist auch in polynomieller Zeit möglich und berechbar. \\
+
+    $\Rightarrow$ f ist in polynomieller Zeit berechenbar. \\
+
+    \textbf{Behauptung:} w $\in$ \textsc{Graph-$k$-Coloring} $\iff$ f(w) $\in $ \textsc{Graph-$k+1$-Coloring} \\
+
+    Angenommen w $\in$ \textsc{Graph-$k$-Coloring}. o.B.d.A x $\notin$ V \\
+
+    $\implies$ w = $\langle G \rangle$. Also wird w auf $\langle G_w\rangle$ abgebildet. Da w $\in$ \textsc{Graph-$k$-Coloring} existiert eine Abbildung $c_k: V \rightarrow \{0,..,k\}$ s.d $\forall \{u,v\}\in E: c_k(u)\neq c_k(v)$. \\
+
+    Betrachte folgende Fortsetzung von $c_k$:
+
+    $c_{k+1}: V \rightarrow \{0,..,k,k+1\}$
+
+    $$c_{k+1}(v)=\begin{cases}
+        c_k(v) & \text{wenn v} \in V. \\
+        k+1    & \text{ falls v=x}
+      \end{cases}$$ \\
+
+    Nach Konstruktion gilt $\forall \{u,v\}\in E_w: c_k(u)\neq c_k(v)$. \\
+
+    $\Rightarrow$ f(w) $\in$ \textsc{Graph-$k+1$-Coloring}. \\
+
+    Angenommen w $\notin$ \textsc{Graph-$k$-Coloring}. \\
+
+    Fallunterscheidung
+
+    i) w $ \neq \langle G \rangle$, dann wird w unter f auf $\langle G_0 \rangle$, welches trivialerweise nur 1 färbbar ist. Folglich w $\notin$ \textsc{Graph-$k+1$-Coloring}, da k $\geq$ 3 \\
+
+    ii) w = $\langle G \rangle$, aber $\nexists c_k: V \rightarrow \{0,..,k\}$ s.d $\forall \{u,v\}\in E: c_k(u)\neq c_k(v)$. \\
+
+    Folglich wird w auf $\langle G_w \rangle$ abgebildet. \\
+
+    Angenommen w $\in$ \textsc{Graph-$k+1$-Coloring}, also muss  eine Abbildung $c_k: V \rightarrow \{0,..,k\}$ s.d $\forall \{u,v\}\in E: c_k(u)\neq c_k(v)$ existieren. (*)  \\
+
+    Da x eine Kante zu jedem Knoten in V hat muss gelten, dass x die Farbe k+1 zu geordnet werden muss. Also ist jede Abbildung $c_{k+1}$ von der folgenden Form sein:
+
+    $$c_{k+1}(v)=\begin{cases}
+        c_k(v) & \text{wenn v} \in V. \\
+        k+1    & \text{falls v=x}
+      \end{cases}$$ \\
+
+    wobei $c_{k}: V \rightarrow \{0,..,k\}$ eine Färbung von V ist. $\lightning$ (*) \\
+
+    $\Rightarrow$ w $\notin$ \textsc{Graph-$k+1$-Coloring}. \\
+
+    $\Rightarrow$ w $\in$ \textsc{Graph-$k$-Coloring} $\iff$ f(w) $\in $ \textsc{Graph-$k+1$-Coloring} \\
+
+    $\Rightarrow$ \textsc{Graph-$k$-Coloring} $\leq_p$ \textsc{Graph-$k+1$-Coloring} \\
+
+    Nachdem Induktionsprinzip folgt also:
+
+    \textsc{Graph-$3$-Coloring} $\leq_p$ \textsc{Graph-$k$-Coloring} $\forall$ k \\ $\qed$
+
+  }
+\end{exercise}
+
+
+\end{document}
+
+\exercisegroup{27}{Eli Kogan-Wang (7251030) \\David Noah Stamm (7249709) \\ Bogdan Rerich (7248483) \\Jan Schreiber(7253698)}
+
+% Folgendes braucht nicht geändert werden
+\exercisetl{Universität Paderborn \\ Prof. Dr. Johannes Blömer}
+\exerciselecture{Berechenbarkeit und Komplexität -- WS 2022/2023}
+\exercisenumber{9}
+\exercisehandin{19. Dezember 2022 -- 13:00 Uhr}
+
+\input{commands.tex} % Diverse praktische Kommandos aus Vorlesungsskript und Übungen
+\usepackage{enumerate}
+
+
+\begin{document}
+\exerciseheader
+\exercisetitle
+
+% !TEX root = .\h9_ml.tex
+
+\begin{exercise}[3]{NP-Vollständigkeit}
+  In Heimübung~8 Aufgabe ~2 haben wir die disjunktive Normaleform (DNF) einer aussagenlogischen Formel $\phi$ definiert und gezeigt, dass die Sprache aller erfüllbaren DNF--Formeln \textsc{DisSat} in P liegt.
+  Eine solche Formel ist widerlegbar, wenn es (mindestens) eine Belegung gibt, sodass die Formel nicht wahr ist.
+  Betrachten sie folgende Sprache
+
+  \begin{align*}
+    \textsc{DisUnsat} & =\{\langle\phi\rangle\mid\phi\mbox{ ist eine widerlegbare Formel in disjunktiver Normalform}\} \ .
+  \end{align*}
+
+  Zeigen Sie, dass \textsc{DisUnsat} NP-vollständig ist.
+
+  \answer{
+    TODO: Lösung eintragen.\\
+    Z.z.\\
+    1. \textsc{DisUnsat} $\in NP$ \\
+    2. ...\\
+    \\
+    1. Konstruiere eine DTM M als Verifizierer:
+    \begin{enumerate}
+      \item Prüfe ob w von der Form $\langle \phi , c \rangle$, sodass $\phi$ eine aussagenlogische Formel in DNF und c eine Belegung der Variablen in $\phi$. Wenn nicht, dann lehne ab.
+      \item Wenn die Formel $\phi$ mit der Belegung c falsch ist, dann akzeptiere.
+    \end{enumerate}
+    Jede Variable kommt o.B.d.A. mindestens einmal in $\phi$ vor. In c kommt sie maximal einmal vor. Also liegt die Länge von c polynomiell unter der von $\phi$
+    Korrektheit:\\
+    w $\in $ \textsc{DisUnsat}: \\
+    Dann gibt es eine Belegung, sodass $\phi$ falsch ist.
+    w $\notin$ \textsc{DisUnsat}: \\
+    Wenn w falsch kodiert ist lehnt M ab. Wenn $\phi$ nicht widerlegbar ist, dann lehnt M jedes w ab.\\
+    \\
+    Schritt 1 und Schritt 2 lassen sich beide in linearer Zeit, also unter polynomieller Zeit ausführen.\\
+    \\
+
+
+
+  }
+\end{exercise}
+
+\begin{exercise}[7]{NP-Vollständigkeit}
+  Betrachten Sie die folgende Sprache
+  \[
+    \textsc{HittingSet} = \left\{\langle X, S,k\rangle \middle|\begin{array}{l}
+      \textrm{$X$ ist eine endliche Menge, $S\subseteq\mathcal{P}(X)$, und es gibt} \\
+      \textrm{$H\subseteq X$ mit $\abs{H}\leq k$, sodass für alle $T\in S: H\cap T\neq \emptyset$.}\end{array}\right\} \ .
+  \]
+  Zeigen Sie, dass \textsc{HittingSet} NP-vollständig ist.
+  Nutzen Sie in Ihrer Reduktion die \emph{NP-vollständige} Sprache \textsc{VertexCover}, welche in Heimübung~7 Aufgabe~1 definiert wurde.
+
+  \answer{
+    TODO: Lösung eintragen.
+  }
+\end{exercise}
+
+
+\begin{exercise}[7]{NP-Vollständigkeit}
+  \newcommand{\TSP}{$\mathrm{TSP_{ent}}$}
+  Betrachten Sie die folgende Sprache
+  \[ \textsc{mTSP} = \left\{ (X,d,L) \middle| \begin{array}{c}\mbox{$X$ ist eine endliche Menge, $d$ eine Metrik auf $X$, und $L\in\N$, }\\ \mbox{sodass es eine Rundreise durch alle $x\in X$ der Länge $\leq L$ gibt.}\end{array}\right\} \ . \]
+  Die Definition von \emph{Metrik auf $X$} finden sie auf Präsenzübung~9 Aufgabe~2.
+  Zeigen Sie, dass \textsc{mTSP} NP-vollständig ist.
+  Verwenden Sie dafür eine Reduktion von \TSP{}, welche NP-vollständig ist, auf \textsc{mTSP}.
+
+  \answer{
+  Es ist folgendes zu zeigen: \\
+
+  1) mTSP $\in $ NP \\
+
+  2) $TSP_{ent} \leq_p mTSP$ \\
+
+  Zu 1):
+
+  Sei V eine DTM.
+
+  Betrachte folgenden Verifizierer: \\
+
+  V bei Eingabe x $\in \{0,1\}^*$
+  \begin{enumerate}
+    \item (Formcheck) Prüfe, ob x = (X,d,L,C) mit X endliche Menge (Sei $\abs{X}$= n), d Metrik auf X, L $\in \N$ und C = $(c(x_1),...,c(x_{n}))$ eine Permutation auf X ist.
+    \item Falls $ d(x_n,x_1) + \overset{n}{\underset{k=1}{\Sigma}} d(x_k,x_{k+1}) \leq L$ akzeptiere
+    \item lehne ab
+  \end{enumerate}
+
+  \textbf{Laufzeit von V}: \\
+
+  \begin{enumerate}
+    \item Dies ist in polynomieller Zeit möglich, da X und L trivialerweise in polynomieller Zeit überprüft werden können. Für C und d ist dieses auch möglich, da X endlich ist.
+    \item Da diese Summe endlich ist und ein Vergleich dieser mit L in polynomieller Zeit möglich ist, kann dieser Schritt in polynomieller Zeit umgesetzt werden.
+    \item Trivialerweise in polynomieller Zeit
+  \end{enumerate}
+
+  \textbf{Polynomilität von C}: \\
+
+  Da C eine Permutation auf einer Endlichen Menge ist, kann dieses triviale in konstanter Zeit bezüglich $\abs{X}$ berechnet werden. \\
+
+  \textbf{Behautung:} V ist ein Verifzierer für $mTSP$ \\
+
+  Angenommen x $\in$ mTSP
+
+  $\implies$ Es existiert eine Rundreise, dessen Länge kleiner als L ist.
+  $\implies$ Wähle diese Rundreise als Permutation in C
+  $\implies$ (X,d,L,C) $\in$ L(V).
+
+  Angenommen x $\notin$ mTSP \\
+
+  $\implies$ Es existiert keine Rundreise, dessen Länge kleiner gleich L ist. \\
+
+  $\implies$ Es existiert keine Permutation, welche für C gewählt werden könnte, s.d. (X,d,L,C) $\notin$ L(V). \\
+
+  $\Rightarrow$ V ist ein polynomieller Verifzierer von mTSP \\
+
+  $\Rightarrow$ mTSP $\in$ NP $\qed$ \\
+
+  Zu 2) \\
+
+  Sei  $\emptyset \neq $X= $\{1,...,n \}$die Menge der Städte der Rundreise sind \\
+
+  Betrachte nun folgende Reduktionsfunktion:
+
+  $$f(w)=\begin{cases}
+      (X,d_{\Delta},L) & \text{falls w} = (\Delta ,L) \\
+      (X,d_L,L)        & \text{sonst}
+    \end{cases}$$ \\
+
+  Wobei $\Delta$ =($d_ij$), wie auf Seite 68 im Skript definiert ist. \\
+
+  \textbf{Behauptung}: $d_{\Delta}$ ist eine Metrik auf X, welche durch $\Delta$ wie folgt induziert wird:
+
+  $$d_{\Delta}(x,y)=\begin{cases}
+      d_{xy} & \text{mit 1 } \leq \text{x,y} \leq \text{n} \\
+    \end{cases}$$ \\
+
+  Beweis: \\
+
+  Die $d_{\Delta}$ ist offensichtlicherweise wohldefiniert. Nach den Eigenschaften  für $\Delta$ auf Seite 68 im Skript, folgen die positiv Definitheit ( die Distanz zwischen zwei Unterschiedlichen Städten kann niemals Null sein) und Symmetrie direkt. Folglich ist nur noch die Dreicksungleichung zu zeigen.
+
+  Seien x,y,z $\in$ X beliebig, aber fest. o.B.d.A x $\neq$ y, da sonst trivial \\
+
+  Betrachte nun $d_{\Delta}$(x,z) + $d_{\Delta}$(y,z). \\
+
+  Fallunterscheidung: \\
+
+  Angenommen z $\neq$ x $\lor$ y \\
+
+  $\implies$ $d_{\Delta}$(x,z) + $d_{\Delta}$(z,y) = $d_{x,z}$ + $d_{z,y}$ > $d_{x,y}$ = $d_{\Delta}$(x,y), da im Raum trivialerweise die Dreicksungleichung gilt. \\
+
+  Angenommen z = x $\lor$ y  o.B.d.A z = x\\
+
+  $\implies$ $d_{\Delta}$(x,z) + $d_{\Delta}$(y,z) = $d_{\Delta}$(x,x) + $d_{\Delta}$(x,y) = $d_{\Delta}$(x,y) \\
+
+  $\implies$ $d_{\Delta}$(x,y) $ \leq d_{\Delta}$(x,z) + $d_{\Delta}$(y,z) $\forall x,y,z \in X$  \\
+
+  $\Rightarrow$ $d_{\Delta}$ ist Metrik. \\
+
+  \textbf{Behauptung}: $d_L$ ist eine Metrik auf X mit
+
+  $$d_L(x,y)=\begin{cases}
+      L & \text{falls x} \neq \text{y} \\
+      0 & \text{sonst}
+    \end{cases}$$ \\
+
+  Beweis: \\
+
+  $d_L$ ist trivialerweise wohldefiniert, positiv Definitheit und symmetrisch. Folglich ist nur noch zu zeigen, dass $d_L$ die Dreicksungleichung erfüllt. \\
+
+  Seien x,y,z $\in$ X beliebig, aber fest. o.B.d.A x $\neq$ y, da sonst trivial \\
+
+  $\Rightarrow$ $d_L$(x,y) = L. \\
+
+  Betrachte nun $d_L$(x,z) + $d_L$(y,z). \\
+
+  Fallunterscheidung: \\
+
+  Angenommen z $\neq$ x $\lor$ y \\
+
+  $\implies$ $d_L$(x,z) + $d_L$(y,z) = 2L > $d_L$(x,y) \\
+
+  Angenommen z = x $\lor$ y  o.B.d.A z = x\\
+
+  $\implies$ $d_L$(x,z) + $d_L$(y,z) = L = $d_L$(x,y) \\
+
+  $\implies$ $d_L$(x,y) $ \leq d_L$(x,z) + $d_L$(y,z) $\forall x,y,z \in X$  \\
+
+  $\Rightarrow$ $d_L$ ist Metrik. \\
+
+  \textbf{Behauptung}: f ist eine polynomiel berechenbare Funktion. \\
+
+  Es kann trivialerweise in polynomieller Zeit geprüft werden, ob eine Eingabe von der Form ($\Delta$,L) ist. \\
+
+  Falls x=($\Delta$,L) so wird x auf (X,$d_{\Delta}$,L) abgebildet. Die $d_{\Delta}$ kann in konstanter polynomiellerzeit bezüglich $\cO(n^2)$ berechnet werden, da $\abs{X}$= n und damit endlich ist. \\
+
+  Falls x $ \neq (\Delta$,L) so wird auf (X,$d_L$,L) die Metrik in konstanter polynomiellerzeit bezüglich $\cO(n^2)$ berechnet werden, da $\abs{X}$= n und damit endlich ist. \\
+
+    Folglich ist f polynomiel berechenbar. \\
+
+    \textbf{Behauptung}: w $ \in TSP_{ent} \iff$ f(w) $ \in mTSP$ \\
+
+    Angenommen w $ \in TSP_{ent} $
+
+    d.h. w = ($\Delta$, L) und $\exists$ Permutation auf X s.d. $ d_{x_n,x_1} + \overset{n}{\underset{k=1}{\Sigma}} d_{x_k,x_{k+1}} \leq L$.
+
+  $\implies$ f(w)= (X,$d_{\Delta}$,L). \\
+
+    Nach Definition von $d_{\Delta}$ gilt:  \\
+
+  $d_{x_n,x_1} + \overset{n}{\underset{k=1}{\Sigma}} d_{x_k,x_{k+1}}$ =$d_{\Delta}(x_n,x_1) + \overset{n}{\underset{k=1}{\Sigma}} d_{\Delta}(x_k,x_{k+1}) \leq L$ \\
+
+  $\Rightarrow$ f(w) $\in mTSP$ \\
+
+    Angenommen w $ \notin TSP_{ent} $ \\
+
+    Fallunterscheidung: \\
+
+    i) w $\neq$ ($\Delta$,L) \\
+
+  $\Rightarrow$ f(w)= (X,d_L,L). Da X $\neq \emptyset$ hat jede Rundreise eine Distanz von $\abs{X}$ L, weswegen f(w) $\notin mTSp$ \\
+
+    ii) w = ($\Delta$,L), aber w $\notin TSP_{ent}$ \\
+
+  $\implies$ $\forall$ Permutationen C auf x gilt $ d_{x_n,x_1} + \overset{n}{\underset{k=1}{\Sigma}} d_{x_k,x_{k+1}} > L$ \\
+
+  $\implies$ f(w)= (X,$d_{\Delta}$,L). \\
+
+    Nach Definition von $d_{\Delta}$ gilt: \\
+
+  $d_{x_n,x_1} + \overset{n}{\underset{k=1}{\Sigma}} d_{x_k,x_{k+1}}$ = $d_{\Delta}(x_n,x_1) + \overset{n}{\underset{k=1}{\Sigma}} d_{\Delta}(x_k,x_{k+1}) > L $ $\forall$ Permutationen \\
+
+  $\Rightarrow$ f(w) $\notin mTSp$ \\
+
+  $\Rightarrow$ w $ \in TSP_{ent} \iff$ f(w) $ \in mTSP$ \\
+
+  $\Rightarrow TSP_{ent} \leq_p mTSP \qed$ \\
+
+    Da $TSP_{ent}$ NP-Vllständig folgt nach Satz 3.6.9 mit 1 und 2): \\
+
+    mTsp ist NP vollständig $\qed$ \\
+  }
+\end{exercise}
+
+\begin{exercise}[7]{Varianten von Sprachen in P und NP}
+  Betrachten Sie die folgende Sprache.
+  \[ \textsc{Graph-$k$-Coloring} = \left\{ \langle G \rangle \middle| \begin{array}{c} \mbox{$G=(V,E)$ ist ein ungerichteter Graph} \\ \mbox{und es gibt eine Funktion $c:V\rightarrow\{1,\dots,k\}$,} \\ \mbox{sodass $\forall \{u,v\}\in E: c(u)\neq c(v)$.} \end{array} \right\} \]
+  Zeigen Sie
+  \begin{enumerate}
+    \item \textsc{Graph-$2$-Coloring} $\in$ P.
+    \item Für alle $k\geq 3$ ist \textsc{Graph-$3$-Coloring} $\leq_p$ \textsc{Graph-$k$-Coloring}.
+  \end{enumerate}
+  \answer{
+
+    1) \textbf{Z.z.: \textsc{Graph-$2$-Coloring} $\in$ P} \\
+
+    Fun Fact: Aus Mod/DuA ist bekannt, dass ein Graph genau dann zwei färbbar ist, wenn dieser Bipatit ist. \\
+
+    Sei M im folgenden eine DTM. \\
+
+    M bei Eingabe x $\in \{0,1\}^*$ \\
+
+    \begin{enumerate}
+      \item (Formcheck) Prüfe, ob x = $\langle G \rangle$
+      \item Führe eine Breitensuche mit folgender Modifikation aus: \\
+            Färbe Knoten abwechselnd in einer der zwei Farben. Falls Knoten entdeckt wird, der bereits gefärbt. Überprüfe, ob die Farbe der Knoten gleich der Farbe im aktuellen Interationsschritt ist. Falls dies für einen der Knoten nicht der Fall ist lehne ab.
+      \item Akzeptiere
+    \end{enumerate}
+
+    \textbf{Laufzeit von M}\\
+
+    \begin{enumerate}
+      \item Kann trivialerweise in polynomieller Zeit durchgeführt werden
+      \item Die Breitensuche hat eine Laufzeit von $\cO (\abs{V}+\abs{E})$ da die Modifikationen nur eine Konstanten Laufzeit bezüglich $\cO (\abs{V}+\abs{E})$ verursachen (Jeder Knoten wird nur einmal bei seiner ersten Entdeckung gefärbt. Es gibt maximal $\abs{E}$ vergleiche von Knoten).
+      \item Trivial in polynomieller Zeit
+    \end{enumerate}
+
+    \textbf{Behauptung} L(M) = \textsc{Graph-$2$-Coloring} \\
+
+    i) \textsc{Graph-$2$-Coloring} $\subset$ L(M) \\
+
+    Sie x $\in$ \textsc{Graph-$2$-Coloring} beliebig, aber fest. \\
+
+    d.h. x= $\langle G \rangle$ und G ist 2 färbbar. \\
+
+    Folglich wird x in (1) im Formcheck nicht abgelehnt. \\
+
+    In (2) wird G auch nicht abgelehnt, da der Graph zwei färbbar ist und durch die abwechselnde Färbung bei der Breitensuche genau eine Solche Färbung generiert wird.
+
+    Also wird x nach 3 akzeptiert und es gilt: x $\in$ L(M)
+
+    ii) L(M) $\subset$ \textsc{Graph-$2$-Coloring} \\
+
+    Sei x $\notin$ \textsc{Graph-$2$-Coloring}, also ist x entweder von der Falschen Form wird also in (1) abgelehnt, oder ist nicht zwei färbbar. Also existiert ein Knoten, welchem durch die Breitensuche 2 unterschiedliche Farben zugeordnet werden. Folglich wird x abgelehnt. \\
+
+    Also gilt in allen Fällen x $\notin$ L(M) \\
+
+    $\Rightarrow L(M) $ = \textsc{Graph-$2$-Coloring} $ \Rightarrow $
+    \textsc{Graph-$2$-Coloring} $\in P \qed $ \\
+
+    2) Sei $ k \in \mathbb{N} \text{ und }  k \geq 3$ beliebig, aber fest. \\
+
+    Z.z \textbf{ \textsc{Graph-$3$-Coloring} $\leq_p$ \textsc{Graph-$k$-Coloring}} $\forall$ k \\
+
+    Beweis durch vollständige Induktion über n mit n $\geq$ 3. \\
+
+    IA: n = 3 klar. \\
+
+    IV: Es gelte \textsc{Graph-$3$-Coloring} $\leq_p$ \textsc{Graph-$k$-Coloring} $\forall k \leq n$ \\
+
+    IS: n $\implies$ n+1. \\
+
+    Aufgrund der IV ist nur noch: \textsc{Graph-$k$-Coloring} $\leq_p$ \textsc{Graph-$k+1$-Coloring} \\
+
+    Wir definieren die Reduktionsfunktion $f: \{0,1,\}^* \rightarrow \{0,1,\}^*$: \\
+
+    $$f(w)=\begin{cases}
+        \langle G_w\rangle  & \text{wenn w} = \langle G \rangle \text{, wobei }  \langle G \rangle \text{ die Kodierung eines Graphen ist} \\
+        \langle G_0 \rangle & \text{wenn w} \neq \langle G \rangle \text{ sonst}
+      \end{cases}$$ \\
+
+    mit G = (V,E) und x $\notin$ V \\
+
+    Sei $G_w = (V_w,E_w)$ mit $V_w=V \cup \{ x \}$ und  $E_w= E \cup \{ \{ x, v \} |\forall v \in V \}$  \\
+
+    und sei $G_0 = (V_0,E_0)$ mit $V_0 = V$ und $E_0 = E \cup \{ \{ u,v  \} |\forall u,v \in V \} $ \\
+
+    \textbf{Laufzeit von f(W):} \\
+
+    Zu Prüfen, ob eine Eingabe der Kodierung eines Graphen entspricht ist trivialerweise in polynomieller Zeit berechbar möglich. \\
+
+    Falls w = $\langle G \rangle$, so wird ein Knoten und $\abs{V}$ Kanten hinzugefügt. Dies ist offensichtlicher weise in polynomieller Zeit möglich und berechbar. \\
+
+    Falls w $ \neq\langle G \rangle$, so werden maximal $\abs{V}$ neue Kanten hinzugefügt. Dies ist auch in polynomieller Zeit möglich und berechbar. \\
+
+    $\Rightarrow$ f ist in polynomieller Zeit berechenbar. \\
+
+    \textbf{Behauptung:} w $\in$ \textsc{Graph-$k$-Coloring} $\iff$ f(w) $\in $ \textsc{Graph-$k+1$-Coloring} \\
+
+    Angenommen w $\in$ \textsc{Graph-$k$-Coloring}. o.B.d.A x $\notin$ V \\
+
+    $\implies$ w = $\langle G \rangle$. Also wird w auf $\langle G_w\rangle$ abgebildet. Da w $\in$ \textsc{Graph-$k$-Coloring} existiert eine Abbildung $c_k: V \rightarrow \{0,..,k\}$ s.d $\forall \{u,v\}\in E: c_k(u)\neq c_k(v)$. \\
+
+    Betrachte folgende Fortsetzung von $c_k$:
+
+    $c_{k+1}: V \rightarrow \{0,..,k,k+1\}$
+
+    $$c_{k+1}(v)=\begin{cases}
+        c_k(v) & \text{wenn v} \in V.
+               & \text{k+1 falls v=x}
+      \end{cases}$$ \\
+
+    Nach Konstruktion gilt $\forall \{u,v\}\in E_w: c_k(u)\neq c_k(v)$. \\
+
+    $\Rightarrow$ f(w) $\in$ \textsc{Graph-$k+1$-Coloring}. \\
+
+    Angenommen w $\notin$ \textsc{Graph-$k$-Coloring}. \\
+
+    Fallunterscheidung
+
+    i) w $ \neq \langle G \rangle$, dann wird w unter f auf $\langle G_0 \rangle$, welches trivialerweise nur 1 färbbar ist. Folglich w $\notin$ \textsc{Graph-$k+1$-Coloring}, da k $\geq$ 3 \\
+
+    ii) w = $\langle G \rangle$, aber $\nexists c_k: V \rightarrow \{0,..,k\}$ s.d $\forall \{u,v\}\in E: c_k(u)\neq c_k(v)$. \\
+
+    Folglich wird w auf $\langle G_w \rangle$ abgebildet. \\
+
+    Angenommen w $\in$ \textsc{Graph-$k+1$-Coloring}, also muss  eine Abbildung $c_k: V \rightarrow \{0,..,k\}$ s.d $\forall \{u,v\}\in E: c_k(u)\neq c_k(v)$ existieren. (*)  \\
+
+    Da x eine Kante zu jedem Knoten in V hat muss gelten, dass x die Farbe k+1 zu geordnet werden muss. Also ist jede Abbildung $c_{k+1}$ von der folgenden Form sein:
+
+    $$c_{k+1}(v)=\begin{cases}
+        c_k(v) & \text{wenn v} \in V.
+               & \text{ k+1 falls v=x}
+      \end{cases}$$ \\
+
+    wobei $c_{k}: V \rightarrow \{0,..,k\}$ eine Färbung von V ist. $\lightning$ (*) \\
+
+    $\Rightarrow$ w $\notin$ \textsc{Graph-$k+1$-Coloring}. \\
+
+    $\Rightarrow$ w $\in$ \textsc{Graph-$k$-Coloring} $\iff$ f(w) $\in $ \textsc{Graph-$k+1$-Coloring} \\
+
+    $\Rightarrow$ \textsc{Graph-$k$-Coloring} $\leq_p$ \textsc{Graph-$k+1$-Coloring} \\
+
+    Nachdem Induktionsprinzip folgt also:
+
+    \textsc{Graph-$3$-Coloring} $\leq_p$ \textsc{Graph-$k$-Coloring} $\forall$ k \\ $\qed$
+
+  }
+\end{exercise}
+
+
+\end{document}

@@ -1,0 +1,338 @@
+\documentclass{article}
+\usepackage{amsmath,amsthm}
+\usepackage{amssymb,latexsym}
+\usepackage{epsfig}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{fullpage}
+\usepackage{enumerate}
+\usepackage{paralist}
+\usepackage{graphicx}
+\usepackage{algpseudocode}
+% \usepackage{qcircuit}
+\usepackage{tikz}
+\usetikzlibrary{quantikz}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{alg}[theorem]{Algorithm}
+\newtheorem{protocol}[theorem]{Protocol}
+\newtheorem{problem}[theorem]{Problem}
+
+\newcommand{\CNOT}{{\rm CNOT}}
+
+
+\newcommand{\ip}[2]{\left\langle #1 , #2\right\rangle}
+%\newcommand{\fid}{\operatorname{F}}
+\newcommand{\tr}{\trace}
+\newcommand{\setft}[1]{\mathrm{#1}}
+\newcommand{\lin}[1]{\setft{L}\left(#1\right)}
+\newcommand{\density}[1]{\setft{D}\left(#1\right)}
+\newcommand{\unitary}[1]{\setft{U}\left(#1\right)}
+%\newcommand{\trans}[1]{\setft{T}\left(#1\right)}
+\newcommand{\herm}[1]{\setft{Herm}\left(#1\right)}
+\newcommand{\pos}[1]{\setft{Pos}\left(#1\right)}
+\newcommand{\sep}[1]{\setft{Sep}\left(#1\right)}
+\newcommand{\rank}[1]{\operatorname{rank}(#1)}
+\newcommand{\ex}{\paragraph{Exercise.}}
+
+\def\I{I}
+\def\({\left(}
+\def\){\right)}
+\def\X{\mathcal{X}}
+\def\Y{\mathcal{Y}}
+\def\Z{\mathcal{Z}}
+\def\W{\mathcal{W}}
+\def\yes{\text{yes}}
+\def\no{\text{no}}
+\def\blog{\textup{log}}
+\newcommand{\A}{\spa{A}}
+\newcommand{\B}{\spa{B}}
+\newcommand{\UA}{U_A}
+
+
+\newcommand{\myparagraph}[1]{\paragraph{#1.}}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\epssdp}{\varepsilon_{\rm sdp}}
+% \newcommand{\bra}[1]{\langle #1|}
+% \newcommand{\ket}[1]{|#1\rangle}
+% \newcommand{\braket}[2]{\langle #1|#2\rangle}
+\newcommand{\ketbra}[2]{\ket{#1}{\bra{#2}}}
+\newcommand{\lmin}[1] {\lambda_{\operatorname{min}}(#1)}
+\newcommand{\lmax}[1] {\lambda_{\operatorname{max}}(#1)}
+\newcommand{\lhyes} {\operatorname{LH_{yes}}}
+\newcommand{\lhno} {\operatorname{LH_{no}}}
+\newcommand{\CQ}{\mathcal{CQ}}
+\newcommand{\lh}{\operatorname{LH}}
+\newcommand{\flh}{\operatorname{5-LH}}
+\newcommand{\klhh}{\operatorname{k-LH}}
+\newcommand{\qma}{\operatorname{QMA}}
+\newcommand{\enc}[1]{\left<#1\right>}
+
+\newcommand{\C}{C}
+\newcommand{\Id}{Id} %CHECK
+\newcommand{\Exs}[2]{E_{#1}[#2]} %CHECK
+
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+
+\newcommand{\trace}{{\rm Tr}}
+
+%\newcommand{\dim}{\operatorname{dim}}
+\newcommand{\norm}[1]{\left\|\,#1\,\right\|}       % norm
+\newcommand{\pnorm}[1]{\left\|\,#1\,\right\|_p}       % norm
+\newcommand{\onorm}[1]{\norm{#1}_{\mathrm{1}}}      % Euclidean norm for vectors
+\newcommand{\enorm}[1]{\norm{#1}_{\mathrm{2}}}      % Euclidean norm for vectors
+\newcommand{\trnorm}[1]{\norm{#1}_{\mathrm {tr}}}  % trace norm
+\newcommand{\fnorm}[1]{\norm{#1}_{\mathrm {F}}}    % frobenius norm
+\newcommand{\snorm}[1]{\norm{#1}_{\mathrm {\infty}}}    % spectral norm
+
+\newcommand{\set}[1]{{\left\{#1\right\}}}    % braces for set notation
+\newcommand{\ve}[1]{\mathbf{#1}}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\optprod}{\OPT_P}
+\newcommand{\opt}{\operatorname{OPT_1}}
+\newcommand{\optt}{\operatorname{OPT_2}}
+\newcommand{\newopt}{\operatorname{NEW-OPT}}
+% \newcommand{\swap}{\operatorname{SWAP}}
+\newcommand{\poly}{\operatorname{poly}}
+\newcommand{\cc}{d^{\frac{k}{2}}}
+\newcommand{\OPT}{{\rm OPT}}
+\newcommand{\QMA}{{\rm QMA}}
+\newcommand{\MQA}{{\rm MQA}}
+\newcommand{\NP}{{\rm NP}}
+\newcommand{\PP}{{\rm P}}
+\newcommand{\PH}{{\rm PH}}
+\newcommand{\BPP}{{\rm BPP}}
+\newcommand{\BQP}{{\rm BQP}}
+
+\newcommand{\complex}{{\mathbb C}}
+\newcommand{\reals}{{\mathbb R}}
+\newcommand{\ints}{{\mathbb Z}}
+\newcommand{\nats}{{\mathbb N}}
+
+\newcommand{\spa}[1]{\mathcal{#1}}
+\newcommand{\dens}{\mathcal{D}(\spa{A}\otimes\spa{B})}
+%\newcommand{\unitaries}{U(\spa{A}\otimes\spa{B})}
+
+\newcommand{\LL}{\mathcal{L}}
+\newcommand{\DD}{\mathcal{D}}
+\newcommand{\HH}{\mathcal{H}}
+\newcommand{\UU}{\mathcal{U}}
+
+
+\mathchardef\mhyphen="2D
+
+\newcommand{\ayes}{A_{\rm yes}} %CHECK
+\newcommand{\ano}{A_{\rm no}} %CHECK
+\newcommand{\nl} {\mathcal{L}_1}
+
+\begin{document}
+
+\title{\vspace{-10mm}Introduction to Quantum Computation, UPB\\Winter 2022, Assignment 7\\{\large Eli Kogan-Wang}}
+\date{}
+\maketitle
+
+
+\section*{Exercises}
+\begin{enumerate}
+  \item As seen in class, Deutsch's algorithm is able to determine with certainty (i.e. probability $1$) whether a $1$-bit function is constant or balanced. Suppose you wish to run Deutsch's algorithm in your lab, but your equipment doesn't quite function as you expect. In particular, instead of preparing your desired initial state of $\ket{0}\ket{1}$ to the algorithm, your machine prepares state $\ket{\psi}\ket{1}$ for $\ket{\psi}=\alpha\ket{0}+\beta\ket{1}$.
+        \begin{enumerate}
+          \item Assuming the function $f$ is balanced, what is the probability that Deutsch's algorithm on your faulty initial state $\ket{\psi}\ket{1}$ will correctly output ``balanced'', i.e. that the final measurement result in the algorithm has label $1$?
+
+                \textbf{Answer:} Consider the following circuit diagram for Deutsch's algorithm on our faulty initial state $\ket{\psi}\ket{1}$:
+
+                \begin{quantikz}
+                  \lstick{\ket{\psi}} & \gate{H} & \gate[wires=2]{U_f} & \gate{H} & \meter{} \\
+                  \lstick{\ket{1}}    & \gate{H} &                   & \qw      & \qw
+                \end{quantikz}
+
+                Our whole state $\ket{\psi_1}$ after the first Hadamard gates:
+
+                $$\begin{aligned}
+                    \ket{\psi_1} & = (\alpha \ket{+} + \beta \ket{-}) \ket{-}                                                     \\
+                                 & = \frac{1}{\sqrt{2}} \left( \alpha (\ket{0}+\ket{1}) + \beta (\ket{0}-\ket{1}) \right) \ket{-} \\
+                                 & = \frac{1}{\sqrt{2}} \left( (\alpha+\beta) \ket{0} + (\alpha-\beta) \ket{1} \right) \ket{-}    \\
+                  \end{aligned} $$
+
+                After applying the unitary $U_f$, using phase kickback:
+
+                $$\begin{aligned}
+                    \ket{\psi_2} & = \frac{1}{\sqrt{2}} \left( (\alpha+\beta)(-1)^{f(0)} \ket{0} + (\alpha-\beta)(-1)^{f(1)} \ket{1} \right) \ket{-} \\
+                  \end{aligned}$$
+
+                Without loss of generality we can assume that $f(0)=1$ and $f(1)=0$ (since $f$ is balanced), since the additional (-1) global phase doesn't affect the final measurement result.
+
+                So:
+
+                $$\begin{aligned}
+                    \ket{\psi_2}' & = \frac{1}{\sqrt{2}} \left( (\alpha+\beta) \ket{0} - (\alpha-\beta) \ket{1} \right) \ket{-} \\
+                  \end{aligned}$$
+
+                Applying the second Hadamard gate:
+
+                $$\begin{aligned}
+                    \ket{\psi_3} & = \frac{1}{\sqrt{2}} \left( (\alpha+\beta) \ket{+} - (\alpha-\beta) \ket{-} \right) \ket{-}              \\
+                                 & = \frac{1}{2} \left( (\alpha+\beta) (\ket{0}+\ket{1}) - (\alpha-\beta) (\ket{0}-\ket{1}) \right) \ket{-} \\
+                                 & = \frac{1}{2} \left( 2\beta\ket{0} + 2\alpha\ket{1} \right) \ket{-}                                      \\
+                                 & = \beta\ket{0} + \alpha\ket{1} \ket{-}                                                                   \\
+                  \end{aligned}$$
+
+                Measuring the first qubit gives us $\ket{0}$ w.P. $\abs{\beta}^2$ and $\ket{1}$ w.P. $\abs{\alpha}^2$.
+
+                So the probability that the algorithm will output ``balanced'' is $\abs{\alpha}^2$.
+
+                Additionally, for the case that $\alpha=1$ (and $\beta=0$), as when the preparation state is correct,
+                the probability that the algorithm will output ``balanced'' is $1$, as expected.
+
+
+          \item There is only so much ``error'' that the algorithm can tolerate before it becomes useless --- for which range of the parameter $0\leq\abs{\alpha}\leq 1$ is the probability of success in part 3a less than or equal to $1/2$? In other words, for which values of $\abs{\alpha}$ is it better to forget about running Deutsch's algorithm and instead just flip a classical (unbiased) coin to ``decide'' if $f$ is balanced?
+
+                \textbf{Answer:} Since we know that the probability of success is $\abs{\alpha}^2$, we can solve for $\abs{\alpha}$:
+
+                $$\begin{aligned}
+                    \abs{\alpha}^2 & \leq \frac{1}{2}        \\
+                    \abs{\alpha}   & \leq \sqrt{\frac{1}{2}} \\
+                    \abs{\alpha}   & \leq \frac{1}{\sqrt{2}} \\
+                  \end{aligned}$$
+        \end{enumerate}
+  \item This question will practice working through Simon's algorithm.
+        \begin{enumerate}
+          \item Consider function $f:\set{0,1}^2\mapsto\set{0,1}^2$ such that $f(00)=10$, $f(01)=11$, $f(10)=10$ and $f(11)=11$. This function satisfies the promise required for Simon's problem, i.e. $f(x)=f(y)$ iff $x=y\oplus s$. What is the value of $s$ for $f$?
+
+                \textbf{Answer:} Since $f(00)=f(10)$, we know that $s=00\oplus 10=10$. (Similarly, since $f(01)=f(11)$: $s=01\oplus 11=10$, so $s=10$ as before.)
+
+          \item Suppose $f:\set{0,1}^n\mapsto \set{0,1}^n$ is an $n$-bit function which slightly violates the promise required of Simon's algorithm in that $f$ is ``almost'' one-to-one in the following sense: For each distinct input $x\in\set{0,1}^n$, the output $f(x)$ is unique, \emph{except} for inputs $0^n$ and $1^n$, which are the only pair of inputs satisfying $f(0^n)=f(1^n)$. Thus, we are very ``close'' to the $s=0^n$ case, and we expect the analysis to go ``similarly''.
+
+                Recall that right before the measurement in Simon's algorithm, our quantum state looks like
+                \[
+                  \sum_{y\in\set{0,1}^n}\ket{y}\left(\frac{1}{2^n}\sum_{x\in\set{0,1}^n}(-1)^{x\cdot y}\ket{f(x)}\right).
+                \]
+                Pick an arbitrary $\hat{y}\in\set{0,1}^n$. Show that when the first register is now measured in the standard basis, the probability of outcome $\hat{y}$ is given by
+                \[
+                  \frac{1}{2^n}\pm\frac{1}{2^{2n-1}},
+                \]
+                where the $+$ occurs if the parity of $y$ is even, and the $-$ occurs if the parity of $y$ is odd. Here, the parity of $y$ is defined as $\bigoplus_{i=1}^n y_i$. (Hint: One way to do the analysis is to recall that for any normalized state $\ket{\psi}=\sum_{z\in\set{0,1}^n}\ket{z}\ket{\phi_z}$, the probability of observing outcome $\ket{z}$ in the first register is $\braket{\phi_z}{\phi_z}$. Do make sure you understand this claim first.)
+
+                \textbf{Answer:} Using the given fact, we will consider $\frac{1}{2^n}\sum_{x\in\set{0,1}^n}(-1)^{x\cdot y}\ket{f(x)}$ for even and odd parity of $y$.
+
+                In general:
+
+                $$\begin{aligned}
+                    \sum_{x\in\set{0,1}^n}(-1)^{x\cdot y}\ket{f(x)} & = \sum_{x\in\set{0,1}^n\backslash \set{0^n,1^n}}(-1)^{x\cdot y}\ket{f(x)} + (-1)^{y\cdot 0^n}\ket{f(0^n)} + (-1)^{y\cdot 1^n}\ket{f(1^n)} \\
+                                                                    & = \sum_{x\in\set{0,1}^n\backslash \set{0^n,1^n}}(-1)^{x\cdot y}\ket{f(x)} + (-1)^{y\cdot 0^n}\ket{f(0^n)} + (-1)^{y\cdot 1^n}\ket{f(0^n)} \\
+                  \end{aligned}$$
+
+                Now, for even parity of $y$, we have that $y\cdot 0^n=0$ and $y\cdot 1^n=0$, so the last two terms are equal and add to $2\ket{f(0^n)}$.
+
+                For odd parity of $y$, we have that $y\cdot 0^n=0$ and $y\cdot 1^n=1$, so the last two terms cancel out.
+
+                Now, for the $x\in\set{0,1}^n\backslash \set{0^n,1^n}$ term, we know that all $\ket{f(x)}$ are all orthogonal to each other, so getting the magnitude of the vector is as easy as counting the terms.
+
+                For both cases we have $2^{n}-2$ terms in the sum, additionally for even parity we have $2\ket{f(0^n)}$ and for odd parity we have $0$.
+
+                Now the magnitude squared of the vector for even parity is $(2^{n}-2)\cdot 1^2 + 2^2=2^n+2$ and for odd parity is $(2^{n}-2)\cdot 1^2=2^n-2$.
+
+                We do not need to consider $x\cdot y$ since $(-1)^2=1^2$.
+
+                Working with $2^n\pm 2$, and dividing by $\left(\frac{1}{2^n}\right)^2$:
+
+                $$\begin{aligned}
+                    \left(\frac{1}{2^n}\right)^2\cdot\left(2^n\pm 2\right) & =\frac{2^n}{2^{2n}}\pm\frac{2}{2^{2n}} \\
+                                                                           & = \frac{1}{2^n}\pm\frac{1}{2^{2n-1}}   \\
+                  \end{aligned}$$
+
+                As desired.
+        \end{enumerate}
+
+  \item In our analysis of Simon's problem, we assumed that one could make \emph{intermediate} measurements when running a circuit. This process, of course, is non-unitary, and ideally we would instead like to keep the computation unitary until the very end, at which point we measure everything in the standard basis. In this question, you will show that indeed, measurements can be \emph{deferred} to the end of a circuit, without loss of generality.
+
+        Recall the circuit $C$ for preparing the Bell state $\ket{\Phi^+}$:
+        % \[ \Qcircuit @C=1em @R=.7em {
+        %   \lstick{\ket{0}} & \gate{H} & \ctrl{1} & \qw \\
+        %   \lstick{\ket{0}} & \qw & \targ & \qw
+        %   } \]
+        \begin{center}
+          \begin{quantikz}
+            \lstick{\ket{0}} & \gate{H} & \ctrl{1} & \qw \\
+            \lstick{\ket{0}} & \qw & \targ{} & \qw
+          \end{quantikz}
+        \end{center}
+
+        \begin{enumerate}
+
+          \item Suppose we insert a measurement in the standard basis on qubit $1$ between the Hadamard gate and the CNOT gate. What is the output state of the new circuit $C'$? (Hint: You will need to use the density matrix formalism $\rho$ to describe the immediate postmeasurement state, assuming the measurement outcome is not read, and subsequently apply any unitary gates $U$ in the circuit as $U\rho U^\dagger$.)
+
+                \textbf{Answer:} Consider $C'$:
+
+                \begin{center}
+                  \begin{quantikz}
+                    \lstick{\ket{0}} & \gate{H} & \meter{} & \cwbend{1} & \cw \\
+                    \lstick{\ket{0}} & \qw & \qw & \targ{} & \qw
+                  \end{quantikz}
+                \end{center}
+
+                After applying the Hadamard gate and measuring, we have:
+
+                $$\rho_1 = \frac{1}{2}\left(\ket{0}\bra{0} + \ket{1}\bra{1}\right) \otimes \ket{0}\bra{0} = \frac{1}{2}\left(\ket{00}\bra{00} +\ket{10}\bra{10}\right)$$
+
+                Now, we apply the CNOT gate. Recall that $\CNOT^\dagger = \CNOT$.
+
+                $$\begin{aligned}
+                    \rho_2 & = \CNOT^\dagger\rho_1\CNOT                                              \\
+                           & = \CNOT\frac{1}{2}\left(\ket{00}\bra{00} + \ket{10}\bra{10}\right)\CNOT \\
+                           & = \frac{1}{2}\left(\ket{00}\bra{00} + \ket{11}\bra{11}\right)           \\
+                  \end{aligned}$$
+
+                Giving us our output state.
+
+          \item Show that by adding a single ancilla qubit (and appropriate additional quantum gates) to $C'$, we can simulate the output of $C'$ by instead measuring only at the \emph{end} of the circuit. Specifically, add a new qubit to the circuit, which is measured only at the end of the circuit (in the standard basis).
+
+                We modify $C'$ to $C''$:
+
+                \begin{center}
+                  \begin{quantikz}
+                    \lstick{\ket{0}} & \qw & \targ{} & \qw & \meter{} \\
+                    \lstick{\ket{0}} & \gate{H} & \ctrl{-1} & \ctrl{1} & \qw \\
+                    \lstick{\ket{0}} & \qw & \qw & \targ{} & \qw
+                  \end{quantikz}
+                \end{center}
+
+                Our ancilla qubit is the first one.
+
+                Since we only use the second qubit as a control qubit, the partial trace after application of CNOT remains unchanged.
+
+                Our state just before measurement is thus:
+
+                $$\begin{aligned}
+                    \psi_{\text{before measurement}} & = \frac{1}{\sqrt{2}}(\ket{000}+\ket{111})
+                  \end{aligned}$$
+
+                After measurement on the ancilla qubit, we have:
+
+                $$\rho_{\text{after measurement}} = \frac{1}{2}\left(\ket{000}\bra{000} + \ket{111}\bra{111}\right)$$
+
+                Taking the partial trace over the ancilla qubit, we have:
+
+                $$\begin{aligned}
+                    \rho_{\text{after measurement}} & = \frac{1}{2}\left(\ket{00}\bra{00} + \ket{11}\bra{11}\right) \\
+                  \end{aligned}$$
+
+                Which is our desired result.
+
+                Additionally, since the measured qubit is only used as a control qubit, we may even dispense with the ancilla qubit and simply measure any single qubit at the end of the circuit.
+        \end{enumerate}
+
+\end{enumerate}
+
+\end{document}
