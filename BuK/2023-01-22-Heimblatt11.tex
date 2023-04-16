@@ -1,0 +1,404 @@
+\documentclass[answers]{submit}
+\homework
+
+%TODO: Hier Gruppennummer, Namen, sowie Matrikelnummern einfügen.
+\exercisegroup{27}{Eli Kogan-Wang (7251030) \\David Noah Stamm (7249709) \\ Bogdan Rerich (7248483) \\Jan Schreiber(7253698)}
+
+% Folgendes braucht nicht geändert werden
+\exercisetl{Universität Paderborn \\ Prof. Dr. Johannes Blömer}
+\exerciselecture{Berechenbarkeit und Komplexität -- WS 2022/2023}
+\exercisenumber{11}
+\exercisehandin{23. Januar 2023 -- 13:00 Uhr}
+
+\input{commands.tex} % Diverse praktische Kommandos aus Vorlesungsskript und Übungen
+\usepackage{enumerate}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+
+
+\begin{document}
+\exerciseheader
+\exercisetitle
+
+\begin{exercise}[6]{P vs NP}
+  Zeigen Sie, dass die folgende Variante von \textsc{SubsetSum} namens \textsc{BoundedSubsetSum} in P liegt:
+  \[
+    \set{\dtm[(S,W),t]}{
+      \begin{array}{l}
+        S=\{s_1,\dots,s_m\}\subseteq \N, \text{ mit $s_i\le 10$ für alle $i$, Funktion $W:S\rightarrow \N$ und } \\
+        \text{es existiert Teilmenge $T\subseteq S$ und $(x_s)_{s\in T}\in\N^{\abs{T}}$ mit $x_s \le W(s)$,}     \\
+        \text{sodass $\sum_{s\in T}x_s\cdot s =t$}
+        % \text{$S=(s_1,\dots,s_m)\in \N^{m}$ mit $s_i\le 10$ für alle $i$ und es gibt}\\
+        % \text{Indexmenge $I\subseteq \{1,\dots,m\}$, sodass $\sum_{i\in I}s_i=t$}
+      \end{array}
+    }
+  \]
+  \emph{Hinweis:} Um formal korrekt abzubilden, dass Elemente aus $S$ mehrfach enthalten sein können, wurde das Problem im Stile einer Multimenge modelliert.
+  Die Basismenge ist $S$ und die Funktion $W$ bildet ab, wie oft jedes Element $s\in S$ in der Multimenge enthalten ist.
+  Die Bedingung über die Faktoren $x$ fordert, dass ein Element $s\in T$ maximal $W(s)$ mal benutzt wird um das Ergebnis $t$ zu erhalten.
+
+  \answer{
+    Es wird angenommen, dass die Summe $W(s_1)+\dots+W(s_m)$ polynomiell in der Kodierung von $(S,W)$ ist.
+
+    Wir beschreiben einen Algorithmus, welcher \textsc{BoundedSubsetSum} in P löst.
+
+    Seien $S=\{s_1,\dots,s_m\}\subseteq \N$ und $W:S\rightarrow \N$ und $t\in \N$ gegeben.
+
+    Wir definieren einen Zustand $(i,j)$ mit $i\in \{0,\dots,m\}$ und $j\in \N$.
+
+    Dieser Zustand beschreibt, dass eine Teilmenge von $S'=\{s_1,\dots,s_i\}$
+    und $(x_s)_{s\in S'}\in\N^{\abs{S'}}$ mit $x_s \le W(s)$ existiert,
+    sodass $\sum_{s\in S'}x_s\cdot s = j$.
+
+    Jeder Zustand $(i,j)$ zeigt auf weitere Zustände wie folgt:
+
+    \begin{itemize}
+      \item $(i+1,j)$, also man kann (mit beachtung von $s_{i+1}$) die gleiche Summe erreichen
+      \item $(i+1,j+k\cdot s_{i+1})$, für alle $k\in \{1,\dots,W(s_{i+1})\}$
+    \end{itemize}
+
+    Vom Startzustand aus verwenden wir eine Breitensuche, um alle Zustände zu erreichen.
+    Wenn wir den Zielzustand $(m,t)$ erreichen, dann ist die Lösung gefunden.
+
+    Die Komplexität der Breitensuche (worst-case) ist $O(|V|+|E|)=O(l+l^2)=O(l^2)$,
+    wobei $l$ die Anzahl der Zustände ist.
+
+    Die erreichbaren Summen $t$, sind teil der Zahlen von $0$ bis $10\cdot (W(s_1)+\dots+W(s_m))$.
+
+    Also ist die Anzahl der Zustände $l=O(m\cdot t)=O(m\cdot 10\cdot (W(s_1)+\dots+W(s_m)))$.
+
+    Nun hängt die Komplexität von den Werten $W(s_i)$ ab.
+
+    Da die Summe $W(s_1)+\dots+W(s_m)$ polynomiell in der Kodierung von $(S,W)$ ist,
+    dann ist die Komplexität des Algorithmus quadratisch in der Kodierung von $(S,W)$,
+    also \textsc{BoundedSubsetSum} ist in P.
+
+  }
+\end{exercise}
+
+\begin{exercise}[6]{Approximationsalgorithmus}
+  Sei $G=(V,E)$ ein ungerichteter Graph.
+  Eine Partition von $V$ in drei Mengen $S_1,S_2,S_3$ nennen wir einen 3-Cut von $G$.
+  Ferner bezeichnet $w(S_1,S_2,S_3)$ die Anzahl der Kanten von $G$, deren Endpunkte in unterschiedlichen Mengen $S_i$ liegen.
+  Wir nennen $w(S_1,S_2,S_3)$ das Gewicht des 3-Cut $S_1,S_2,S_3$.
+
+  Beim Max-3-Cut-Problem ist für einen gegebenen, ungerichteten Graphen $G=(V,E)$ ein 3-Cut gesucht, dessen Gewicht maximal unter allen 3-Cuts von $G$ ist.
+  Betrachten Sie den folgenden Approximationsalgorithmus für das Max-3-Cut-Problem.
+
+  Zeigen Sie, dass der Algorithmus \textsc{approx3Cut} einen Approximationsfaktor von $\frac{2}{3}$ erreicht.
+  Das heißt, der Algorithmus berechnet für jeden Graphen einen 3-Cut, dessen Gewicht mindestens $\frac{2}{3}$ des Gewichts einer Partition mit maximalem Gewicht beträgt.
+
+  \begin{algorithm}
+    \caption{\textsc{approx3Cut}(G) mit Eingabe $G=(V,E)$}
+    \begin{algorithmic}
+      \State $S_1\leftarrow V,S_2\leftarrow \emptyset,S_3\leftarrow \emptyset$;
+      \While{Es existiert Permutation $\pi:\{1,2,3\}\rightarrow \{1,2,3\}$ und ein $v\in S_{\pi(1)}$,
+        \State \phantom{ile } sodass $w(S_1,S_2,S_3)<w(S_{\pi(1)}\setminus \{ v\}, S_{\pi(2)}\cup \{ v \} , S_{\pi(3)})$}
+      \State $S_{\pi(1)}\leftarrow  S_{\pi(1)}\setminus \{ v \}$;
+      \State $S_{\pi(2)}\leftarrow  S_{\pi(2)}\cup \{ v \}$;
+      \EndWhile
+      \State {\Return $S_1,S_2,S_3$}
+    \end{algorithmic}
+  \end{algorithm}
+
+  \emph{Hinweis: }
+  Beweisen Sie, dass der Algorithmus nicht hält, solange es noch ein $i\in \{ 1,2,3\}$ und ein $v\in S_i$ gibt, sodass mehr als $\frac{1}{3}$ der Nachbarn von $v$ ebenfalls in $S_i$ enthalten sind.
+  Beweisen Sie auch, dass der Algorithmus in Polynomialzeit terminiert.
+
+  \answer{
+
+    \textbf{Behauptung:} \\
+
+    Approx3Cut(G) ist polynomiell bezüglich der Koodierung von G.\\
+
+    Die While Schleife terminiert bezüglich G in polynomiell Zeit, da in jedem Interationsschritt das Gewicht des 3 Cuts um 1 erhöht wird.
+    Dieses kann maximal |E| betragen. Folglich muss die Schleife nach Endlich vielen Schritt (maximal |E|) terminieren.
+    Außerdem gibt es insgesamt 3! Verschiedene Permutationen für $\pi$, da dieses aus $S_3$ kommt.
+    Da diese Permututionen für jeden Knoten überprüft werden müssen, da die while schleife eine Laufzeit von 6*$\abs{V} \cdot \abs{E} \in \cO(\abs{V} \cdot \abs{E})$. Da dieses polynoiell bezüglich G ist und alle anderen Schritte des Algos eine Konstante Laufzeit haben, folgt die Polynomilität des Algo. \\
+
+
+
+
+    \textbf{Behauptung: (1)} \\
+    Der Algorithmus hält nicht, solange es noch ein $i\in \{ 1,2,3\}$ und ein $v\in S_i$ gibt,
+    sodass mehr als $\frac{1}{3}$ der Nachbarn von $v$ ebenfalls in $S_i$ enthalten sind. \\
+
+    Beweis durch Widerspruch. \\
+
+    Angenommen der Algo. würde halten, obwohl eine solches v, wie in der Annahme existieren würde.
+
+    o.B.d.A Sei $i=1$, v in der Menge $S_1$ enthalten und $N_1(v)$:= $\frac{\text{Anzahl der Nachbarn von v in } S_1}{\text{Anzahl der Nachbarn von v}} $. \\
+
+    Nach Voraussetzung gilt: $N_1(v) > \frac{1}{3}$. \\
+
+    $ \implies N_2(v)+N_3(v) < \frac{2}{3} \implies N_2(v) < \frac{1}{3} \lor N_3(v) < \frac{1}{3}$. \\
+
+    Gelte dies o.B.d.A. für $S_2$. \\
+
+    $\implies w(S_1,S_2,S_3)<w(S_{1}\setminus \{ v\}, S_{2}\cup \{ v \} , S_{3}) = w(S_1,S_2,S_3) + N_1(v)-N_2(v)$. \\
+
+    Folglich kann der Algorithmus noch nicht gehalten haben, da eine weitere Iteration der While-Schleife ausgeführt werden kann. HIER BLITZ EINFÜGEN. $\qed$ \\
+
+    Also gilt $\forall v \in V$, dass $N_i(v) \leq \frac{1}{3} \iff w(S_1,S_2,S_3) \geq \frac{2}{3}$.
+
+    \textbf{Behauptung:}\\
+    Der Approx3Cut hat eine Approximationsfaktor von $\frac{2}{3}$ \\
+
+    Aus (1) folgt: \\
+
+    Approx3Cut(G)= w(S) $\geq \frac{2\cdot \abs{E}}{3} \geq \frac{2 \cdot \text{opt(G)}}{3}$ \\
+
+    $\iff \frac{\text{Approx3Cut(G)}}{\text{opt(G)}} \geq \frac{2}{3}$
+
+
+
+
+  }
+\end{exercise}
+
+\begin{exercise}[6]{Rekursive Aufzählbarkeit und Entscheidbarkeit -- Klausuraufgabe 18/19 + 20/21}
+  \begin{enumerate}[a)]
+    \item \emph{Beweisen} Sie, ob folgende Sprache rekursiv aufzählbar oder, durch geeignete Reduktion, nicht rekursiv aufzählbar ist
+          \[
+            L_{\theenumi} = \set{\dtm[M]x}{\text{DTM $M$ gestartet mit $x$ erreicht eine Konfiguration mit leerem Band.}}
+          \]
+    \item \emph{Beweisen} Sie, ob folgende Sprache entscheidbar oder, durch geeignete Reduktion, nicht entscheidbar ist
+          \[
+            L_{\theenumi} = \set{\dtm[M]x}{\text{DTM $M$ berechnet bei Eingabe $x$ die Binärdarstellung von $\abs{x}^2$.}}
+          \]
+  \end{enumerate}
+  \answer{
+
+    a) \\
+
+    Sei im folgenden $M_x$ eine Turingmaschine: \\
+
+    $M_x$ bei Eingabe w $\in \{0,1\}^*$
+
+    \begin{enumerate}
+      \item (Formcheck) Prüfe ob w = $ \langle M \rangle$x, wobei M die Gödelisierung einer Turingmaschine ist und x $\in \{0,1\}^*$.
+      \item Widerhole für i=1,2,3,....
+            \begin{enumerate}
+              \item Simuliere M bei Eingabe x für i Schritte. Prüfe nach jedem Schritt, ob das Band leer ist.
+              \item Falls dies in einem Schritt der Fall ist, so akzeptiere.
+            \end{enumerate}
+    \end{enumerate}
+
+    Behauptung: L($M_x$)=$L_a$. \\
+
+    Angenommen w $\in L_a$ \\
+
+    $\implies$ w = $ \langle M \rangle$ x und die Turingmaschine erreicht eine Konfiguration mit einem leeren Band. \\
+
+    $\implies$ w wird in (1) nicht abgelehnt und da in 2 a) durch die Simulation alle möglichen Konfigurationen irgendwann erreicht folglich auch die mit einem leeren Band und die Turingmaschine hält nach diesem.
+
+    $\implies$ w $\in$ L(M)
+
+    Angenommen w $\notin L_a$.
+
+    $\implies$ Entweder w $ \neq \langle M \rangle$x, wird also in (1) abgelehnt oder w = $ \langle M \rangle$x, aber in keiner Konfiguration wird ein leeres Band erreicht.\\
+
+    Folglich wird w in (1) nicht angelehnt, aber es kann in 2a) keine Konfiguration gefunden werden, in der ein leeres Band erreicht wird.\\
+
+    $\implies$ w wird in jedem Iterationsschritt abgelehnt.
+
+    $\implies$ w $\notin$ L(M)
+
+    $\implies$ L(M)=$L_a \qed$.
+
+    Da $M_x$ offensichtlicher Weise rekursiv aufzählbar ist, da falls M bei Eingabe x in eine Endlosschleife kommt, auch $M_x$ in eine Endlosschleife kommt.
+
+    $\implies L_a$ ist rekursiv aufzählbar.
+
+    \vspace{1cm}
+    \hrule
+
+    b) \\
+
+    Sei $$L_H=\left\{\langle M \rangle x \mid M \text{ ist eine Turingmaschine die bei Eingabe } x \text{ hält } \right\}$$
+
+    Das Halteproblem, welches bekanntlich nicht entscheidbar ist.\\
+
+    Wir zeigen: $L_H \leq L_b$ \\
+
+    Zuerst die Reduktionsfunktion $f: \{0,1\}^* \rightarrow \{0,1\}^*$.\\
+
+    Sei $w \in \{0,1\}^*$, aber keine Kodierung $ \langle M \rangle x$, mit $M$ eine Gödelisierung einer Turingmaschine und $x \in \{0,1\}^*$.\\
+
+    Dann ist $f(w):=w$, was auch keine Gödelisierung einer Turingmaschine ist.\\
+
+    Sei $w = \langle M \rangle x$ mit $M$ eine Gödelisierung einer Turingmaschine und $x \in \{0,1\}^*$.\\
+
+    Nun ist $f(w)$ eine Turingmaschine $M'$, die bei Eingabe $y$ wie folgt verhält:\\
+
+    \begin{enumerate}
+      \item Simuliere $M$ bei Eingabe $x$, bis zur Terminierung.
+      \item Schreibe die Binärdarstellung von $|y|^2$ auf das Band.
+    \end{enumerate}
+
+    Wir zeigen: $f$ ist eine Reduktion von $L_H$ nach $L_b$.\\
+
+    Angenommen $w \in L_H$.\\
+
+    Also $w = \langle M \rangle x$ mit $M$ eine Gödelisierung einer Turingmaschine und $x \in \{0,1\}^*$.\\
+
+    Da $w \in L_H$ hält $M$ bei Eingabe $x$.\\
+
+    $\implies$ $f(w) = \langle M' \rangle$.
+
+    Bei Eingabe $y$ wird $M'$, die Binärdarstellung von $|y|^2$ auf das Band schreiben, da $M$ bei Eingabe $x$ hält.\\
+
+    Also ist $f(w) \in L_b$.
+
+    Angebommen $w \notin L_H$.\\
+
+    Wenn $w \notin L_H$ ist $w$ keine Kodierung $ \langle M \rangle x$, mit $M$ eine Gödelisierung einer Turingmaschine und $x \in \{0,1\}^*$.\\
+
+    $\implies$ $f(w) = w$.
+
+    Also ist $f(w) \notin L_b$, da $f(w)$ keine Gödelisierung einer Turingmaschine ist.
+
+    Wenn $w \notin L_H$ ist $w$ eine Kodierung $ \langle M \rangle x$, mit $M$ eine Gödelisierung einer Turingmaschine und $x \in \{0,1\}^*$.\\
+
+    Da $w \notin L_H$ hält $M$ nicht bei Eingabe $x$.\\
+
+    $\implies$ $f(w) = \langle M' \rangle$.
+
+    Bei Eingabe $y$ wird $M'$ nicht halten, da $M$ nicht bei Eingabe $x$ hält.\\
+
+    Also wird $M'$ nicht die Binärdarstellung von $|y|^2$ auf das Band schreiben.\\
+
+    Also ist $f(w) \notin L_b$.
+
+    Damit ist $f$ eine Reduktion von $L_H$ nach $L_b$.\\
+
+    $\implies L_H \leq L_b$.
+
+    Da das Halteproblem nicht entscheidbar ist, ist $L_b$ nicht entscheidbar.\\
+  }
+\end{exercise}
+
+\begin{exercise}[6]{NP-Vollständigkeit -- Klausuraufgabe 20/21}
+  Betrachten Sie die folgende Sprache.
+  \[
+    \textsc{Max-SAT} :=
+    \set{\dtm[\phi,k]}{
+      \begin{array}{l}
+        \text{$\phi$ ist eine Boolsche Formel in KNF, $k\in\N$ und es} \\
+        \text{existiert eine Belegung der Variablen, sodass }          \\
+        \text{mindestens $k$ Klauseln von $\phi$ erfüllt sind.}
+      \end{array}}
+  \]
+
+  Zeigen Sie, dass die Sprache \textsc{Max-SAT} NP-vollständig ist. Nutzen Sie für Ihre Reduktion eine der drei folgenden NP-vollständigen Sprachen
+  \begin{enumerate}[a)]
+    \item $\textsc{SAT} = \set{\dtm[\phi]}{\text{$\phi$ ist eine erfüllbare Boolesche Formel in KNF.}}$
+    \item $\textsc{3SAT} = \set{\dtm[\phi]}{\text{$\phi$ ist eine erfüllbare Boolesche Formel in 3-KNF.}}$
+    \item $\textsc{VertexCover} = \set{\dtm[G,k]}{\text{$G$ ist ein ungerichteter Graph mit einer $k$-Knotenüberdeckung.}}$
+  \end{enumerate}
+  \answer{
+    Es ist folgendes zu Zeigen: \\
+
+    \begin{enumerate}
+      \item Max-Sat $\in$ NP
+      \item SAT $\leq_p$ Max-Sat
+    \end{enumerate}
+
+    Zu (1):
+
+    Betrachte folgende Turingmaschine:
+
+    V bei Eingabe x $\in \{0,1\}^*$:
+    \begin{enumerate}
+      \item (Formcheck) Prüfe, ob x = $\langle \phi,k,B \rangle$ eine Kodierung ist, wobei $\phi$ eine boolesche Formel in KNF ist, k $\in \N$ und B eine Belegung von $\phi$
+      \item Prüfe, ob B mindestens k Klauseln der KNF erfüllt. Falls dies der Fall ist so lehne x ab.
+      \item Akzeptiere.
+    \end{enumerate}
+
+    \textbf{BH.: V ist Polynomiell} \\
+
+    \begin{enumerate}
+      \item Der Formcheck kann trivialerweise in polynomieller Zeit durchgeführt werden.
+      \item Da hierbei nur maximal die Anzahl der Klauseln in $\phi$ überprüft werden müssen, ist dies in poly. Zeit bezüglich $\phi$ möglich.
+      \item Trivialerweise in Polynomieller Zeit möglich
+    \end{enumerate}
+
+    Da B eine Belegung von $\phi$, welche jedem Literal aus diesem einen Wahrheitswert zuordnet, hat dieses bezüglich $\phi$ eine polynomielle Länge. \\
+
+    \textbf{BH.: V ist Verifzierer von Max-SAT} \\
+
+    Angenommen $\langle \phi,k \rangle \in $ Max-SAT. d.h. es existiert eine Belegung B von $\phi$, welche k Klauseln erfüllt. \\
+
+    $\implies$ V akzeptiert x=$\langle \phi,k,B \rangle$ nach (3). \\
+
+    $\implies$ x $\in L(v)$ \\
+
+    Angenommen $\langle \phi,k \rangle \notin $ Max-SAT \\
+
+    Beweis durch Widerspruch: \\
+
+    Angenommen es würde eine Belegung B von $\phi$ geben s.d. \\
+
+    x = $\langle \phi,k,B \rangle \in L(V)$
+
+    $\implies$ (Nach (3)) $\langle \phi,k \rangle \in $ Max-SAT WIEDERSPRUCHS BLITZ EINFÜGEN.
+
+    $\implies$ V ist ein Verifizierer von Max-SAT.
+
+    $\implies$ Max-SAT $\in NP$ \\
+
+    Zu (2): \\
+
+    Behauptung: \textbf{SAT} $\leq_p$ \textbf{Max-Sat}. \\
+
+    Betrachte folgende Reduktionsfunktion: \\
+
+    $$f(w)=\begin{cases}
+        \langle \phi,k\rangle &
+        \begin{array}{l}
+          \text{wenn w} = \langle \phi \rangle \text{,wobei } \phi \text{ die Koodierung einer KNF ist} \\
+          \text{und k die Anzahl ihrer Klauseln}                                                        \\
+        \end{array} \\
+        \delta                & \text{ wenn w} \neq \langle \phi \rangle \text{ sonst}
+      \end{cases}$$ \\
+
+    Wobei $\delta$ eine Formel ist, welche nicht in KNF ist. \\
+
+    Die Laufzeit von f(w) ist trivialerweise polynomiell und berechenbar,da diese nur die Anzahl der Klauseln von $\phi$ bestimmt. \\
+
+    Behauptung: w $\in$ SAT $\iff$ f(w) $\in$ Max-Sat \\
+
+    Angenommen w $\in$ SAT\\
+
+    $\implies$ w wird unter f auf $\langle \phi,k\rangle$ abgebildet
+    und es existiert eine Erfüllende Belegung B von $\phi$. \\
+
+    $\implies$ Folglich muss B jede Klauseln in $\phi$ erfüllen (,da KNF) und B erfüllt damit k Klauseln.
+
+    $\implies$ f(w) $\in$ Max-Sat. \\ \\
+
+    Angenommen w $\notin$ Sat. \\
+
+    Also ist w entweder von der flasche Form, wird dann also auf $\delta$ abgeldet,
+    welches nicht in Max-Sat ist, da nicht in KNF oder auf  $\langle \phi,k\rangle$ \\
+
+    Angommen f(w) $\in $ Max-Sat
+
+    $\implies$ Es existiert eine Belegung, welche K klauseln erfüllen würde.
+    Nach wahl von k ist diese Belegung dann auch eine erfüllende Belegung von $\phi$ \\
+
+    $\implies$ w $\in$ SAT WIDERSPRUCHSPFEIL EINFÜGEN.
+
+    $\implies$ w $\in$ SAT $\iff$ f(w) $\in$ Max-Sat \\
+
+    $\implies$ \textbf{SAT} $\leq_p$ \textbf{Max-Sat}.
+
+    $\xrightarrow{1,2}$ Max Sat ist NP vollständig. $\qed$
+
+
+  }
+\end{exercise}
+
+
+\end{document}

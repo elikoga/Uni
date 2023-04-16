@@ -1,0 +1,265 @@
+\documentclass[answers]{submit}
+\homework
+
+%TODO: Hier Gruppennummer, Namen, sowie Matrikelnummern einfügen.
+\exercisegroup{27}{Eli Kogan-Wang (7251030) \\David Noah Stamm (7249709) \\ Bogdan Rerich (7248483) \\Jan Schreiber(7253698)}
+
+% Folgendes braucht nicht geändert werden
+\exercisetl{Universität Paderborn \\ Prof. Dr. Johannes Blömer}
+\exerciselecture{Berechenbarkeit und Komplexität -- WS 2022/2023}
+\exercisenumber{12}
+\exercisehandin{30. Januar 2023 -- 13:00 Uhr}
+
+\input{commands.tex} % Diverse praktische Kommandos aus Vorlesungsskript und Übungen
+\usepackage{enumerate}
+\usepackage{algorithm2e}
+
+\begin{document}
+\exerciseheader
+\exercisetitle
+\newcommand{\cI}{\mathcal{I}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cT}{\mathcal{T}}
+\newcommand{\RO}{\mathfrak{O}_{\textsc{RS}}}
+\newcommand{\RS}{\mathrm{RS_{opt}}}
+
+
+
+\begin{exercise}[6]{Approximationsalgorithmen}
+  Wir betrachten die Optimierungsvariante einer Einschränkung von \textsc{HittingSet} (siehe Heimübung~9 Aufgabe~2).
+  Die Menge der Instanzen $\cI$ ist die Menge aller Paare $(X,S)$, wobei $X$ eine endliche Menge ist und $S\subseteq\cP(X)$, sodass für alle $T\in S: \abs{T}\leq 3$.
+  Die Menge der gültigen Lösungen ist
+  \[ F(I) = \{ H \mid H\in \cP(X)\mbox{ und für alle $T\in S: H\cap T \neq \emptyset$} \} \ . \]
+  Für $H\in F(I)$ ist die Zielfunktion $w(H) = \abs{H}$.
+  Es handelt sich um ein Minimierungsproblem.
+  Betrachten Sie folgenden Approximationsalgorithmus.
+  \begin{algorithm}
+    $H \gets \emptyset$\;
+    \For{$T\in S$}{
+      \If{$T\cap H = \emptyset$}{
+        $H \gets H\cup T$\;
+      }
+    }
+    \Return{$H$}\;
+    \caption{\textsc{kleinerSchnitt} $(X,S)$}
+  \end{algorithm}
+
+  Zeigen Sie, dass \textsc{kleinerSchnitt} eine Approximationsgüte von höchstens $3$ hat.
+
+  \answer{ \\
+
+    Da nach Aufgabenstellung bereits gilt, dass KleinerSchnitt (X,S) ein Approximationsalgorithmus ist,
+    ist nur noch die Approximationsgüte zu Zeigen: \\
+
+    Sei H die Ausgabe von kleinerSchnitt bei Eingabe einer Beliebigen, aber festen Instanz (X,S). \\
+
+    \textbf{Behauptung:} w(H)= $\abs{H} \leq 3 \cdot \abs{O}$, wobei O die Optimale Lösungsmenge ist. \\
+
+    Da vor jedem hinzufügen eines T $\in S$ geprüft wird, ob H $\cap$ T = $\emptyset$ gilt: \\
+
+    H = $\overset{.}{\bigcup_{T \in S}}$ T  eine disjunkte Vereinigung von allen T $\in S$. \\
+
+    Außerdem gilt:  $O \in F(I)$ gilt für alle T $\in$ S, dass $O \cap T \neq \emptyset $. \\
+
+    Folglich gilt, dass (mindestens) ein Element aus jedem der T, welches zu H hinzugefügt werden, in O liegen muss.  \\
+
+    $ \implies \frac{1}{3} \abs{H} \leq \abs {O}$, da für jede Teilmenge T $\in$ S gilt $\abs{T}$ = 3 gilt\\
+
+    Also gilt Insgesamt: H $\leq$ 3 $\cdot \abs{O} \iff \frac{w(H)}{opt(H)} \leq 3 $ \\
+
+    $\implies$ Kleiner Schnitt hat einen Approximationsfaktor von 3 $\qed$.
+  }
+\end{exercise}
+
+
+\begin{exercise}[12]{Such- und Optimierungsvarianten}
+  Betrachten Sie folgende, aus der Vorlesung bekannte, Sprache.
+  \[ \textsc{Rucksack} = \left\{ \langle G,W,g,w\rangle \middle| \begin{array}{c} \mbox{$G = \{g_1,\dots,g_n\}$, $W = \{w_1,\dots,w_n\}$, $g,w\in\N$,} \\ \mbox{für $1\leq i\leq n$ ist $g_i,w_i\in\N$, und es} \\ \mbox{gibt $S\subseteq\{1,\dots,n\}$ mit $\sum_{i\in S} g_i \leq g$ und $\sum_{i\in S} w_i\geq w$.} \end{array} \right\} \]
+  Gehen Sie im folgenden davon aus, dass Sie Zugriff auf ein \emph{Orakel} $\RO$ haben.
+  Gegeben eine Instanz $I = \langle G,W,g,w\rangle$ kann Ihnen dieses Orakel \emph{in einem Zeitschritt} beantworten, ob $I$ in \textsc{Rucksack} liegt, oder nicht.
+
+  Zeigen Sie:
+  Eine DTM, die $\RO$ verwenden darf, kann
+  \begin{enumerate}
+    \item gegeben $\langle G,W,g,w\rangle\in\textsc{Rucksack}$ in polynomieller Zeit ein $S\subseteq \{1,\dots,n\}$ berechnen, sodass $\sum_{i\in S} g_i \leq g$ und $\sum_{i\in S} w_i\geq w$.
+    \item gegeben $\langle G,W,g\rangle$ in \emph{polynomieller} Zeit ein $w\in \N$ berechnen, sodass $\langle G,W,g,w\rangle\in \textsc{Rucksack}$, aber $\langle G,W,g,(w+1)\rangle\not\in \textsc{Rucksack}$.
+          Hierbei können Sie den Algorithmus aus Teilaufgabe 1 benutzen, müssen sich aber klar machen, was polynomiell in Bezug auf die Eingaben bedeutet.
+  \end{enumerate}
+
+  \answer{
+
+    \begin{enumerate}
+      \item Wir zeigen eine DTM $M$, die unter verwendung von $M$ ein $S\subseteq \{1,\dots,n\}$ berechnet, sodass $\sum_{i\in S} g_i \leq g$ und $\sum_{i\in S} w_i\geq w$.\\
+
+            Bei Eingabe $\langle G,W,g,w\rangle\in\textsc{Rucksack}$ geht die DTM wie folgt vor:\\
+
+            \begin{enumerate}
+              \item $idx \gets 1$, $S \gets \{1,\dots,n\}$
+              \item Solange $idx \leq n$: \label{while}
+                    \begin{enumerate}
+                      \item Prüfe, ob $\langle \{g_i|g\in S \setminus \{idx\}\}, \{w_i|w\in S \setminus \{idx\}\}, g, w\rangle \in \textsc{Rucksack}$ mit $\RO$:
+                            \begin{enumerate}
+                              \item Falls ja, dann $S \gets S \setminus \{idx\}$
+                            \end{enumerate}
+                      \item $idx \gets idx + 1$
+                    \end{enumerate}
+              \item Schreibe $S$ auf das Band
+            \end{enumerate}
+
+            Schleifeninvariante: Nach jeden Durchlauf von \ref{while} gilt:
+
+            Für jedes $S'$, mit $S'=S\setminus \{n\}$ mit $n\in \{1,\dots,idx - 1\}$ gilt:
+
+            $$\langle \{g_i|g\in S'\}, \{w_i|w\in S'\}, g, w\rangle \notin \textsc{Rucksack}$$
+
+            Und $$\langle \{g_i|g\in S\}, \{w_i|w\in S\}, g, w\rangle \in \textsc{Rucksack}$$
+
+            Nachdem $idx = n + 1$ gilt, ist $S$ eine solche gesuchte Menge, da es keine strikten
+            Untermengen von $S$ gibt, die in $\textsc{Rucksack}$ lägen, aber $S$ selbst in $\textsc{Rucksack}$ liegt.
+
+            Der Algorithmus geht $n$ mal durch die Schleife, und für jeden Durchlauf wird $\RO$ genau einmal aufgerufen.
+
+            Der Algorithmus ist offensichtlich polynomiell in der Eingabe.
+
+      \item Wir beschreiben eine DTM, die unter Verwendung von $M$ ein $w\in \N$ berechnet,
+            sodass $\langle G,W,g,w\rangle\in \textsc{Rucksack}$,
+            aber $\langle G,W,g,(w+1)\rangle\not\in \textsc{Rucksack}$.
+
+            Bei Eingabe von $\langle G,W,g\rangle$ geht die DTM wie folgt vor:
+
+            \begin{enumerate}
+              \item $max_w \gets \sum_{i=1}^n w_i$
+              \item Begehe binäre Suche auf $w\in\{1,\dots,max_w\}$, nach einem $w$ mit der gesuchten Eigenschaft
+            \end{enumerate}
+
+            Für die binäre Suche verwenden wir die DTM $M$ aus Teilaufgabe 1, mit 2 Aufrufen:
+
+            Einmal mit $w$ und einmal mit $w+1$.
+
+            Der Suchbereich ist $max_w$ groß, und $max_w\in O(2^n)$, da die Summe der Gewichte binär kodiert werden kann.
+
+            Die binäre Suche aber benötigt $O(\log(max_w))=O(n)$ Schritte, sodass der Algorithmus polynomiell ist.
+    \end{enumerate}
+  }
+\end{exercise}
+
+\begin{exercise}[6]{Rekursive Aufzählbarkeit und Entscheidbarkeit}
+
+  \begin{enumerate}[a)]
+    \item \emph{Beweisen} Sie, ob folgende Sprache rekursiv aufzählbar oder, durch geeignete Reduktion, nicht rekursiv aufzählbar ist
+          \[
+            L_{\theenumi} = \set{\dtm[M]}{\begin{array}{l} \text{$M$ ist DTM und es gibt $w,w'\in\Bin^*$, sodass DTM $M$} \\
+                \text{bei Eingabe $w$ hält und für die Konkatenation $ww'$ nicht hält.}
+              \end{array}}
+          \]
+    \item \emph{Beweisen} Sie, ob folgende Sprache entscheidbar oder, durch geeignete Reduktion, nicht entscheidbar ist
+          \[
+            L_{\theenumi} = \set{\dtm[k,x,M_1,M_2,\dots,M_k]}{
+              \begin{array}{l}
+                \text{$k\in\N,x\in \Bin^*$, $M_i$ ist DTM für alle $1\le i \le k$}    \\
+                \text{und es gibt $I\subseteq\{1,2,\dots,k\},\abs{I}\ge k/2$, sodass} \\
+                \text{für alle $i\in I$ DTM $M_i$  bei Eingabe $x$ hält. }
+              \end{array}}
+          \]
+  \end{enumerate}
+
+  \answer{
+
+    a) \\
+
+    \textbf{Behauptung:} $H^c \leq L_a $
+
+    Betrachte folgende Reduktionsfunktion:
+
+    $$f(w)=\begin{cases}
+        \langle M^{(x)} \rangle      & \text{wenn w} = \langle M \rangle \text{x, wobei }  \langle M \rangle \\
+                                     & \text{die Kodierung einer DTM ist und x} \in \{0,1\}^*                \\
+        \langle M^{\epsilon} \rangle & \text{ sonst}
+      \end{cases}$$ \\
+
+    Wobei $\langle M^{(x)} \rangle$ eine Turingmaschine ist, welche wie folgt definiert ist: \\
+
+    $\langle M^{(x)}\rangle$ bei Eingabe z $\in \{0,1\}^*$
+    \begin{enumerate}
+      \item Berechne |z|. Falls |z|=0, so akzeptiere.
+      \item Simuliere M bei Eingabe x für |z| Schritte.
+      \item Falls M in |z| Schritten hält, so akzeptiere z.
+      \item Sonst gehe in eine Endlosschleife.
+    \end{enumerate}
+
+    und $\langle M^{\epsilon} \rangle$ die Turingmaschine, welche nur das leere Wort akzeptiert und sonst in eine endlosschleife geht. \\
+
+    Da die Einzige Änderung von $f(w)$ bezüglich der Turingmaschine in Satz 2.10.1 ist,
+    dass hinzufügen einer Bedingung in (1), welche trivialerweise berechbar ist. Folglich ist f(w) auch berechbar. \\
+
+    Angenommen w $\in H^c$ \\
+
+    Entweder w $ \neq \langle M\rangle$x \\
+
+    $\implies f(w)= \langle M^{\epsilon} \rangle$, welche in $L(L_a)$ liegt,da für $w = \epsilon$ und $w' \in \{0,1\}^+$, die DTM bei Eingabe w hält, aber nicht für $ww'$.
+
+    oder w = $\langle M\rangle$x, wobei M eine DTM ist, welche bei Eingabe x nicht hält. \\
+
+    $\implies$ f(w)= $\langle M^{(x)} \rangle$ \\
+
+    Wähle w= $\epsilon$ (= das leere Wort) und ${w^*}'$ = x \\
+
+    $\implies ww' = w' = x$. \\
+
+    $\implies$ f(w) $\in L_a$, da nach (1) w von M $\in$ L(M) und nach (4) M bei Eingabe $w'$ in eine Endlosschleife geht. \\
+
+    Angenommen w $\notin H^c$
+
+    $\implies$ w = $\langle M\rangle$x, wobei M eine DTM ist, welche bei Eingabe x hält. \\
+
+    $\implies$ M hält nach
+
+
+
+    b) \\
+    \textbf{Behauptung:} $H \leq L_b $
+
+    Betrachte folgende Reduktionsfunktion:
+
+    $$f(w)=\begin{cases}
+        \langle 2,x,M,M\rangle           & \text{wenn w} = \langle M \rangle \text{x, wobei }  \langle M \rangle \\
+                                         & \text{ die Kodierung einer DTM ist und x} \in \{0,1\}^*               \\
+        \epsilon \text{(das leere Wort)} & \text{,wenn w} \neq \langle M \rangle \text{x sonst}
+      \end{cases}$$ \\
+
+    f ist trivialerweise berechenbar, da f nur die Reihenfolge der Eingabe verändert
+    und eine Kodierung einer 2 und M auf das bannt kopiert, welches alles Operationen sind, von denen wir wissen,
+    dass sie berechenbar sind. \\
+
+    \textbf{Behauptung:} w $ \in H \iff$  f(w) $ \in L_b$ \\
+
+    Angenommen w $\in$ H.
+
+    $\implies$ w = $\langle M \rangle$x und M hält bei Eingabe x.
+
+    $\implies$ f(w)= $\langle 2,x,M,M\rangle$. Da nach Voraussetzung beide Turingmaschinen bei Eingabe x halten.\\
+    \\
+    Folglich halten mehr als $\frac{2}{2}$=1 Turingmaschine, womit gilt: f(w) $\in L_b$ \\
+
+    Angenommen w $\notin$ H. \\
+
+    $\implies$ Entweder w $ \neq \langle M \rangle$x, wird damit auf $\epsilon$ abgebildet, welches nicht in $L_b$ liegt \\
+
+    oder  w = $\langle M \rangle$x und M hält bei Eingabe x nicht.\\
+
+    $\implies$ f(w)= $\langle 2,x,M,M\rangle$, aber da M nicht bei Eingabe x hält, hält keine der Turingmaschinen. \\
+
+    $\implies$ f(w) $\notin L_b$
+
+    $\implies $ w $ \in H \iff$  f(w) $ \in L_b$ \\
+
+    $\implies$ w $ \in H \iff$  f(w) $ \in L_b \qed $ \\
+
+    Da nach 2.9.2 gilt, dass H nicht entscheidbar ist, folgt mit 2.9.1, dass $L_b$ nicht entscheidbar ist.
+
+  }
+
+\end{exercise}
+
+
+\end{document}

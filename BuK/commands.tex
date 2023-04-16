@@ -1,23 +1,37 @@
 %% Generic %%
+
+% Following commands were often defined in documentclass
 \newcommand{\Q}{\mathbb{Q}}
 \newcommand{\N}{\mathbb{N}}
-\newcommand{\C}{\mathbb{C}}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\cO}{\mathcal{O}}
 \newcommand{\abs}[1]{\left\vert #1 \right\vert}
 \newcommand{\norm}[1]{\left\Vert #1 \right\Vert}
-\DeclareMathOperator*{\argmax}{arg\,max}
-\DeclareMathOperator*{\argmin}{arg\,min}
+
+\newcommand{\C}{\mathbb{C}}
+%\DeclareMathOperator*{\argmax}{arg\,max}
+%\DeclareMathOperator*{\argmin}{arg\,min}
+
+\newcommand{\set}[2]{\left\{ #1 \ \middle| \ #2 \right\}}
 
 \newcommand{\la}{\lambda}
 \newcommand{\p}{{\textup P}}
-\newcommand{\np}{{\textup NP}}
+\newcommand{\np}{{\textup NP}\xspace}
+\newcommand{\conp}{{\textup coNP}}
 \newcommand{\cst}{{\tt{cost}}}
 \newcommand{\val}{{\tt{value}}}
+\newcommand{\Bin}{{\{0,1\}}}
 
+
+%%% BuK %%%
+\newcommand{\qa}{q_{\mathrm{accept}}}
+\newcommand{\qr}{q_{\mathrm{reject}}}
+\newcommand{\dtm}[1][M]{\langle #1 \rangle}
+\newcommand{\lep}{\le_{p}}
 
 %% PSEUDOCODE %%%%
+\newcommand{\alg}[1]{\texttt{#1}}
 
 \newenvironment{pseudocode}[1]%
 {\vspace*{-0.5\baselineskip} \upshape \begin{tabbing}
@@ -95,8 +109,6 @@
 \newcommand{\bits}{\{0,1\}^*}
 
 \newcommand{\rd}{\rhd}
-\newcommand{\qa}{q_{{\textup accept}}}
-\newcommand{\qr}{q_{{\textup reject}}}
 \newcommand{\gehtu}[1]{%
   \stackrel{#1}{\smash{\rule{0.15mm}{1ex}}\rule[0.5ex]{2em}{0.15mm}}}
 %\newcommand{\Beweis}{{\textbf Beweis.} }
