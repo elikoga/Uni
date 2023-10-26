@@ -1,0 +1,2280 @@
+$pdflatex=q/xelatex -8bit -shell-escape -synctex=1 %O %S/\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+% Pseudocode
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\setlength{\parindent}{0in}
+
+\newcommand{\uebungsGruppe}{1}
+\newcommand{\zettelNummer}{1}
+\newcommand{\studierenderEins}{Eli Kogan-Wang (7251030)}
+\newcommand{\studierenderZwei}{David Noah Stamm (7249709)}
+\newcommand{\studierenderDrei}{Daniel Heins (7213874)}
+\newcommand{\studierenderVier}{Tim Wolf (7269381)}
+
+\newcounter{AufgabenCounter}
+\setcounter{AufgabenCounter}{1}
+\newcounter{TeilaufgabenCounter}
+\newenvironment{aufgabe}{\section*{Aufgabe \theAufgabenCounter}\setcounter{TeilaufgabenCounter}{1}}{\stepcounter{AufgabenCounter}}
+\newenvironment{teilaufgabe}{\paragraph*{\alph{TeilaufgabenCounter})}}{\stepcounter{TeilaufgabenCounter}}
+
+\renewcommand{\to}{\textnormal{ to }}
+\newcommand{\bigO}{\mathcal{O}}
+
+\newcommand{\qed}{\hfill$\square$}
+
+\begin{document}
+
+\title{Datenstrukturen und Algorithmen \\ Heimübung \zettelNummer{}}
+\author{\studierenderEins{} \\
+  \studierenderZwei{} \\
+  \studierenderDrei{} \\
+  \studierenderVier{}}
+
+\maketitle
+
+\begin{aufgabe}
+
+  Sei $G := (V, E)$ ein zusammenhängender, ungerichteter Graph
+  mit exakt einem Pfad pro Knotenpaar
+  und nicht-leerer, endlicher Knotenmenge.
+
+  Zu zeigen:
+
+  $$\sum_{v\in V}deg(v)=2(|V|-1)$$
+
+  Alle über den Beweis betrachteten Graphen haben die beschriebenen Eigenschaften.
+
+  Beweis über Induktion, über die Anzahl der Knoten $|V|$:
+
+  \textbf{I.A.}\\
+  Sei $G := (V, E)$ mit $|V|=1$.\\
+  Also $E=\emptyset$ aus den Eigenschaften.\\
+  Also $\forall v\in V,\deg(v)=0$.\\
+  Also $\sum_{v\in V}deg(v)=0=2(|V|-1)$.\\
+  \textbf{I.V.}\\
+  Sei $n\in \mathbb{N}^+$.\\
+  $\forall G := (V, E)$ mit $|V|=n$ gilt:
+  $$\sum_{v\in V}deg(v)=2(n-1)$$
+  \textbf{I.S.}\\
+  Sei $G := (V, E)$ mit $|V|=n+1$.\\
+  Aus den Eigenschaften von $G$ folgt:\\
+  Es gibt einen Knoten $v_{Blatt}$ mit $deg(v_{Blatt})=1$.\\
+  Wir betrachten den induzierten Teilgraph $G' := (V', E')$ mit $V'=V\backslash\{v_{Blatt}\}$.\\
+  Für $G'$ gilt aus I.V.
+  $$\sum_{v\in V'}deg_{G'}(v)=2(n-1)$$
+  $E\backslash E'=\{v_{Blatt},v_{Parent}\}$
+  $$\forall v\in V: deg_G(v)=\begin{aligned}\begin{cases}
+        1             & \text{wenn }v=v_{Blatt}  \\
+        deg_{G'}(v)+1 & \text{wenn }v=v_{Parent} \\
+        deg_{G'}(v)   & \text{sonst}
+      \end{cases}\end{aligned}$$
+
+  Also:
+  $$\sum_{v\in V}deg_{G}(v)=2(n-1)+2$$
+
+  $$2(n-1)+2=2((n+1)-1)=2(|V|-1)$$
+
+  \qed
+
+\end{aufgabe}
+
+\begin{aufgabe}
+  Zu zeigen:
+  $$\forall n\in \mathbb{N}:\sum_{i=1}^{n}i^3=\frac{n^2\cdot (n+1)^2}{4}$$
+
+  Beweis über Induktion, über die $n$.
+
+  \textbf{I.A.}\\
+  $n=1$.\\
+  Also $\sum_{i=1}^{1}i^3=1^3=1$.\\
+  $\frac{1^2\cdot (1+1)^2}{4}=1$.\\
+  \textbf{I.V.}\\
+  Sei $n\in \mathbb{N}$.\\
+  Es gilt:
+  $$\sum_{i=1}^{n}i^3=\frac{n^2\cdot (n+1)^2}{4}$$
+  \textbf{I.S.}\\
+  Zu zeigen:
+  $$\sum_{i=1}^{n+1}i^3=\frac{(n+1)^2\cdot ((n+1)+1)^2}{4}$$
+  $$
+    \begin{aligned}
+      \sum_{i=1}^{n+1}i^3 & = (n+1)^3+\sum_{i=1}^{n}i^3                           \\
+                          & \overset{I.V.}{=} (n+1)^3+\frac{n^2\cdot (n+1)^2}{4}  \\
+                          & = \frac{4\cdot (n+1)^3}{4}+\frac{n^2\cdot (n+1)^2}{4} \\
+                          & = \frac{4\cdot (n+1)^3+n^2\cdot (n+1)^2}{4}           \\
+                          & = \frac{(4\cdot(n+1)+n^2) \cdot (n+1)^2}{4}           \\
+                          & = \frac{(n^2+2\cdot2\cdot n + 2^2) \cdot (n+1)^2}{4}  \\
+                          & = \frac{(n+2)^2 \cdot (n+1)^2}{4}                     \\
+                          & = \frac{((n+1)+1)^2 \cdot (n+1)^2}{4}                 \\
+                          & = \frac{(n+1)^2 \cdot ((n+1)+1)^2}{4}                 \\
+    \end{aligned}
+  $$
+  \qed
+\end{aufgabe}
+
+\begin{aufgabe}
+  \begin{teilaufgabe}
+    Lineare Suche in Pseudocode:
+    \begin{algorithm}[H]
+      \caption{\textsc{LinSearch}($A[1, \dots, n], v$)}
+      \begin{algorithmic}[1]
+        \For{$i \gets 1 \to n$}
+        \If{$A[i]=v$}
+        \State \textbf{Return} $i$ \label{return:i}
+        \EndIf
+        \EndFor
+        \State \textbf{Return} \textsc{Nil} \label{return:nil}
+      \end{algorithmic}
+    \end{algorithm}
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    Schleifeninvariante $I(i)$: $\forall j\in [1,i): A[j]\neq v$
+
+    \textbf{Initialisierung}
+    $$i=1\implies[1,i)=\emptyset\implies\forall j\in\emptyset: A[j]\neq v =: I(1)$$
+    \textbf{Erhaltung}
+    Angenommen $I(i)$.
+    Wenn $A[i]=v$ dann brechen wir ab und das Ende des Schleifendurchlaufs wird nicht erreicht (siehe Termination).
+    Sonst, wenn $A[i]\neq v$ dann:
+    $$(I(i) := \forall j\in [1,i): A[j]\neq v) \land A[i]\neq v\iff\forall j\in [1,i+1): A[j]\neq v =: I(i+1)$$
+    Also gilt $I(i+1)$ am Ende des Schleifendurchlaufs.
+
+    \textbf{Terminierung}
+    Die Schleife kann aus 2 Gründen beendet werden:
+    \begin{enumerate}
+      \item \textbf{Return} $i$ (Zeile \ref{return:i}) wenn $A[i]=v$.
+            $I(i)$ gilt genau wie am Anfang des Schleifendurchlaufs,
+            wie in Erhaltung beschrieben, da weder $i$ noch $A$ nach der erfrühten
+            Termination verändert wurde.
+            \label{return:i:description}
+      \item \textbf{Return} \textsc{Nil} (Zeile \ref{return:nil}) wenn
+            $i=n+1$ (bestimmte Modelle von \textbf{for} Enden mit $i=n$;
+            dieselbe Argumentation gilt, aber die Korrektheit muss mühseliger begründet
+            werden).
+            $$I(n+1) := \forall j\in [1,n+1): A[j]\neq v \iff\forall j\in [1,n]: A[j]\neq v$$
+            $I(n+1)$ gilt, da sonst Terminationsfall \ref{return:i:description} erreicht würde.
+            Also: $v$ ist nicht in $A$ enthalten, also wird \textsc{Nil} zurückgegeben.
+            \label{return:nil:description}
+    \end{enumerate}
+    Der Terminationsfall \ref{return:i:description} korrespondieren zum Fall, dass $i$ mit $x_i=v$ zurückgegeben wird.
+    Der Terminationsfall \ref{return:nil:description} korrespondieren zum Fall, dass $\textbf{Nil}$ mit $\not\exists i\in [1,n]: x_i=v$ zurückgegeben wird.
+    Damit erfüllt der Algorithmus das gewünschte Verhalten.
+    \qed
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    Laufzeitbestimmung
+    \begin{algorithm}[H]
+      \caption{\textsc{LinSearch}($A[1, \dots, n], v$)}
+      \begin{algorithmic}[1]
+        \For{$i \gets 1 \to n$} \Comment{$\sum_{i=1}^nT(I)$}
+        \If{$A[i]=v$} \Comment{$O(1)$}
+        \State \textbf{Return} $i$ \Comment{$O(1)$}
+        \EndIf
+        \EndFor
+        \State \textbf{Return} \textsc{Nil} \Comment{$O(1)$}
+      \end{algorithmic}
+    \end{algorithm}
+    Laufzeit: $$\sum_{i=1}^n(O(1)+O(1))+O(1)=O(n)$$
+  \end{teilaufgabe}
+\end{aufgabe}
+\end{document}
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+% Pseudocode
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\setlength{\parindent}{0in}
+
+\newcommand{\uebungsGruppe}{1}
+\newcommand{\zettelNummer}{2}
+\newcommand{\studierenderEins}{Eli Kogan-Wang (7251030)}
+\newcommand{\studierenderZwei}{David Noah Stamm (7249709)}
+\newcommand{\studierenderDrei}{Daniel Heins (7213874)}
+\newcommand{\studierenderVier}{Tim Wolf (7269381)}
+
+\newcounter{AufgabenCounter}
+\setcounter{AufgabenCounter}{1}
+\newcounter{TeilaufgabenCounter}
+\newenvironment{aufgabe}{\section*{Aufgabe \theAufgabenCounter}\setcounter{TeilaufgabenCounter}{1}}{\stepcounter{AufgabenCounter}}
+\newenvironment{teilaufgabe}{\paragraph*{\alph{TeilaufgabenCounter})}}{\stepcounter{TeilaufgabenCounter}}
+
+\renewcommand{\to}{\textnormal{ to }}
+\newcommand{\bigO}{\mathcal{O}}
+
+\newcommand{\qed}{\hfill$\square$}
+
+\begin{document}
+
+\title{Datenstrukturen und Algorithmen \\ Heimübung \zettelNummer{}}
+\author{\studierenderEins{} \\
+  \studierenderZwei{} \\
+  \studierenderDrei{} \\
+  \studierenderVier{}}
+
+\maketitle
+
+% Aufgabe 1
+\begin{aufgabe}
+
+  % Teilaufgabe a)
+  \begin{teilaufgabe}
+
+    $f(n) \subseteq \Omega(g(n)) \\ \Leftrightarrow g(n) \subseteq \mathcal{O}(f(n))$ \\
+    $\Leftrightarrow \exists c, n_0 >0$, so dass $\forall n \ge n_0: g(n) \leq c \cdot f(n) \leq c \cdot f(n)^4$ \\
+    $\Leftrightarrow g(n) \subseteq \mathcal{O}(f(n)^4)$ \\ \\
+    ($ c \cdot f(n) \leq c \cdot f(n)^4$ gilt, da f(n) streng monoton wachsend und positiv ist, für alle $n \ge n_0$)
+
+
+  \end{teilaufgabe}
+
+  % Teilaufgabe b)
+  \begin{teilaufgabe}
+    Zu Zeigen: $\mathcal{O}(f(n)+ g(n))\subseteq \mathcal{O}(f(n))$ falls $g(n) \subseteq \mathcal{O}(f(n))$ \\ \\
+    Sei h: $N \to N$ weitere monotone Funktion mit $h(n) \subseteq {O}(f(n)+ g(n))$ \\ \\
+    Es gilt: \\ \\
+    $g(n) \subseteq \mathcal{O}(f(n))$ \\ \\
+    $\Leftrightarrow \exists c_1, n_1 > 0 $ so dass $\forall n \ge n_1: g(n) \leq c_1 \cdot f(n) $ \\ \\
+    $h(n) \subseteq \mathcal{O}(f(n)+g(n))$ \\ \\
+    $\Leftrightarrow \exists c_2, n_2 > 0 $ so dass $\forall n \ge n_2: h(n) \leq c_2 \cdot (f(n)+g(n)) $ \\ \\
+    $ \rightarrow \exists c_0, n_0 > 0 $ so dass $\forall n \ge n_0: h(n) \leq c_2 \cdot (f(n) + c_2 \cdot (g(n) \leq c_2 \cdot f(n) + c_2\cdot c_1 \cdot f(n) = c_0 \cdot f(n)$ mit $c_0 = (c_2 \cdot c_1 + c_2)$ und $n_0 = max \{n_1,n_2\}$ \\ \\
+    $\Leftrightarrow h(n) \subseteq \mathcal{O}(f(n)) $
+  \end{teilaufgabe}
+
+\end{aufgabe}
+
+% Aufgabe 2
+\begin{aufgabe}
+
+  Wir haben den folgenden Algorithmus entworfen:
+
+
+  \begin{algorithm}[H]
+    \renewcommand{\thealgorithm}{}
+    \caption{FindeLängsteAbsteigendeFolge($A[1, \dots, n]$)}
+    \begin{algorithmic}[1]
+      \State $currentRun \gets 1$ \Comment{$O(1)$}
+      \State $longestRun \gets 1$ \Comment{$O(1)$}
+      \For{$i \gets 1 \to n-1$} \Comment{$\sum_{i=1}^{n-1} T(I)$}
+      \If{$A[i] > A[i+1]$}
+      \State $currentRun \gets currentRun + 1$ \label{increment:currentRun}\Comment{$O(1)$}
+      \If{$currentRun > longestRun$}
+      \State $longestRun \gets currentRun$ \label{set:currentRun} \Comment{$O(1)$}
+      \EndIf
+      \Else
+      \State $currentRun \gets 1$ \label{reset:currentRun} \Comment{$O(1)$}
+      \EndIf
+      \EndFor
+      \State \textbf{Return} $longestRun$ \Comment{$O(1)$}
+    \end{algorithmic}
+  \end{algorithm}
+
+  \textbf{Laufzeitanalyse:}
+  $$O(1)+\sum_{i=1}^{n-1} O(1) = O(1) + O(n) = O(n)$$
+  Alle Operationen in der Schleife benötigen $\mathcal{O}(1)$. Die Schleife wird $n$ mal ausgeführt, weshalb die Asymptotische Worst-Case Laufzeit $\mathcal{O}(n)$ beträgt.\\
+
+  \textbf{Korrektheit:}
+
+  Hilfsdefinitionen:
+
+  $$\begin{aligned}
+       & currentRun_{right}                                                \\
+       & := \max\left(\left\{right-left \left|
+      \begin{aligned}
+           & left\in[1,right)                        \\
+           & \forall j\in[left,right]: A[j] > A[j+1] \\
+        \end{aligned}
+      \right.\right\}\cup\left\{1\right\}\right)                           \\
+       & = \text{maximale Länge eines bei A[right] endendem Teilintervalls
+        mit absteigenden Zahlen}
+    \end{aligned}$$
+
+  $$\begin{aligned}
+       & longestRun_i                                   \\
+       & := \max\left(\left\{
+      currentRun_{right} \left|
+      \begin{aligned}
+         & right\in(1,i] \\
+      \end{aligned}
+      \right.\right\}\cup\left\{1\right\}\right)        \\
+       & =\text{maximale Länge eines Teilintervalls mit
+        absteigenden Zahlen von A[1] bis A[i]}
+    \end{aligned}$$
+
+
+
+  Invariante:
+  $$\begin{aligned}
+      I(i) & :=                      \\
+           & longestRun=longestRun_i \\
+      \land                          \\
+           & currentRun=currentRun_i \\
+    \end{aligned}$$
+
+  \textbf{Initialisierung:}
+  $currentRun=1$\\
+  $longestRun=1$\\
+  $i=1$
+  $$\begin{aligned}
+      I(1) & :=                                                       \\
+           & longestRun = 1 = \max(\emptyset\cup\{1\}) = longestRun_i \\
+      \land                                                           \\
+           & currentRun = 1 = \max(\emptyset\cup\{1\}) = currentRun_i \\
+    \end{aligned}$$
+
+  \textbf{Erhaltung:}
+
+  Angenommen $I(i)$. \\
+  Falls $A[i] > A[i+1]$, so existiert ein bei $A[i+1]$ endendes Teilintervall mit absteigenden Zahlen,
+  dessen Länge um $1$ länger ist, als das Teilintervall mit absteigenden Zahlen, dass bei $A[i]$ endet.
+  Damit setzt Zeile \ref{increment:currentRun} $currentRun$ auf $currentRun_{i+1}$.
+
+  Falls $currentRun$ nun größer ist als $longestRun$, so setzt Zeile \ref{reset:currentRun} $longestRun$ auf $currentRun$.
+  Also wird $longestRun$ auf $longestRun_{i+1}$ gesetzt (Aussagen über $\max$ zu beweisen wird dem Leser überlassen).
+
+  Falls nicht $A[i] > A[i+1]$, so existiert kein bei $A[i+1]$ endendes Teilintervall mit absteigenden Zahlen,
+  dessen Länge um $1$ länger ist, als das Teilintervall mit absteigenden Zahlen, dass bei $A[i]$ endet. Das Teilintervall,
+  mit absteigenden Zahlen, dass bei $A[i+1]$ endet hat also Länge $1$. Damit setzt Zeile \ref{reset:currentRun} $currentRun$ auf $currentRun_{i+1}$.
+
+  In diesem Fall können wir auch festellen, dass $longestRun_i = longestRun_{i+1} = longestRun$.
+  (Aussagen über $\max$ zu beweisen wird dem Leser überlassen)
+
+  Also gilt nach dem Schleifendurchlauf $I(i+1)$.
+
+  \textbf{Termination:}
+
+  Die Schleife endet nach $n-1$ Durchläufen.
+  Danach gilt $I((n-1)+1) = I(n)$.
+  Damit ist $longestRun=longestRun_n$, was zurückgegeben wird.
+
+  \qed
+
+\end{aufgabe}
+
+% Aufgabe 3
+\begin{aufgabe}
+  Für diese Beweise nehme ich an das Log Base e ist. \\
+  1. $3^{n \cdot \log(n^{3})}$ = $3^{3 \cdot n \cdot \log(n)}$ = $(3^3)^{n \cdot \log(n)}$
+  = $ 27^{n \cdot \log(n)}$ = $e^{log(27^{n \cdot \log(n)})} $ \\ \\
+  = $e^{ n \cdot log(n) \cdot log(27)} \subseteq \mathcal{O}(e^{ n \cdot log(n)log(27)})$ \\ \\
+  2. $101010 \subseteq \mathcal{O}(1)$, da $101010 < 101011 \cdot 1 $  \\ \\
+  3. $\sqrt[3]{n}^{\log n} = n^{\frac{1}{3}log(n)} = e^{log(n^{\frac{1}{3}log(n)})} = e^{\frac{1}{3}log(n)log(n)} = e^{\frac{1}{3}log^2(n)} \subseteq \mathcal{O}(e^{log^2(n)}) $ \\ \\
+  4. $2^{20} n^{15} \subseteq \mathcal{O}(n^{15})$,da $2^{20} n^{15} < 2^{42} n^{15} $ \\ \\
+  5. $5^{n-1}$ = $\frac{1}{5} 5^{n} \subseteq \mathcal{O}(5^{n}) \leftrightarrow \mathcal{O}(e^{nlog(5)}) $, da $ \forall n  $ $\frac{1}{5} 5^{n} < 5^{n} $ \\ \\
+  $\rightarrow$ Ordnung der Funktionen:   2,4,3,5,1, da $\mathcal{O}(1) \subseteq \mathcal{O}(n^{15}) \subseteq \mathcal{O}(e^{log^2(n)}) \subseteq \mathcal{O}(e^{n \cdot log(5)}) \subseteq \mathcal{O}(e^{ n \cdot log(n)log(27)}) $
+
+\end{aufgabe}
+
+% Aufgabe 4
+\begin{aufgabe}
+  %Teilaufgabe a
+  \begin{teilaufgabe}
+    Der Algorithmus beginnt bei dem letzten Element im Array und verschiebt es immer weiter nach vorne, bis kein Element weiter vorne im Array größer ist als das aktuelle Element. Dies wird mit jedem Element wiederholt.
+  \end{teilaufgabe}
+
+  % Teilaufgabe b)
+  \begin{teilaufgabe}
+    Invariante innere Schleife: $I_1(i): A[n-i]$ ist das kleinste Element im Array (n-i,n]\\
+    Beweis:
+    \begin{enumerate}
+      \item Intialisierung: $I(1) = A[n-1]$ ist kleinstes Element in $(n-1, n]$, wahr, da die Menge ein elementig ist.
+      \item Erhaltung: Sei die Bedingungen im  Schleifendurchlauf korrekt \\
+            Z.z. : Invariante ist im k + 1 Schleifendurchlauf korrekt \\
+            Fallunterscheidung: \\
+            Fall 1 :$A[n-(k+1)] < A[n-k] \land A[n-k]$ ist kleinstes Element in $A(n-k, n]\\
+              \Rightarrow A[n-(k+1)] $ist kleinstes Element in$ A(n-(k+1),n] =: I(k+1)$\\
+            Fall 2 :$A[n-(k+1)] > A[n-k]$\\
+            $\Rightarrow A[n-(k+1)] \leftrightarrow A[n-k]$\\
+            $\Rightarrow A[n-(k+1)] $ist kleinstes Element in$ A(n-(k+1),n] =: I(k+1)$\\
+            $\rightarrow$ Die Bedingung ist im k + 1 Schleifendurchlaufkorrekt.
+      \item Terminierung: Die Schleife terminiert, wenn $j=i$\\
+            $\Rightarrow A[i] $ist kleinstes Element in $A(i-k,n]$
+    \end{enumerate}
+    Invariante äußere Schleife: $I_2[l]:= [1, \dots, l]$ ist aufsteigend sortiert \\
+    $\Leftrightarrow A[m] $ist das kleinste Element von $ A[m,\dots,a] \forall a \in [1,l)$
+    \begin{enumerate}
+      \item Initialisierung: l = 1 $\rightarrow$  A[m] ist das kleinste Element von $ A[m,\dots,a] \forall k \in [1,1)$ ist wahr.
+      \item Erhaltung: Die Schleifeninvariante ist zu Beginn des i Schleifendurchlaufs korrekt \\
+            Z.z. : Invariante ist im i + 1 Schleifendurchlauf korrekt \\ \\
+            Es gilt:
+            $A[m] $ist das kleinste Element von $ A[m,\dots,a] \forall a \in [1,i)$ \\ (nach Induktionsbehauptung.)  $\land$
+            $A[m] $ist das kleinste Element von $ A[m,\dots,i] $ (folgt aus der inneren Schleifen invariante.) \\ \\
+            $\rightarrow$ $A[m] $ist das kleinste Element von $ A[m,\dots,a] \forall a \in [1,i] $ =:  $I_2[i+1]$ \\
+            $\Rightarrow$ Die Schleifeninvariante ist zu Beginn der i+1-Schleifedurchlaufs korrekt.
+      \item Terminierung: \\ $i=n-1$ \\
+            $A[m] $ist das kleinste Element von $ A[m,\dots,a] \forall a \in [1,n-1)$ $\land$ \\
+            $A[m] $ist das kleinste Element in $ A[m,\dots,n]$
+            $\rightarrow$ $A[m]$ist das kleinste Element von $ A[m,\dots,a] \forall a \in [1,n)$
+            $\Leftrightarrow$ $[1, \dots, n]$ ist aufsteigend sortiert
+    \end{enumerate}
+  \end{teilaufgabe}
+
+  % Teilaufgabe c)
+  \begin{teilaufgabe}
+
+    \begin{algorithm}[H]
+      \renewcommand{\thealgorithm}{}
+      \caption{Sort($A[1\dots n]$)}
+      \begin{algorithmic}[1]
+        \For{$i\gets 1$ to length($A$) $- 1$} \Comment{$\sum_{i=1}^{n-1}T(I)$}
+        \For{$j\gets$ length($A$) downto $i+1$} \Comment{$\sum^{j=n}_{i+1}T(J)$}
+        \If{$A[j] < A[j-1]$} \Comment{1x Compare: $\Theta(1)$}
+        \State$A[j-1] \leftrightarrow A[j]$ \Comment{1x Swap: $\Theta(1)$}
+        \EndIf
+        \EndFor
+        \EndFor
+      \end{algorithmic}
+    \end{algorithm}
+
+    $$T(J):=\Theta(1)+\Theta(1)=\Theta(1)$$
+
+    $$\begin{aligned}
+          & \sum_{i=1}^{n-1}\sum^{j=n}_{i+1}1                                             \\
+        = & (n-1)+(n-2)+\dots+2+1                                                         \\
+        \\
+        = & \frac{\begin{aligned}
+                        & (n- & 1 & )  +  (n- & 2 & )  +     \dots  + & 2 & +         & 1 &   \\
+                      + &     & 1 & +         & 2 & +  \dots  +  (n-  & 2 & )  +  (n- & 1 & ) \\
+                    \end{aligned}}{2} \\
+        = & \frac{\overbrace{n+n+\dots+n+n}^{n-1}}{2}                                     \\
+        = & \frac{n\cdot (n-1)}{2}
+      \end{aligned}$$
+
+    Es werden also $\frac{n\cdot (n-1)}{2}$ Swaps und dieselbe Anzahl von Vergleichen benötigt.
+
+    $$\Theta\left(\frac{n\cdot (n-1)}{2}\right)=\Theta\left(n^2\right)$$
+
+  \end{teilaufgabe}
+\end{aufgabe}
+
+\end{document}
+
+def eli_pow(x, n):
+  result = 1
+  while n > 0:
+    if n % 2 == 1:
+      result = result * x
+    x = x * x
+    n = (n - (n % 2)) / 2 # rechtsshift
+  return result
+
+# I(n) := result * (x_var^n_var) = x_0 ^ n^0
+
+# x_i, n_i, result_i
+# x_{i+1} = x_i \cdot x_i
+# n_{i+1} = \lfloor n_i / 2 \rfloor
+# result_{i+1} = result_i \cdot x^{n_i \mod 2}
+
+# result_i \cdot x^{n_i \mod 2} \cdot x_i \cdot x_i \cdot \lfloor n_i / 2 \rfloor
+
+def david_pow(x, n):
+  result = 1
+  while n > 1:
+    if n % 2 == 1:
+      result = result * x
+    x = x * x
+    n = n // 2
+  return result * x
+
+# print values for pow(3, n) for n to 10
+
+for n in range(0, 11):
+  print("Real:" + str(pow(3, n)))
+  print("Eli:" + str(eli_pow(3, n)))
+  print("David:" + str(david_pow(3, n)))\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\usepackage{graphicx}
+
+% Pseudocode
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\setlength{\parindent}{0in}
+
+\newcommand{\uebungsGruppe}{1}
+\newcommand{\zettelNummer}{1}
+\newcommand{\studierenderEins}{Eli Kogan-Wang (7251030)}
+\newcommand{\studierenderZwei}{David Noah Stamm (7249709)}
+\newcommand{\studierenderDrei}{Daniel Heins (7213874)}
+\newcommand{\studierenderVier}{Tim Wolf (7269381)}
+
+\newcounter{AufgabenCounter}
+\setcounter{AufgabenCounter}{1}
+\newcounter{TeilaufgabenCounter}
+\newenvironment{aufgabe}{\section*{Aufgabe \theAufgabenCounter}\setcounter{TeilaufgabenCounter}{1}}{\stepcounter{AufgabenCounter}}
+\newenvironment{teilaufgabe}{\paragraph*{\alph{TeilaufgabenCounter})}}{\stepcounter{TeilaufgabenCounter}}
+
+\renewcommand{\to}{\textnormal{ to }}
+\newcommand{\bigO}{\mathcal{O}}
+
+\newcommand{\qed}{\hfill$\square$}
+
+\begin{document}
+
+\title{Datenstrukturen und Algorithmen \\ Heimübung \zettelNummer{}}
+\author{\studierenderEins{} \\
+  \studierenderZwei{} \\
+  \studierenderDrei{} \\
+  \studierenderVier{}}
+
+\maketitle
+
+\begin{aufgabe}
+
+  Pow in linearer Zeit:
+  \begin{algorithm}[H]
+    \caption{\textsc{PowLin}($x, n$)}
+    \begin{algorithmic}[1]
+      \State $result \gets 1$ \Comment{$O(1)$}
+      \While{$n > 0$} \Comment{$\sigma_{i=1}^kT(I)$}
+      \If{$n \mod 2 = 1$} \Comment{$O(1)$}
+      \State $result \gets result \cdot x$ \Comment{$O(1)$}
+      \EndIf
+      \State $x \gets x \cdot x$ \Comment{$O(1)$}
+      \State $n \gets (n - (n \mod 2)) / 2$ \Comment{$O(1)$}
+      \EndWhile
+      \State \textbf{Return} $result$ \Comment{$O(1)$}
+    \end{algorithmic}
+  \end{algorithm}
+
+  \textbf{Schleifeninvariante:}
+
+  $$I(n):= result_n \cdot (x_n)^{n} = (x_{orig})^{n_{orig}}$$
+
+  \textbf{Korrektheit:}
+
+  \textbf{Initialisierung:}
+
+  $n = n_{orig}$\\
+  $x = x_{orig}$\\
+  $result = 1$
+  $$result\cdot x^n = (x_{orig})^{n_{orig}}$$
+
+  \textbf{Erhaltung:}
+
+  Gegeben sei für die $i$-te Iteration:
+
+  $$I(n_i) := result_{n_i} \cdot (x_{n_i})^{n_{n_i}} = (x_{orig})^{n_{orig}}$$
+
+  Es gilt: $I(n_i)$.
+
+  Nun ist zu zeigen:
+
+  $$I(n_{i+1}) = result_{n_{i+1}} \cdot (x_{n_{i+1}})^{n_{n_{i+1}}} = (x_{orig})^{n_{orig}}$$
+
+  Durchführung:
+
+  $result_{n_{i+1}}$
+  $$= \begin{cases}
+      result_{n_{i+1}}                   & \text{falls } n_{n_{i+1}} \mod 2 = 0 \\
+      result_{n_{i+1}} \cdot x_{n_{i+1}} & \text{falls } n_{n_{i+1}} \mod 2 = 1 \\
+    \end{cases}
+    = result_{n_i} \cdot x^{n_{n_i} \mod 2}$$
+  $$x_{n_{i+1}}= x_{n_i} \cdot x_{n_i} = x_{n_i}^{2}$$
+  $$n_{n_{i+1}} = \frac{(n_{n_i} - (n_{n_i} \mod 2))}{2}$$
+
+
+  $$\begin{aligned}
+      LHS & = result_{n_{i+1}} \cdot (x_{n_{i+1}})^{n_{n_{i+1}}}                                                   \\
+          & = (result_{n_i} \cdot x^{n_{n_i} \mod 2}) \cdot (x_{n_i}^{2})^{\frac{(n_{n_i} - (n_{n_i} \mod 2))}{2}} \\
+          & = result_{n_i} \cdot x^{n_{n_i} \mod 2} \cdot ((x_{n_i}^{2})^{\frac12})^{(n_{n_i} - (n_{n_i} \mod 2))} \\
+          & = result_{n_i} \cdot x^{(n_{n_i} \mod 2)} \cdot x_{n_i}^{n_{n_i} - (n_{n_i} \mod 2)}                   \\
+          & = result_{n_i} \cdot (x_{n_i})^{n_{n_i}}                                                               \\
+          & \overset{Annahme}{=} (x_{orig})^{n_{orig}}
+    \end{aligned}$$
+
+  \textbf{Laufzeit:}
+
+  Potentialfunktion: $\Psi(n) = \log(n)$\\
+  Wir brechen ab, wenn $n \not > 0$ also, wenn $\log(n) \not > 1$\\
+  Da $n_{i+1} = \frac{(n_{i} - (n_{i} \mod 2))}{2}$:\\
+  $\Psi(n_{i+1}) \leq \Psi(n_i)-1$
+
+  Damit: $k\in O(\frac{\Psi(n)}{1}) = O(\log(n))$\\
+  $O(1)+O(\log(n))+O(1) = O(\log(n))$\\
+  Damit hat der Algorithmus die Laufzeit $O(\log(n))$
+
+\end{aufgabe}
+
+\begin{aufgabe}
+  \begin{teilaufgabe}
+    \begin{algorithm}
+      \caption{\textsc{NonRecMergeSort}($A[1,\dots,2^k]$)}
+
+      \begin{algorithmic}
+        \For{$i \gets 1$ up to $k$}
+        \For{$j \gets 0$ up to $2^{k-i} -1$}
+        \State $Merge(A, 2^i\cdot j+1, 2^i\cdot j+(2^{i-1})+1, 2^i\cdot (j+1))$
+        \EndFor
+        \EndFor
+      \end{algorithmic}
+    \end{algorithm}
+
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    Hilfsdefinitionen:
+
+    $$Sorted(A[n,\dots,m]) := \forall i \in [n,m): A[i] \leq A[i+1]$$
+
+    Invarianten:
+
+    $I(i,j) := \forall l \in [0:2^{k-i}-1-j): Sorted(A[2^{i}\cdot l,\dots,2^{i}\cdot (l + 1) - 1])$
+
+    $I(i) := \forall m \in [1:i): \forall j \in [0:2^{k-i}-1]: Sorted(A[2^{i}\cdot j,\dots,2^{i}\cdot (j + 1) - 1])$
+  \end{teilaufgabe}
+
+\end{aufgabe}
+
+\begin{aufgabe}
+
+  % Image 2022-04-29-DuA_3.JPG
+
+
+  \noindent\makebox[\textwidth]{\includegraphics[width=\textwidth]{2022-04-29-DuA_3.JPG}}
+\end{aufgabe}
+
+\end{document}
+
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{stmaryrd}
+
+\usepackage{graphicx}
+
+% Pseudocode
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\setlength{\parindent}{0in}
+
+\newcommand{\uebungsGruppe}{110}
+\newcommand{\zettelNummer}{4}
+\newcommand{\studierenderEins}{Eli Kogan-Wang (7251030)}
+\newcommand{\studierenderZwei}{David Noah Stamm (7249709)}
+\newcommand{\studierenderDrei}{Daniel Heins (7213874)}
+\newcommand{\studierenderVier}{Tim Wolf (7269381)}
+
+\newcounter{AufgabenCounter}
+\setcounter{AufgabenCounter}{1}
+\newcounter{TeilaufgabenCounter}
+\newenvironment{aufgabe}{\section*{Aufgabe \theAufgabenCounter}\setcounter{TeilaufgabenCounter}{1}}{\stepcounter{AufgabenCounter}}
+\newenvironment{teilaufgabe}{\paragraph*{\alph{TeilaufgabenCounter})}}{\stepcounter{TeilaufgabenCounter}}
+
+\renewcommand{\to}{\textnormal{ to }}
+\newcommand{\bigO}{\mathcal{O}}
+
+\newcommand{\qed}{\hfill$\square$}
+
+% Load the setspace package
+\usepackage{setspace}
+\doublespacing
+
+\begin{document}
+
+\title{Datenstrukturen und Algorithmen \\ Heimübung \zettelNummer{}}
+\author{\studierenderEins{} \\
+  \studierenderZwei{} \\
+  \studierenderDrei{} \\
+  \studierenderVier{}}
+
+\maketitle
+
+\begin{aufgabe}
+  Herleitung der geschlossenen Formel T(n): \\
+  Angenommen $n  = 4^{k}$
+  $$
+    \begin{aligned}
+      T(n) & = T\left(4^{k}\right)                                                                                                                        \\
+           & = 4 T\left(\frac{4^{k}}{4}\right) + \sqrt{4^{k}} \cdot c_2                                                                                   \\
+           & = 4 \cdot T\left(4^{k-1}\right) + 2^{k} \cdot c_2                                                                                            \\
+           & = 4 \left(4 \cdot T\left(4^{k-2}\right)+ 2^{k-1} \cdot c_2\right) + 2^{k} \cdot c_2                                                          \\
+           & = 4^{2} \underbrace{T\left(4^{k-2}\right)}_\text{sukzessives Einsetzen} + 2^{k+1} \cdot c_2 + 2^{k} \cdot c_2                                \\
+           & = 4^{k} c_1 + \left(\sum_{j=0}^{k-1} 2^{k+i}\right)c_2                                                                                       \\
+           & = 4^{k} c_1 + \left(2^{k} \cdot \sum_{j=0}^{k-1} 2^{i}\right)c_2                                              & | \text{ geometrische Summe} \\
+           & = 4^{k} c_1 +  2^{k} \left(\frac{1-2^{k}}{1-2}\right)c_2                                                                                     \\
+           & = 4^{k} c_1 +  2^{k} \left(2^{k}-1\right)c_2                                                                                                 \\
+           & = 4^{k} \left(c_1 + c_2\right) - 2^{k}c_2
+    \end{aligned}
+  $$
+
+  Korrektheitsbeweis der Formel durch vollständige Induktion:  \\
+  Beh. : $$T(n) = T(4^{k}) = 4^{k} (c_1 + c_2) - 2^{k}c_2 $$
+
+  I.A.: $n = 1$
+
+  $T(1) = T(4^{0}) = c_1 = 4^{0} (c_1 + c_2) - 2^{0}c_2 $
+
+  I.V.: Es gilt: $T(4^{k-1}) = 4^{k-1} (c_1 + c_2) - 2^{k-1}c_2 $
+
+  I.S.: Zu Zeigen: $T(n) = T(4^{k}) = 4^{k} (c_1 + c_2) - 2^{k}c_2 $
+
+  Nach Definition von $T(n)$ gilt (da $n > 1$ ist):
+
+  $$
+    \begin{aligned}
+      T(n) & = T(4^{k})                                                                           \\
+           & = 4 T(\frac{4^{k}}{4}) + \sqrt{4^{k}} \cdot c_2                                      \\
+           & = 4 \cdot T(4^{k-1})+ 2^{k} \cdot c_2                                                \\
+           & \stackrel{IV}{=} 4 \cdot (4^{k-1} (c_1 + c_2) - 2^{k-1}c_2) + \sqrt{4^{k}} \cdot c_2 \\
+           & = 4^{k}(c_1 + c_2)-2^{k+1}c_2 + 2^{k}\cdot c_2                                       \\
+           & = 4^{k} (c_1 + c_2) - 2^{k}c_2                                                       \\
+    \end{aligned}
+  $$
+
+  \qed
+
+\end{aufgabe}
+\begin{aufgabe}
+  Aus der Rekursionsgleichung folgt: $a = 2,  b = 2 $ und $f(n) = n\log n$\\
+  $\Rightarrow $ $n^{\log_b(a)} = n^{\log_2(2)} = n^1$ \\
+  $f(n) = n\log n = n^{\log_n(n\log_2n)} = n^{\log_n(n)+\log_n\log_2(n)} = n^{1+\log_n\log_2(n)}$ \\
+  Das Mastertheorem kann nur angewendet werden, \\
+  falls f(n) $\in\mathcal{O}(n^{1- \varepsilon }) \lor f(n) \in \Theta(n)
+    \lor (f(n) \in \Omega(n^{1+\varepsilon}) \land a\cdot f(\frac{n}{b}) \leq c \cdot f(n))   $
+
+  Es gilt trivialerweise:
+  $$
+    \begin{aligned}
+      n^{1 + \log_n\log_2(n)}                 & \not\in\mathcal{O}(n)                    \\
+      \Rightarrow n^{1 + \log_n\log_2(n)}     & \not\in\mathcal{O}(n^{1- \varepsilon } ) \\
+      \text{und\quad }n^{1 + \log_n\log_2(n)} & \not\in \Theta(n)
+    \end{aligned}
+  $$
+  Ist $f(n) \in \Omega(n^{1+\varepsilon})$ ? \\
+  $\iff \exists c, n_0>0$, so dass $\forall n \geq n_0: n^{1+\log_n\log_2(n)} \geq c \cdot n^{1+\varepsilon} $ \\
+  Dies für $ c = 1 $ und $ \varepsilon = \frac{1}{10}$ erfüllt \\
+  $ \Rightarrow f(n) \in \Omega(n^{1+\varepsilon}) $, aber die zweite Bedingung ist nicht erfüllt\\
+  $2 \cdot \frac{n}{2} \log(\frac{n}{2}) \leq c \cdot n \cdot \log (n)  $ \\
+  $n \cdot \log(\frac{n}{2}) \leq c \cdot n \cdot \log (n)  $ \\
+  Diese Bedingung wird nur von c = 1 erfüllt, da
+
+  $ \displaystyle \lim_{n \rightarrow \infty} \frac{n \cdot \log(\frac{n}{2})}{n \cdot log (n)}$ \\
+  $ = \displaystyle \lim_{n \rightarrow \infty} \frac{\log(\frac{n}{2})}{\log (n)}$ \\
+  Da $\displaystyle \lim_{n \rightarrow \infty} \log(\frac{n}{2}) = \infty$
+  $ \land \displaystyle \lim_{n \rightarrow \infty} \log(n) = \infty$ gilt, \\
+  kann die Regel vom Krankenhaus angewendet werden :°) \\
+  $\displaystyle \lim_{n \rightarrow \infty} \frac{\log(\frac{n}{2})}{\log (n)} $
+  $ = \displaystyle \lim_{n \rightarrow \infty} \frac{ \frac{\mathrm{d} }{\mathrm{d}n} \log(\frac{n}{2})}{ \frac{\mathrm{d} }{\mathrm{d}n}log (n)}
+    =\displaystyle \lim_{n \rightarrow \infty} \frac{ \frac{\mathrm{d} }{\mathrm{d}n} \log(n) - \log(2)}{ \frac{\mathrm{d} }{\mathrm{d}n}log (n)}$\\
+  $\displaystyle \lim_{n \rightarrow \infty} \frac{\frac{1}{n}}{\frac{1}{n}} = \displaystyle \lim_{n \rightarrow \infty} 1 = 1 \quad\left[\text{d.h. sie sind asympt. äquiv.}\right]$\\
+  $\Rightarrow c = 1 \lightning c < 1  $ \\
+  $\Rightarrow$ Die Rekursionsgleichung kann nicht mit dem allgemeinen Master-Theorem analysiert werden
+\end{aufgabe}
+\begin{aufgabe}
+  \begin{teilaufgabe}
+    \begin{algorithm}[H]
+      \caption{\textsc{3Sort}($A, i, j$)}
+      \begin{algorithmic}[1]
+        \If{$j\leq i+1$}
+        \If{$A[i] > A[j]$}
+        \State $A[i] \leftrightarrow A[j]$
+        \EndIf
+        \State return
+        \EndIf
+        \State $k \gets \left\lfloor\frac{j-i+1}{3}\right\rfloor$
+        \State 3Sort($A, i, j-k$) \label{3Sort:1}
+        \State 3Sort($A, i+k, j$) \label{3Sort:2}
+        \State 3Sort($A, i, j-k$) \label{3Sort:3}
+      \end{algorithmic}
+    \end{algorithm}
+
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    Sei $n:=len(A)$.
+    Beweis über Induktion über $n$:\\
+    \textbf{Basisfall:}\\
+    $n = 0$: Trivial\\
+    $n = 1$: Trivial\\
+    $n = 2$:
+
+    Mit $a>b$:
+
+    $A\gets [a,b];\mathrm{3Sort}(A,0,1)\implies A=[b,a]$\\
+    $A\gets [b,a];\mathrm{3Sort}(A,0,1)\implies A=[b,a]$
+
+    Nun Induktion:
+
+    Sei $n\in\mathbb{N}$
+
+    Angenommen $3Sort(A,i,j)$ sortiert $A$ wenn $j-i+1\leq n$
+
+    Zu zeigen ist: $3Sort(A,i,j)$ sortiert $A$ wenn $j-i+1=n+1$
+
+
+
+    Wir betrachten eine Ausführung von 3Sort mit $j-i+1=n+1$:
+
+    3Sort in Zeile \ref{3Sort:1} sortiert $A[i:j-k]$, da
+    $$((j-k)-i+1)=\left(\left(j-\left\lfloor\frac{j-i+1}{3}\right\rfloor\right)-i+1\right)=\left\lceil\frac{2}{3}\cdot(j-i+1)\right\rceil \leq n$$
+
+    $A=(a|b|c)$ wobei $a,b,c$ die drittel von $A$ sind.
+
+    Da $A[i:j-k]$ nun sortiert ist, ist bekannt, dass das zweite $\frac13$ von $A$ ($b$) größer als das erste $\frac13$ von $A$ ($a$) ist.
+    Da jedes Element aus $a$ nun mindestens $\frac13\cdot(n+1)$ Elemente über sich hat mit wissen wir, dass kein Element der obersten $\frac13$ von $A$ ($c$) im ersten $\frac13$ von $A$ ($a$) ist.
+    Alle Elemente, die am Ende in $c$ sein sollen sind nun in $(b|c)$.
+
+    Nach der Ausführung von 3Sort in Zeile \ref{3Sort:2} ist damit $c$ korrekt populiert.
+
+    Alle Elemente von $a,b$ befinden sich in $(a|b)$ und $c$ hat keine Elemente von $a$ und $b$.
+    Nach der Ausführung von 3Sort in Zeile \ref{3Sort:3} ist damit $a,b$ korrekt populiert.
+    $c$ wurde nicht geändert und ist immernoch korrekt populiert. Nun ist $A=(a|b|c)$ sortiert.
+  \end{teilaufgabe}
+
+  \begin{teilaufgabe}
+
+    $$T(n)=\begin{cases}
+        1                        & \text{falls } n=1     \\
+        3\cdot T(\frac{2}{3}n)+1 & \text{falls } n\geq 2 \\
+      \end{cases}$$
+    Nach Mastertheorem:
+
+    $a=3;b=\frac{3}{2};c=1$
+
+    Da $a>b$: $T(n)\in\Theta(n^{\log_{}\frac{3}{2}(3)})$
+
+  \end{teilaufgabe}
+\end{aufgabe}
+
+\end{document}
+
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{graphics}
+\usepackage{stmaryrd}
+% Pseudocode
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\graphicspath{ {./images/} }
+
+\setlength{\parindent}{0in}
+
+\newcommand{\uebungsGruppe}{110}
+\newcommand{\zettelNummer}{5}
+\newcommand{\studierenderEins}{Eli Kogan-Wang (7251030)}
+\newcommand{\studierenderZwei}{David Noah Stamm (7249709)}
+\newcommand{\studierenderDrei}{Daniel Heins (7213874)}
+\newcommand{\studierenderVier}{Tim Wolf (7269381)}
+
+\newcounter{AufgabenCounter}
+\setcounter{AufgabenCounter}{1}
+\newcounter{TeilaufgabenCounter}
+\newenvironment{aufgabe}{\section*{Aufgabe \theAufgabenCounter}\setcounter{TeilaufgabenCounter}{1}}{\stepcounter{AufgabenCounter}}
+\newenvironment{teilaufgabe}{\paragraph*{\alph{TeilaufgabenCounter})}}{\stepcounter{TeilaufgabenCounter}}
+
+\renewcommand{\to}{\textnormal{ to }}
+\newcommand{\bigO}{\mathcal{O}}
+
+\newcommand{\qed}{\hfill$\square$}
+
+\begin{document}
+
+\title{Datenstrukturen und Algorithmen \\ Heimübung \zettelNummer{}}
+\author{\studierenderEins{} \\
+  \studierenderZwei{} \\
+  \studierenderDrei{} \\
+  \studierenderVier{}}
+
+\maketitle
+
+% Aufgabe 1
+\begin{aufgabe}
+  \begin{teilaufgabe}
+    Es gilt: $n = 4^{k}$ \\
+    Nach Rekursionsgleichung: \\
+    $a = b = 3$ ($\implies n^{\log_b{a}} = n^{\log_3{3}}= n )$ \\
+    und $f(n) = \frac{n}{4} = 4^{k-1} $\\
+    n $\neq 3^{k} $ \\
+    $\implies$ allgemeines Mastertheorem muss angewendet werden. \\ \\
+    Untersuchung der Laufzeit der Rekursionsgleichgung durch das allgemeine Mastertheorem: \\ \\
+    Liegt $f(n) \in \Theta(n)$ ? \\ \\
+    $f(n) \in \Theta(n)$ \\
+    $\iff \exists c_1, c_2, n_0 > 0 $ so dass $\forall n \ge n_0: c_1 \cdot n\leq f(n) \leq c_2 \cdot n $ \\
+    Dies ist für $c_1 = \frac{1}{8}, c_2 = 1$ und $n_0 = 42069$ erfüllt. \\
+    $\implies$ Nach dem Mastertheorem hat T(n) $\in \mathcal{O}(n \cdot log(n))$
+
+  \end{teilaufgabe}
+
+  \begin{teilaufgabe}
+    Es gilt : $n = 2^{k}$ \\
+    Nach Rekursionsgleichung: \\
+    $a = 8 $ $b = 2$ ($\implies n^{\log_b{a}} = n^{\log_2{8}}= n^{3} )$\\
+    und $f(n) = n^{4} \cdot \log (n) $\\
+    Da $n=2{k} = b^{k}$, aber f(n) nicht konstant ist, kann  das "vereinfachte" Mastertheorem nicht angewendet werden. \\
+    Untersuchung der Laufzeit der Rekursionsgleichung durch das allgemeine Mastertheorem: \\
+    Offentsichtlicherweise gilt $f(n) \notin \Theta(n^3)$ \\
+    Liegt $f(n) \in \mathcal{O}(n^{3- \epsilon})$ ? \\ \\
+
+    Offensichtlicherweise gilt $f(n) \notin \mathcal{O}(n^{3})$ \\
+    $\implies f(n) \notin \mathcal{O}(n^{3- \epsilon})$ \\
+    Liegt $f(n) \in \Omega(n^{3+\epsilon})$ ? \\ \\
+    $f(n) \in \Omega(n^{3+\epsilon})$ \\
+    $\iff \exists c, n_0 >0$, so dass $\forall n \geq n_0: n^{4} \cdot \log (n) \geq c \cdot n^{3+\varepsilon} $ \\
+    Dies ist für $c = 1$ und $\epsilon = 1$ erfüllt \\
+    Nun ist noch zu überprüfen, ob $a \cdot f(\frac{n}{b}) \leq c \cdot f(n)$ \\ \\
+    $a \cdot f(\frac{n}{b}) \leq c \cdot f(n)$ = $8 \cdot f(\frac{n}{2}) \leq c \cdot f(n)$ \\
+    = $8 \cdot (\frac{n}{2})^{4} \cdot \log (\frac{n}{2}) \leq c \cdot n ^{4} \cdot \log (n)$ \\
+    = $2^{3} \cdot \frac{n^{4}}{2^{4}} \cdot \log (\frac{n}{2}) \leq c \cdot n ^{4} \cdot \log (n)$ \\
+    = $ \frac{n^{4}}{2} \cdot (\log (n) - \log (2)) \leq c \cdot n ^{4} \cdot \log (n)$ \\
+    Diese Ungleichung ist z.B. für $c = \frac{2}{3}$ erfüllt. \\
+    $\implies $Nachdem Mastertheorem gilt: $ f(n) \in \Theta(n ^{4} \cdot \log (n)$, da $\exists c < 1$
+  \end{teilaufgabe}
+\end{aufgabe}
+
+% Aufgabe 2
+\begin{aufgabe}
+  \begin{teilaufgabe}
+    Beweis durch Wiederspruch: o.B.d.A das kleinste Element kommt nicht doppelt im Heap vor.
+    Angenommen das kleinste Element := w wäre kein Blatt. \\
+    $\overset{Form-Invariante}\implies$ w hat kinder $\overset{Heap-Invariante}\implies$ die Kinder haben einen kleineren Wert als w: $\lightning$
+
+    w ist kleinstes Element des Heaps. \qed
+  \end{teilaufgabe}
+
+  \begin{teilaufgabe}
+    Gegenbeispiel \\ \includegraphics[scale=0.5]{2022-05-13-HÜ 5 2b.JPG} \\
+  \end{teilaufgabe}
+
+  \begin{teilaufgabe}
+  \end{teilaufgabe}
+\end{aufgabe}
+
+% Aufgabe 3
+\begin{aufgabe}
+  Es wird ein n-elementiger Min-Heap betrachtet:
+  \begin{teilaufgabe}
+    Z.Z.: Die Höhe (der Wurzel) beträgt $\lfloor \log(n) \rfloor$ \\
+    Beweis: \\
+    Fallunterscheidung: \\
+    Fall 1: Sei $\log (n) \in \mathbb{N}$. \\
+    $\overset{Form-Invariante}\implies$ Min heap ist ein vollständiger Binärbaum. Da dieser auf jeder Ebene mit der maximalen Anzahl an Knoten bestückt ist.\\
+    $\implies$ In jeder Ebene wird die Anzahl der Knoten verdoppelt. Dies ist maximal $\log(n)$ mal möglich. \\
+    $\implies \forall$ Blattknoten $\exists! $ Phad der Länge $ \log (n)$ zur Wurzel des Baumes. \\
+    $\implies$ Die Höhe des Baumes ist $\log(n)$ \\ \\
+    Fall 2:Sei $\log (n) \notin \mathbb{N}$. \\
+    $\overset{Form-Invariante}\implies$ Min heap ist ein vollständiger Binärbaum, bis auf die unterste Ebene.\\
+    $\implies$ In jeder Ebene wird die Anzahl der Wurzeln verdoppelt. Dies ist maximal $\log(n-1)$ mal möglich. Die übrigen Konten sind Blätter in der untersten Ebene. \\
+    $\implies \forall $ Blattknoten in der untersten $\exists! $ Phad der Länge $\lfloor \log(n) \rfloor$ zur Wurzel des Baumes. \\
+    $\implies$ Die Höhe ist Baumes ist $\lfloor \log(n) \rfloor$  \\ \\
+    $\implies$ Aussage \qed
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    Z.Z. Es gibt höchstens $ \lceil \frac{n}{2^{h+1}} \rceil $ Knoten mit der höhe h \\ \\
+    Beweis durch vollständige Induktion über die Höhe des Baumes:\\
+    Sei $k_h :=$ Die maximal Anzahl der Knoten auf Höhe h \\
+    IA: h = 0: Der Baum besteht aus einem Blatt  $\iff$ n = 1 \\
+    $\implies$ $k_0 = 1 = \lceil \frac{1}{2^{0+1}} \rceil$ \\
+    IV: Es gelte für ein beliebiges, aber festes i:  h = i $k_i  = \lceil \frac{n}{2^{i+1}} \rceil$ \\
+    IS: Z.Z. Für h = i+1 gilt: $k_{i+1}  = \lceil \frac{n}{2^{(i+1)+1}} \rceil = \lceil \frac{n}{2^{i+2}} \rceil$ \\
+    %% Nach a gilt: Die Höhe (der Wurzel) beträgt $\lfloor \log(n) \rfloor$ \\
+    %%$\implies$ i+1 = $\log(k)$ $\land$ i = $\lfloor \log(k+1) \rfloor $mit k $ \in \mathbb{N}$ \\
+    Form-Invariante: Der Baum ist ein vollständiger Binärbaum bis auf die untersten Ebene \\
+    $\iff$ $k_{i+1} = $ $\frac{1}{2}$ $\cdot k_i \overset{I.V.}= \frac{1}{2} $ $\cdot (\lceil \frac{n}{2^{i+1}} \rceil)$ = $\lceil \frac{n}{2^{(i+2)}} \rceil$ \\
+    (Die oberen Gausklammern sind hier notwendig, da der Baum auf der untersten Ebene nicht umbedingt vollständig ist. \\
+    Nach dem Induktionsprinzip gilt für h = i:  $k_i  = \lceil \frac{n}{2^{i+1}} \rceil $ $ \forall i \in \mathbb{N}$ \qed
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    Z.Z Die worst-case Laufzeit von Heapify ist $\Omega(\log (n))$ \\
+    Beweis:
+
+    \includepdf[pages=-]{2022-05-13-DuA-beiProfGharibian-Heimblatt-05.pdf}
+
+  \end{teilaufgabe}
+\end{aufgabe}
+\end{document}
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{graphics}
+\usepackage{stmaryrd}
+% Pseudocode
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\graphicspath{ {./images/} }
+
+\setlength{\parindent}{0in}
+
+\newcommand{\uebungsGruppe}{110}
+\newcommand{\zettelNummer}{5}
+\newcommand{\studierenderEins}{Eli Kogan-Wang (7251030)}
+\newcommand{\studierenderZwei}{David Noah Stamm (7249709)}
+\newcommand{\studierenderDrei}{Daniel Heins (7213874)}
+\newcommand{\studierenderVier}{Tim Wolf (7269381)}
+
+\newcounter{AufgabenCounter}
+\setcounter{AufgabenCounter}{1}
+\newcounter{TeilaufgabenCounter}
+\newenvironment{aufgabe}{\section*{Aufgabe \theAufgabenCounter}\setcounter{TeilaufgabenCounter}{1}}{\stepcounter{AufgabenCounter}}
+\newenvironment{teilaufgabe}{\paragraph*{\alph{TeilaufgabenCounter})}}{\stepcounter{TeilaufgabenCounter}}
+
+\renewcommand{\to}{\textnormal{ to }}
+\newcommand{\bigO}{\mathcal{O}}
+
+\newcommand{\qed}{\hfill$\square$}
+
+\begin{document}
+
+\title{Datenstrukturen und Algorithmen \\ Heimübung \zettelNummer{}}
+\author{\studierenderEins{} \\
+  \studierenderZwei{} \\
+  \studierenderDrei{} \\
+  \studierenderVier{}}
+
+\maketitle
+
+% Aufgabe 1
+\begin{aufgabe}
+  % Angenommen, die Funktion Partiton teilt Teilarrays der Größen n immer in zwei Teilarrays auf,
+  % von denen eines (1 − α) · n Elemente und das andere α · n Elemente enthält, mit 1
+  % 2 ≤ α < 1. Geben
+  % Sie die Rekursionsgleichung f ̈ur die Laufzeit von Quicksort unter dieser Annahme an und leiten
+  % Sie (ohne Verwendung des Master Theorems) eine geschlossene Form her. Geben Sie zus ̈atzlich
+  % die Laufzeit im O-Kalkül in Abh ̈angigkeit von α und n an.
+
+  \begin{algorithm}[H]
+    \caption{\textsc{Quicksort}($A[1...n], l, r$) $O(f(n))$}
+    \begin{algorithmic}[1]
+      \If{p<r}\Comment{$O(1)$}
+      \State $q\gets$ Partition($A,p,r$)\Comment{$O(n)$}
+      \State Quicksort(A,p,q-1)\Comment{$O(f(n\cdot (1-\alpha)))$}
+      \State Quicksort(A,q+1,r)\Comment{$O(f(n\cdot \alpha))$}
+      \EndIf
+    \end{algorithmic}
+  \end{algorithm}
+
+  $$f(n)=n+f(n\cdot \alpha)+f(n\cdot (1-\alpha))$$
+
+  Da die Rekursionstiefe für $\alpha > \frac12$ nicht Fest ist können wir keine exakte Geschlossene Formel angeben. Aber eine Analyse im O-Kalkühl ist möglich:
+
+  $$\begin{aligned}
+      O(f(n)) & =O(n+f(n\cdot (1-\alpha))+f(n\cdot \alpha))                                                     \\
+              & =O(n+2\cdot f(n\cdot\alpha))\quad \text{da}n\cdot (1-\alpha) \leq n\cdot\alpha                  \\
+              & =O(n+2\cdot n\cdot\alpha + \dots + 2^{k-1}\cdot n\cdot\alpha^{k-1} +2^k\cdot f(n\cdot\alpha^k)) \\
+              & \text{für } k = \log_{\frac{1}{\alpha}}(n)                                                      \\
+              & =O(n+2\cdot n\cdot\alpha + \dots + 2^{k-1}\cdot n\cdot\alpha^{k-1})                             \\
+              & = O(n) + O(2\cdot n\cdot alpha) + \dots + O(2^{k-1}\cdot n\cdot alpha^{k-1})                    \\
+              & = O(n) + \underbrace{O(n) +\dots+ O(n)}_{\text{k-mal}}                                          \\
+              & = O(k\cdot n)                                                                                   \\
+              & = O(n\cdot \log_{\frac{1}{\alpha}}(n))
+    \end{aligned}$$
+\end{aufgabe}
+
+\begin{aufgabe}
+  % embed 2022-05-19-Blatt-6-Aufgabe-2.pdf
+
+  \includepdf[pages=-]{2022-05-19-Blatt-6-Aufgabe-2.pdf}
+
+\end{aufgabe}
+
+\begin{aufgabe}
+  \includepdf[pages=-]{2022-05-19-Blatt-6-Aufgabe-3.pdf}
+\end{aufgabe}
+\end{document}
+  \documentclass{article}
+
+  \usepackage[utf8]{inputenc}
+  \usepackage[ngerman]{babel}
+  \usepackage{amssymb}
+  \usepackage{amsmath}
+  \usepackage{graphics}
+  % Pseudocode
+  \usepackage{algorithm}
+  \usepackage[noend]{algpseudocode}
+  \usepackage{graphicx}
+  \usepackage{pdfpages}
+
+  \usepackage{tikz}
+
+  \setlength{\parindent}{0in}
+
+  \newcommand{\zettelNummer}{10}
+  \newcommand{\studierenderEins}{Eli Kogan-Wang (7251030)}
+  \newcommand{\studierenderZwei}{David Noah Stamm (7249709)}
+  \newcommand{\studierenderDrei}{Daniel Heins (7213874)}
+  \newcommand{\studierenderVier}{Tim Wolf (7269381)}
+
+  \newcounter{AufgabenCounter}
+  \setcounter{AufgabenCounter}{1}
+  \newcounter{TeilaufgabenCounter}
+  \newenvironment{aufgabe}{\section*{Aufgabe \theAufgabenCounter}\setcounter{TeilaufgabenCounter}{1}}{\stepcounter{AufgabenCounter}}
+  \newenvironment{teilaufgabe}{\paragraph*{\alph{TeilaufgabenCounter})}}{\stepcounter{TeilaufgabenCounter}}
+
+  \renewcommand{\to}{\textnormal{ to }}
+  \newcommand{\bigO}{\mathcal{O}}
+
+  \newcommand{\qed}{\hfill$\square$}
+
+\begin{document}
+
+\title{Datenstrukturen und Algorithmen \\ Heimübung \zettelNummer{}}
+\author{\studierenderEins{} \\
+  \studierenderZwei{} \\
+  \studierenderDrei{} \\
+  \studierenderVier{}}
+
+\maketitle
+
+% Aufgabe 1
+\begin{aufgabe}
+  Für die Adjazenzlistendarstellung:
+
+  Sei $G_{new}$ ein neuer leerer Graph in Adjazenzlistendarstellung. Er wird im Laufe des Algorithmus
+  mit den Einträgen des Transponierten Graphen $G^T$ erweitert.
+
+  Für jeden Knoten $v$ aus $V(G)$: ($|V|$ mal)
+
+  Wir fügen $v$ zu $G_{new}$ hinzu. ($O(1)$)
+
+  Für jeden Knoten $v$ aus $V(G)$: ($|V|$ mal)
+
+  Wir iterieren über die ursprüngliche Adjazenzliste
+  $A(v)$ mit $v_{adj}$ adjazent zu $v$: ($|A(v)|$ mal)
+
+  Wir fügen zur Adjazenzliste von $v_{adj}$ den Knoten $v$ hinzu. ($O(1)$)
+
+  Nun ist $G_{new}$ eine Adjazenzlistendarstellung von $G^T$.
+
+  Bemerkung: $|V|\cdot|A(v)|$ = $O(|E|)$
+
+  Das heißt wir üben $O(|V|+|E|)$ Elementare Operationen aus.
+
+  Der Algorithmus ist korrekt, weil er alle und nur diese Kanten aus $G^T$ dem
+  Graphen $G_{new}$ hinzufügt.
+
+  \rule{\textwidth}{0.5pt}
+
+  Für die Adjazenzmatrixdarstellung:
+
+  Sei $G_{new}$ ein neuer kantenloser Graph in Adjazenzmatrixdarstellung
+  über dieselben Knoten $V$ aus $G$.
+
+  Nun sei $A$ die Adjazenzmatrix von $G$ und $A_{new}$ die Adjazenzmatrix von $G_{new}$.
+
+  Nun für $1\leq i\leq |V|$: ($O(|V|)$) Und $1\leq j\leq |V|$: ($O(|V|)$)
+
+  $A_{new}(j,i) = A(i,j)$ ($O(1)$)
+
+  Nun ist $A_{new}=A^T$ und $G_{new}$ eine Adjazenzmatrixdarstellung von $G^T$.
+
+  Der Algorithmus übt $O(|V|^2)$ Elementare Operationen aus.
+
+  Die Korrektheit des Algorithmus lässt sich aus der Vertauschung der Indizes $i$ und $j$
+  begründen.
+\end{aufgabe}
+
+% Aufgabe 2
+\begin{aufgabe}
+
+  Der Algorithmus \textsc{Bipartite-Check-Breadth-First-Search} nimmt einen Graphen $G$ und einen Startknoten $s\in V$.
+
+  \begin{algorithm}[H]
+    \caption{\textsc{Bipartite-Check-Breadth-First-Search}($G, s$)}
+    \begin{algorithmic}[1]
+      \For{jeden Knoten $u$ in $V\backslash\{s\}$}
+      \State $color[u]\gets WHITE$
+      \State $\pi[u]\gets NIL$
+      \EndFor
+      \State $color[s]\gets GRAY$
+      \State $\pi[s]\gets NIL$
+      \State $Q\gets\{\}$
+      \State Enqueue($Q$, $s$)
+      \While{$Q\neq\emptyset$}
+      \State $u\gets$ Dequeue($Q$)
+      \If{$color[u]=GRAY$}
+      \State otherColor $\gets BLACK$
+      \Else
+      \State otherColor $\gets GRAY$
+      \EndIf
+      \For{jeden Knoten $v$ in $A(u)$} \Comment{$A(u)$: Nachbarn von $u$}
+      \If{$color[v]=WHITE$}
+      \State $color[v]\gets $ otherColor
+      \State $\pi[v]\gets u$
+      \State Enqueue($Q$, $v$)
+      \ElsIf{$color[v]\neq$ otherColor}
+      \State \textbf{return} \textsc{false}
+      \EndIf
+      \EndFor
+      \EndWhile
+      \State \textbf{Return} \textsc{true}
+    \end{algorithmic}
+  \end{algorithm}
+
+  Wir reduzieren das Problem der Bipartitheitsprüfung auf den der $2$-Färbbarkeit.
+
+  Mithilfe der Breitensuche könenn wir die $2$-Färbung auf $G$ versuchen und bei einem Konflikt
+  abbrechen.
+
+  Ein Graph ist genau dann $2$-Färbbar, wenn er bipartit ist.
+
+  Unser Algorithmus ist damit korrekt, weil true rückgibt, genau dann wenn der Graph $2$-Färbbar ist.
+  Und weil er false rückgibt, wenn der Graph nicht $2$-Färbbar ist.
+
+  Die Laufzeit einer Breitensuche ist aus der Vorlesung mit $O(|V|+|E|)$ Elementaren Operationen bekannt und wurde hierbei  nur durch Elementare Operationen Erweitert, weswegen dieser weiterhin in O(|V|+|E|) liegt.
+\end{aufgabe}
+
+\begin{aufgabe}
+
+  Der vorgeschlagene Algorithmus besteht aus 3 Phasen:
+
+  1. Phase:
+
+  Aufteilen der Kanten mit Gewichtung $w\neq 1$ in $w$-Kanten mit Gewichtung $1$.
+
+  Man fügt zusätzliche Knoten hinzu und ballert dadurch zusätzliche Kanten rein.
+
+  Laufzeit: $O(|E|\cdot k)$ (da $w\in [1,k]$)
+
+  2. Phase:
+
+  Breitensuche
+
+  Laufzeit: $O((|V|+|E|)\cdot k)$ da wir Knoten und Kanten hinzugefügt haben.
+
+  3. Phase:
+
+  Vergessen der neu hinzugefügten Knoten+Kanten.
+
+  Wir vergessen die neu hinzugefügten Knoten und Kanten in den gefundenen kürzesten Pfaden.
+
+  Laufzeit: $O(|V|\cdot k)$ (da wir nur Ergebnisse für jeden Knoten speichern und maximal $k$ Knoten+Kanten pro Knoten vergessen)
+
+  Die Gesamtlaufzeit ist damit $O(|V|+|E|\cdot k)$
+\end{aufgabe}
+\end{document}
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{graphics}
+% Pseudocode
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{graphicx}
+
+\setlength{\parindent}{0in}
+
+\newcommand{\uebungsGruppe}{1}
+\newcommand{\zettelNummer}{7}
+\newcommand{\studierenderEins}{Eli Kogan-Wang (7251030)}
+\newcommand{\studierenderZwei}{David Noah Stamm (7249709)}
+\newcommand{\studierenderDrei}{Daniel Heins (7213874)}
+\newcommand{\studierenderVier}{Tim Wolf (7269381)}
+
+\newcounter{AufgabenCounter}
+\setcounter{AufgabenCounter}{1}
+\newcounter{TeilaufgabenCounter}
+\newenvironment{aufgabe}{\section*{Aufgabe \theAufgabenCounter}\setcounter{TeilaufgabenCounter}{1}}{\stepcounter{AufgabenCounter}}
+\newenvironment{teilaufgabe}{\paragraph*{\alph{TeilaufgabenCounter})}}{\stepcounter{TeilaufgabenCounter}}
+
+\renewcommand{\to}{\textnormal{ to }}
+\newcommand{\bigO}{\mathcal{O}}
+
+\newcommand{\qed}{\hfill$\square$}
+
+\begin{document}
+
+\title{Datenstrukturen und Algorithmen \\ Heimübung \zettelNummer{}}
+\author{\studierenderEins{} \\
+  \studierenderZwei{} \\
+  \studierenderDrei{} \\
+  \studierenderVier{}}
+
+\maketitle
+
+% Aufgabe 1
+\begin{aufgabe}
+  Damit Prev(x) und Succ(x) in $\mathcal{O}(1)$ liegen, muss man eine zusätzliche Eigenschaft für alle Knoten im Baum definieren. \\
+  Jeder Knoten x im Baum erhält zusätzlich eine Verweis auf die Adresse seines Nachfolgers und Vorgängers mit $N_x$ := die Adresse des Nachvolgers von x und $V_x$ := die Adresse des Vorgängers von x \\
+  Damit dies Eigenschaft aufrecht erhalten wird müssen die Einfügen- und Löschenfunktion abgeändert werden.
+
+  \begin{algorithm}[H]
+    \caption{EinfügenNeu(T,z)}
+    \begin{algorithmic}[1]
+      \State $y \gets nil$
+      \State $x \gets root[T]$
+      \While{x $\neq$ nil}1
+      \State $y \gets x$
+      \If{$key[z] < key[x]$}
+      \State $x \gets lc[x]$
+      \Else
+      \State $x \gets rc[x]$
+      \EndIf
+      \EndWhile
+      \State $p[z] \gets y$
+      \If{$y=nil$}
+      \State $root[t] \gets z$
+      \State $V[z] \gets nil$
+      \State $N[z] \gets nil$
+      \Else
+      \If{$key[z] < key[y]$}
+      \State $lc[y] \gets z$
+      \State $N_{V_y} \gets z$
+      \State $V_z \gets V_y$
+      \State $V_y \gets z$
+      \State $N_z \gets y$
+      \Else
+      \State $rc[y] \gets z$
+      \State $V_{N_y} \gets z$
+      \State $N_z \gets N_y$
+      \State $N_y \gets z$
+      \State $V_z \gets y$
+      \EndIf
+      \EndIf
+    \end{algorithmic}
+  \end{algorithm}
+
+  \begin{algorithm}[H]
+    \caption{LöschenNeu(T,z)}
+    \begin{algorithmic}[1]
+      \If{$lc[z] = nil\lor rc[z] = nil$}
+      \State $y \gets z$
+      \Else
+      \State $y \gets N_z$
+      \EndIf
+      \If{$V_y \neq nil$}
+      \State $N_{V_y} \gets N_z$
+      \EndIf
+      \If{$N_y \neq nil$}
+      \State $V_{N_y} \gets V_z$
+      \EndIf
+      \If{$V_z \neq nil$}
+      \State $N_{V_z} \gets N_z$
+      \EndIf
+      \If{$N_z \neq nil$}
+      \State $V_{N_z} \gets V_z$
+      \EndIf
+      \If{$lc[y] \neq nil$}
+      \State $x \gets lc[y]$
+      \Else
+      \State $x \gets rc[y]$
+      \EndIf
+      \If{$x \neq nil$}
+      \State $p[x] \gets p[y]$
+      \EndIf
+      \If{$p[y] = nil$}
+      \State $root[T] \gets x$
+      \Else
+      \If{$y = lc[p[y]]$}
+      \State $lc[p[y]] \gets x$
+      \Else
+      \State $rc[p[y]] \gets x$
+      \EndIf
+      \EndIf
+      \If{$y \neq z$}
+      \State $key[y] \gets key[z]$
+      \EndIf
+      \State \textbf{Return} y
+    \end{algorithmic}
+  \end{algorithm}
+
+  \begin{algorithm}[H]
+    \caption{Pred(x)}
+    \begin{algorithmic}[1]
+      \State \textbf{Return} $key[V_x]$
+    \end{algorithmic}
+  \end{algorithm}
+
+
+  \begin{algorithm}[H]
+    \caption{Succ(x)}
+    \begin{algorithmic}[1]
+      \State \textbf{Return} $key[N_x]$
+    \end{algorithmic}
+  \end{algorithm}
+\end{aufgabe}
+
+% Aufgabe 2
+\begin{aufgabe}
+  \includegraphics[width=\textwidth]{2022-05-28-Blatt-7-DuA 7_2.JPG}
+\end{aufgabe}
+
+% Aufgabe 3
+
+\begin{aufgabe}
+  \begin{teilaufgabe}
+    Es wird Inorder-Tree-Walk(x), mit Vertauschung von lc[x] mit rc[x] und statt einer Ausgabe wird list-insert (L,x) aufgerufen. \\
+    Dadurch wird eine absteigende Sortierung der Schlüssel an list-insert übergeben wodurch eine aufsteigend sortierte Link-list entsteht. Zum Beginn des Algorithmus wird x auf root[T] gesetzt und die Liste L ist leer.\\
+    \begin{algorithm}[H]
+      \caption{bin-Search-to-linked-list(T,L,x)}
+      \begin{algorithmic}[1]
+        \If{$x \neq nil$}
+        \State bin-Search-to-linked-list(T,L,rc[x])
+        \State List-Insert(L,x)
+        \State bin-Search-to-linked-list(T,L,lc[x])
+        \EndIf
+      \end{algorithmic}
+    \end{algorithm}
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    Z.z Der Algorithmus ist Korrekt $ \Longleftrightarrow$ Die Elemente in L sind aufsteigend sortiert. \\
+    o.B.d.A Ist dies der Fall, falls List-insert die Adressen der Elemente des Baumes und die Elemente in einer absteigenden sortierten Reihenfolge übertragen werden. \\
+    $\Rightarrow$ Es ist nur noch zu zeigen, dass die Elemente des Baumes in einer absteigenden sortierten Reihenfolge an List-Insert übertragen werden. (Das die Adressen dieser übertragen werden gilt nach Zeile 3). \\
+    Beweis durch Vollständige Induktion über die Anzahl der Element eines Baumes mit Hilfe der Suchbaumeigenschaft. \\
+    Sei $T_{n}$:= ein beliebiger binärer Suchbaum mit n Elementen \\
+    IA: n = 0: Trivial\\
+    n = 1: Trivial \\
+    n = 2: Trivial  \\
+    %%n = 3: \\
+    %%Sei x:= das rechteste Blatt von $T_{3}$
+    %%Der Algorithmus wird über: \\
+    %%bin-Search-to-linked-list($T_{3}$,L,(root[$T_{3}$])) aufgerufen. \\
+    %%Nun wird Zeile 2, solange rekursiv ausgeführt bis x erreicht ist. \\
+    %%Dieses ist nach der binären Suchbaumeigenschaft das größte Element von $T_{3}$. \\
+    %%Dieses wird nach Zeile 3 an List-Insert übertragen. \\
+    %%Dannach Zeile 4 ausgefürhrt, bis der Vorgänger von x erreicht ist. \\
+    %%Dieses ist nach der binären Suchbaumeigenschaft das zweit größte Element von $T_{3}$. Dieses wird übertragen. \\
+    %%Dannach wird der Algorithmus solange Rekursiv ausgeführt, bis der  Vorgänger vom Vorgänger von x erreicht ist. \\
+    %%Dieses ist nach der binären Suchbaumeigenschaft das dritt größte Element von $T_{3}$. Dieses wird übertragen. \\
+    %% Nun wurden alle Elemente aufgerufen und der Algorithmus terminiert. \\
+    IV: Es gelte: Der Algorithmus überträgt die Elemente eines Baumes $T_{n-1}$ in einer absteigenden sortierten Reihenfolge korrekt.\\
+    IS: Z.Z Der Algorithmus überträgt die Elemente eines Baumes $T_{n}$ in einer absteigenden sortierten Reihenfolge korrekt. \\
+    Es gilt: $T_{n}$ = $T_{n-1}$ + Einfügen ($T_{n-1}$,n) \\
+    Nach IV gilt bereits das alle Elemente ohne n Korrekt ausgegeben werden. \\
+    Folglich ist nur noch zu Zeigen, das n an der richtigen Stelle ausgeben wird. \\
+    Dies ist, aber trivialerweise der Fall, da beim Einfügen die Suchbaumeigenschaft erhalten bleibt.\\
+    $\Rightarrow$ n wird an der richtigen Stelle ausgeben.
+    Nachdem Induktionsprinzip gilt, dass für einen Baum mit n elementen, die Elemente des Baumes in einer absteigenden sortierten Reihenfolge an List-Insert übertragen werden.\\
+    $\Rightarrow$ Der Algorthmus ist Korrekt. \qed
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    bin-Search-to-linked-list ist eine abgeänderte Variante des aus der Vorlesung bekannten Algo. Inoder-Tree-Walk. \\
+    Es gibt zwei Unterschiede zwischen bin-Search-to-linked-list und Inoder-Tree-Walk, welche aber keinen Einfluss auf die Laufzeit haben. \\
+    Zum einen wurde rc[x] durch lc[x] ausgetauscht. (Dies hat trivialerweise keinen Einfluss auf die Laufzeit.) Zum anderen wurde return key[x] durch  List-Insert(L,x) ausgetauscht. Diese haben beide eine Laufzeit von $\mathcal{O}(1)$ (Nach Lemma 10.10)
+    Folglich bleibt die Laufzeit erhalten.\\
+    Da Inoder-Tree-Walk(x) nach Folie 45 eine  Laufzeit von $\theta (n)$, hat bin-Search-to-linked-list folglich auch eine Laufzeit $\theta (n)$ \\
+  \end{teilaufgabe}
+\end{aufgabe}
+
+\end{document}
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{graphics}
+% Pseudocode
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{graphicx}
+
+\setlength{\parindent}{0in}
+
+\newcommand{\zettelNummer}{7}
+\newcommand{\studierenderEins}{Eli Kogan-Wang (7251030)}
+\newcommand{\studierenderZwei}{David Noah Stamm (7249709)}
+\newcommand{\studierenderDrei}{Daniel Heins (7213874)}
+\newcommand{\studierenderVier}{Tim Wolf (7269381)}
+
+\newcounter{AufgabenCounter}
+\setcounter{AufgabenCounter}{1}
+\newcounter{TeilaufgabenCounter}
+\newenvironment{aufgabe}{\section*{Aufgabe \theAufgabenCounter}\setcounter{TeilaufgabenCounter}{1}}{\stepcounter{AufgabenCounter}}
+\newenvironment{teilaufgabe}{\paragraph*{\alph{TeilaufgabenCounter})}}{\stepcounter{TeilaufgabenCounter}}
+
+\renewcommand{\to}{\textnormal{ to }}
+\newcommand{\bigO}{\mathcal{O}}
+
+\newcommand{\qed}{\hfill$\square$}
+
+\begin{document}
+
+\title{Datenstrukturen und Algorithmen \\ Heimübung \zettelNummer{}}
+\author{\studierenderEins{} \\
+  \studierenderZwei{} \\
+  \studierenderDrei{} \\
+  \studierenderVier{}}
+
+\maketitle
+
+% Aufgabe 1
+\begin{aufgabe}
+  \begin{teilaufgabe}
+    Es gibt 2 Möglichkeiten dies zu implementieren:\\
+    Möglichkeit 1:\\
+    Push = Enqueue.
+    $O(1)$\\
+
+    Pop:
+    Enqueue(Q,Dequeue(Q)) $n-1$-Mal, dann return Dequeue(Q).
+    $O(n)$\\
+
+    Möglichkeit 2:\\
+    Pop = Dequeue.
+    $O(1)$\\
+
+    Push:
+    Enqueue(Q,x), dann Enqueue(Dequeue(Q),x) $n-1$-Mal.
+    $O(n)$\\
+
+    Ähnlich wie bei c).
+
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    $n$ ist die Anzahl der Speicherplätze im Array.
+
+    $a$ ist die Anzahl der Elemente im Stack $A$.
+    $b$ ist die Anzahl der Elemente im Stack $B$.\\
+    \includegraphics[width=\textwidth]{2022-05-28-Blatt-8-1-b.png}\\
+
+    $A$ wächst nach rechts, $B$ wächst nach links.\\
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    Im allgemeinen ist es Möglich alle Objekte einer Qeue in einem der Stacks zu speichern.
+    Der zweite Stack wird hierbei nur jeweils benötigt, um eine der Beiden Queue operationen Dequeue oder Enqueue zu realiesieren. \\
+    Folglich gibt es zwei Möglichkeiten dies beiden zu implementieren: \\
+    Sei $S_1$ der Stack in dem die Elemente der Queue gespeichert sind. \\
+    Möglichkeit 1:
+    Dequeue ist in diesem Fall identisch zu Pop und hat somit eine Laufzeit von $\mathcal{O}(1)$ \\
+    Für Enqueue muss der ganze Stack mit Pop und Push Operationen in den zweiten Stack übertragen werden.
+    Hierbei wird die Reihenfolge der Elemente invertiert. Nun wird das neue Objekt mit einer Push Operation hinzugefügt.
+    Dannach werden wieder alle Objekte in Stack 1 übertragen und die Operation ist beendet. \\
+    Da jede Push und Pop operation eine Laufzeit von $\mathcal{O}(1)$ hat liegt Enqueue in $\mathcal{O}(n)$ \\
+    Möglichkeit 2:
+    Enqueue ist in diesem Fall identisch zu Push und hat somit eine Laufzeit von $\mathcal{O}(1)$ \\
+    Für Dequeue muss der ganze Stack mit Pop und Push Operationen in den zweiten Stack übertragen werden.
+    Hierbei wird die Reihenfolge der Elemente invertiert. Nun wird das neue Objekt mit einer Pop-Operation hinzugefügt.
+    Dannach werden wieder alle Objekte in Stack 1 übertragen und die Operation ist beendet. \\
+    Da jede Push und Pop operation eine Laufzeit von $\mathcal{O}(1)$ hat liegt Dequeue in $\mathcal{O}(n)$ \\
+  \end{teilaufgabe}
+\end{aufgabe}
+
+% Aufgabe 2
+\begin{aufgabe}
+  \begin{teilaufgabe}
+    Die Logik beim Vorgehen bei einer Rechtsrotation ist identisch. \\
+    \begin{algorithm}[H]
+      \caption{Linksrotation (T,x)}
+      \begin{algorithmic}[1]
+        \State y $\gets$ rc[x]
+        \State rc[x] $\gets$ lc[x]
+        \State
+        \If{lc[y] $\neq$ nil}
+        \State p[y] $\gets$ p[x]
+        \EndIf
+        \If{$p[x] = nil$}
+        \State root[T] $\gets$ y
+        \ElsIf {x = lc[p[x]]}
+        \State lc[p[x]] $\gets$ y
+        \Else
+        \State rc[p[x]] $\gets$  y
+        \EndIf
+        \State lc[y] $\gets$  x
+        \State rc[x] $\gets$  y
+        \State h[x] $\gets$ 1 + max\{h[lc[x]],h[rc[x]]\}
+        \State h[y] $\gets$ 1 + max\{h[lc[y]],h[rc[y]]\}
+        \State size[x] $\gets$ 1 + size[lc[x]] + size[rc[x]]
+        \State size[y] $\gets$ 1 + size[lc[y]] + size[rc[y]]
+      \end{algorithmic}
+    \end{algorithm}
+    Wobei size[nil] = 0.
+    \begin{algorithm}
+      \caption{SizeOf(T,x)}
+      \begin{algorithmic}[1]
+        \State \textbf{Return} size[x]
+      \end{algorithmic}
+    \end{algorithm}
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    Der Algortihmus wird mit der Wurzel des Baumes aufgerufen. \\
+    \begin{algorithm}[H]
+      \caption{k-median(T,x,k)}
+      \begin{algorithmic}[1]
+        \If{$SizeOf(rc[x]) - SizeOf(x) = k \lor lc[x] = rc[x]=Nil $}
+        \State return x
+        \EndIf
+        \If{$SizeOf(lc[x]) > k-1$ }
+        \State return k-median$(T,rc[x],SizeOf(x)-(SizeOf(rc[x]+1))$
+        \Else
+        \State return k-median$(T,lc[x],k)$
+        \EndIf
+      \end{algorithmic}
+    \end{algorithm}
+    Budget Laufzeitanalyse: \\
+    Der Algorithmus ist rekursiv und ruft sich selber wieder über das linke oder rechte Kind des aktuellen Elements. Da dem Algorithmus zu Beginn die Wurzel vom Baum übergeben wird,kommt es im worst case zu h Rekursions aufrufen(,wobei h die höhe des Baumes ist) und die Laufzeit pro Aufruf ist kostant.
+    Folglich hat der Algorithmus eine Laufzeit von $\mathcal{O}(h))$. Da der Betrachtete Baum ein AVL-Baum ist, ist nach Satz 12.2 gilt h = $\Theta(log(n))$. Also hat der Algorithmus eine Laufzeit von $\mathcal{O}(log(n))$
+  \end{teilaufgabe}
+
+\end{aufgabe}
+
+% Aufgabe 3
+\begin{aufgabe}
+  Jeder Knoten im Baum hat eine zusätzliche Variable size, wie in 2 \\
+  Auch ist jeder Knoten annotiert mit $min$ und $max$, welche das Minimum und das Maximums des Teilbaums des Knoten enthält.\\
+  Erstaufruf mit $x=root[T]$\\
+  \begin{algorithm}[H]
+    \caption{Schnittmengensuche(T,x,a,b)}
+    \begin{algorithmic}[1]
+      \If {a > b}
+      \State \textbf{Return} 0 $\label{terminate:a>b}$
+      \EndIf
+      \If {x = nil}
+      \State \textbf{Return} 0 \label{terminate:x=nil}
+      \EndIf
+      \If {key[x] < a}
+      \State \textbf{Return} Schnittmengensuche$(T,rc[x],a,b)$ \label{recurse:key[x]<a}
+      \ElsIf {key[x] > b}
+      \State \textbf{Return} Schnittmengensuche$(T,lc[x],a,b)$ \label{recurse:key[x]>b}
+      \Else
+      \State $min \gets MinimumSuche(x)$
+      \State $max \gets MaximumSuche(x)$
+      \If {$key[min] \leq a \land b \leq key[max]$}
+      \State \textbf{Return} $size[x]$ \label{terminate:key}
+      \Else
+      \State $result \gets 1$ \label{result}
+      \State $result \gets result$ + Schnittmengensuche$(T,lc[x],a,b)$
+      \State $result \gets result$ + Schnittmengensuche$(T,rc[x],a,b)$
+      \State \textbf{Return} $result$
+      \EndIf
+      \EndIf
+    \end{algorithmic}
+  \end{algorithm}
+
+  Die Idee ist, dass wir die Schnittmengensuche mithilfe der Annotierten Variablen $size, min, max$ frühstmöglich beenden können.
+  Und damit nur den Baum so tief ablaufen, bis das Ergebnis Klar ist.\\
+
+  Unsere Laufzeit ist durch Teilbäume begrenzt, dessen Eltern-Knoten nicht im Intervall liegen.
+
+  Da der AVL Baum balanciert und ein Binärer Suchbaum ist, befinden sich diese Teilbäume maximal auf der Höhe $\leq \log(n)$.\\
+  Damit rekursieren wir uns maximal $\log(n)$ mal.\\
+  Mit einer Addition von Laufzeit $O(1)$ pro Ebene ist die Laufzeit $\mathcal{O}(log(n))$.\\
+
+
+  Der Algorithmus ist korrekt, da er ab Zeile $\ref{result}$ die Anzahl der Schnittmengen klassisch Berechnet, mit einer regulären Termination
+  in Zeile $\ref{terminate:a>b}$ und in Zeile $\ref{terminate:x=nil}$.
+  Die Rekursion in Zeile $\ref{recurse:key[x]<a}$ und in Zeile $\ref{recurse:key[x]>b}$ ist korrekt, da die Schnittmengen nur in den Teilbäumen liegen
+  die links oder rechts sind.
+  Die Termination mit Size in Zeile $\ref{terminate:key}$ ist korrekt, da die der gesamt Teilbaum im gesuchten Intervall liegt.
+\end{aufgabe}
+\end{document}
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{graphics}
+% Pseudocode
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+
+\usepackage{tikz}
+
+\setlength{\parindent}{0in}
+
+\newcommand{\zettelNummer}{9}
+\newcommand{\studierenderEins}{Eli Kogan-Wang (7251030)}
+\newcommand{\studierenderZwei}{David Noah Stamm (7249709)}
+\newcommand{\studierenderDrei}{Daniel Heins (7213874)}
+\newcommand{\studierenderVier}{Tim Wolf (7269381)}
+
+\newcounter{AufgabenCounter}
+\setcounter{AufgabenCounter}{1}
+\newcounter{TeilaufgabenCounter}
+\newenvironment{aufgabe}{\section*{Aufgabe \theAufgabenCounter}\setcounter{TeilaufgabenCounter}{1}}{\stepcounter{AufgabenCounter}}
+\newenvironment{teilaufgabe}{\paragraph*{\alph{TeilaufgabenCounter})}}{\stepcounter{TeilaufgabenCounter}}
+
+\renewcommand{\to}{\textnormal{ to }}
+\newcommand{\bigO}{\mathcal{O}}
+
+\newcommand{\qed}{\hfill$\square$}
+
+\begin{document}
+
+\title{Datenstrukturen und Algorithmen \\ Heimübung \zettelNummer{}}
+\author{\studierenderEins{} \\
+  \studierenderZwei{} \\
+  \studierenderDrei{} \\
+  \studierenderVier{}}
+
+\maketitle
+
+% Aufgabe 1
+\begin{aufgabe}
+  \begin{teilaufgabe}
+    \includepdf[pages=-]{2022-06-10-Blatt-9-Aufgabe-1-1.pdf}
+  \end{teilaufgabe}
+\end{aufgabe}
+\begin{aufgabe}
+  Bekannt sind Hashtablellen mit der Backing-Struktur ``Liste''.
+
+  Wir ersetzen die Backing-Struktur mit einem AVL-Baum.
+
+  % \textbf{Insert(T,x):}
+  % Falls key[x] noch nicht in Baum T[h(key[x])] vorhanden, füge x in Baum T[h(key[x])] ein.
+
+  \begin{algorithm}[H]
+    \caption{\textsc{Insert}($T, x$)}
+    \begin{algorithmic}[1]
+      \State \textbf{Insert-AVL(T[h(key[x])], x)}
+    \end{algorithmic}
+  \end{algorithm}
+
+  % \textbf{Delete(T,x):}
+  % Falls key[x] in Baum T[h(key[x])] vorhanden, entferne x aus Baum T[h(key[x])].
+
+  \begin{algorithm}[H]
+    \caption{\textsc{Delete}($T, x$)}
+    \begin{algorithmic}[1]
+      \State \textbf{Delete-AVL(T[h(key[x])], x)}
+    \end{algorithmic}
+  \end{algorithm}
+
+  % \textbf{Search(T,x):}
+  % Falls key[x] in Baum T[h(key[x])] vorhanden, liefere true, sonst false.
+
+  \begin{algorithm}[H]
+    \caption{\textsc{Search}($T, x$)}
+    \begin{algorithmic}[1]
+      \State \textbf{Search-AVL(T[h(key[x])], x)}
+    \end{algorithmic}
+  \end{algorithm}
+
+  Die Korrektheit ist durch die funktional identische Semantik zu Hashtablellen mit Backing-Liste gegeben.
+
+  Durch Ersetzung der Backing-Struktur der ``Liste'' mit einem AVL-Baum ersetzen wir die
+  zuvor bekannten Operationen mit Worst-Case Laufzeiten $O(n)$ durch $O(log n)$.
+\end{aufgabe}
+\begin{aufgabe}
+  \begin{teilaufgabe}
+    Beweis durch vollständige Induktion über die Kreislänge$:=n$:
+
+    Wir verwenden die Kreisnotation $(x_1,x_2,\cdots,x_n)$ für einen Kreis über einen Graphen $G$.
+
+
+    \begin{tikzpicture}
+      [nodePath/.style={circle,fill=yellow!40}]
+      \node[nodePath] (n1) at (0,0) {$x_1$};
+      \node[nodePath] (n2) at (1,1) {$x_2$};
+      \node[nodePath] (nn) at (2,0) {$x_n$};
+
+      \foreach  \from/\to in {n1/n2,nn/n1}
+      \draw[->] (\from) -- (\to) node [midway, auto] () {};
+
+      \foreach \from/\to in {n2/nn}
+      % dotted line
+      \draw[dashed, ->] (\from) -- (\to) node [midway, auto] () {};
+    \end{tikzpicture}
+
+    \textbf{I.A.:} $n=1$: trivial
+
+    $n=2$:
+
+    Wir betrachten die Möglichen Kreise $K_1=(x_1,x_2)$ $K_2=(x_1,x_1)$.
+
+    $K_1$ ist ein einfacher Kreis.
+
+    $K_2$ ist ein komplexer Kreis.
+
+    $K_2$ kann in die einfachen Kreise $(x_1)$ und $(x_1)$ aufgeteilt werden.
+
+    \rule{\textwidth}{0.5pt}
+
+    Sei $n\in \mathbb{N}$.
+
+    \textbf{I.V.:} Jeder komplexe Kreis mit bis zu $n-1$ Knoten kann in einfache Kreise aufgeteilt werden.
+
+    \textbf{I.S.:} Sei $K_n=(x_1,x_2,\cdots,x_{i-1},x_i,\cdots,x_{j-1},x_j\cdots,x_n)$ ein komplexer Kreis.
+
+    Existieren kein $1\leq i\neq j\leq n$: $x_i=x_j$ so ist der Kreis einfach.
+
+    Also existieren $1\leq i\leq n$: $x_i=x_j$.
+
+    Nun sind $K_a=(x_1,x_2,\cdots,x_{i-1},x_j,\cdots,x_n)$ und $K_b=(x_i,x_j,\cdots,x_{j-1})$ Kreise.
+
+    Sind $K_a$ und $K_b$ einfach, so sind wir fertig.
+    Sind sie komplex, so können wir sie nach \textbf{I.V.}
+    in einfache Kreise $K_a=K_{a_1}+K_{a_2}+\cdots+K_{a_k}$,
+    $K_b=K_{b_1}+K_{b_2}+\cdots+K_{b_l}$ aufteilen.
+
+    Nun sind ist $K_{a_1},K_{a_2},\cdots,K_{a_k},K_{b_1},K_{b_2},\cdots,K_{b_l}$ eine Aufteilung von $K_n$ in einfache Kreise.
+
+    \qed
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    ``$\implies$'':
+
+    Sei $G$ ein Graph mit einem Eulerkreis
+    $E=(x_1,x_2,\cdots,x_{i-1},x_i,x_{i+1},\cdots,x_n)$.
+
+    Sei $x$ ein Knoten in $G$ und $i\in\{i_1,\cdots,i_k\}$ die $k$-Vorkommnisse von $x$ im Eulerkreis sind.
+
+    Da nun $(x_{i-1},x_i)$ eine Eingangskante von $x$ ist, die maximal $1$-mal für ein $i$ vorkommt, ist $indeg(x)=k$.
+
+    Da nun $(x_i,x_{i+1})$ eine Ausgangskante von $x$ ist, die maximal $1$-mal für ein $i$ vorkommt, ist $outdeg(x)=k$.
+
+    Damit $indeg(x)=outdeg(x)$.
+
+
+    \rule{\textwidth}{0.5pt}
+
+    ``$\impliedby$'':
+
+    Über Induktion über die Kantenanzahl $n$.
+
+    \textbf{I.A.:} $n=1$: trivial, da $indeg\neq outdeg$ nicht vorkommt.
+
+    \rule{\textwidth}{0.5pt}
+
+    Sei $n\in\mathbb{N}$.
+
+    \textbf{I.V.:} Jeder Graph mit $indeg(v)=outdeg(v)$ und maximal $n-1$ Kanten hat einen Eulerkreis.
+
+    \textbf{I.S.:} Sei $G=(E,V)$ ein Graph mit $indeg(v)=outdeg(v)$ und $n$ Kanten.
+
+    Bekannt ist, dass ein Kreis $K$ in $G$ existiert.
+
+    Der Kreis $K$ geht über die Kantenmenge $E(K)$.
+
+    Der Induzierte Teilgraph von $E\backslash E(K)$: $G_\text{ind}$ hat immernoch $indeg(v)=outdeg(v)$, da K im induzierte Teilgraph von $E(K)$ ein Eulerkreis ist.
+
+    Nach \textbf{I.V.} hat $G_\text{ind}$ einen Eulerkreis, wir nennen ihn $K_\text{ind}$.
+
+    Wir betrachten einen Knoten $v\in V(K)$.
+
+    Wir stellen $K_\text{ind}$ als $K_\text{ind}=(v_1,v_2,\cdots,v_{i-1},v_i,v_{i+1},\cdots,v_k)$ dar,
+    wobei $v=v_i$.
+
+    Wir stellen $K$ als $K=(x_1,x_2,\cdots,x_{j-1},x_j,x_{j+1},\cdots,x_l)$ dar, wobei
+    $v_i=v=x=x_j$.
+
+    Nun ist $(v,v_{i+1},\cdots,v_k,v_1,\cdots,v_{i-1},v,x_{j+1},\cdots,x_l,x_1,\cdots,x_{j-1})$ ein Eulerkreis in $G$.
+  \end{teilaufgabe}
+\end{aufgabe}
+\end{document}
+"""
+
+binary tree in python
+
+"""
+
+class Node:
+  def __init__(self, value):
+    self.value = value
+    self.left = None
+    self.right = None
+    self.parent = None
+
+  # for print
+
+  def __repr__(self):
+    return "(N: " + str(self.value) + ")"
+
+class BinarySearchTreeWithPreviousAndNext:
+  """
+  We'll maintain a dict `prev` and `next`
+  """
+  def __init__(self):
+    self.root = None
+    self.prev = {}
+    self.next = {}
+
+  def insert(self, value):
+    node_x = self.root
+    node_y = None
+    node_z = Node(value)
+    while node_x != None:
+      node_y = node_x
+      if value < node_x.value:
+        node_x = node_x.left
+      else:
+        node_x = node_x.right
+    node_z.parent = node_y
+    if node_y == None:
+      self.root = node_z
+      self.prev[node_z] = None
+      self.next[node_z] = None
+    else:
+      if node_z.value < node_y.value:
+        node_y.left = node_z
+        self.next[self.prev[node_y]] = node_z
+        self.prev[node_z] = self.prev[node_y]
+        self.prev[node_y] = node_z
+        self.next[node_z] = node_y
+      else:
+        node_y.right = node_z
+        self.prev[self.next[node_y]] = node_z
+        self.next[node_z] = self.next[node_y]
+        self.next[node_y] = node_z
+        self.prev[node_z] = node_y
+
+  def search(self, value):
+    node_x = self.root
+    while node_x != None:
+      if value == node_x.value:
+        return node_x
+      if value < node_x.value:
+        node_x = node_x.left
+      else:
+        node_x = node_x.right
+    return None
+
+  def delete(self, node_z):
+    """
+    node_z is the node to delete
+    """
+    if node_z.left == None or node_z.right == None:
+      node_y = node_z
+    else:
+      node_y = self.next[node_z]
+    if self.prev[node_y] != None:
+      self.next[self.prev[node_y]] = self.next[node_z]
+    if self.next[node_y] != None:
+      self.prev[self.next[node_y]] = self.prev[node_z]
+    if self.prev[node_z] != None:
+      self.next[self.prev[node_z]] = self.next[node_z]
+    if self.next[node_z] != None:
+      self.prev[self.next[node_z]] = self.prev[node_z]
+    if node_y.left != None:
+      node_x = node_y.left
+    else:
+      node_x = node_y.right
+    # node_x is the child of node_y and takes node_y's place
+    if node_x != None:
+      node_x.parent = node_y.parent
+    # parent of node_y is now parent of node_x
+    if node_y.parent == None:
+      self.root = node_x
+    # if node_y was root, node_x is now root
+    else:
+      # since it wasn't a root, it had a parent
+      if node_y == node_y.parent.left:
+        node_y.parent.left = node_x
+      else:
+        node_y.parent.right = node_x
+      # node_x is now the child of node_y's parent
+    if node_y != node_z:
+      node_z.value = node_y.value
+      # node_z is now node_y
+
+
+    return node_y
+
+
+
+
+  def output_in_order(self):
+    """
+    uses self.next
+    starts at leftmost value
+    """
+    output = []
+    node_x = self.root
+    while node_x.left != None:
+      if node_x.left != None:
+        node_x = node_x.left
+    while node_x != None:
+      output.append(node_x.value)
+      node_x = self.next[node_x]
+    return output
+
+import random
+
+if __name__ == "__main__":
+  # values = [5, 3, 7, 2, 4, 6, 8]
+  # values = [1,2,1]
+  # values is 10 random values
+  values = [random.randint(0, 1000) for i in range(40)]
+  print(values)
+  bst = BinarySearchTreeWithPreviousAndNext()
+  for value in values:
+    bst.insert(value)
+  first_value = values[0]
+  # delete in list and tree
+  values.remove(first_value)
+  bst.delete(bst.search(first_value))
+  output = bst.output_in_order()
+  print(output)
+  values.sort()
+  print(values)
+  # print if both are equal
+  print(output == values)
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{graphics}
+\usepackage{stmaryrd}
+
+% Pseudocode
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+
+\usepackage{tikz}
+
+\setlength{\parindent}{0in}
+
+\newcommand{\zettelNummer}{11}
+\newcommand{\studierenderEins}{Eli Kogan-Wang (7251030)}
+\newcommand{\studierenderZwei}{David Noah Stamm (7249709)}
+\newcommand{\studierenderDrei}{Daniel Heins (7213874)}
+\newcommand{\studierenderVier}{Tim Wolf (7269381)}
+
+\newcounter{AufgabenCounter}
+\setcounter{AufgabenCounter}{1}
+\newcounter{TeilaufgabenCounter}
+\newenvironment{aufgabe}{\section*{Aufgabe \theAufgabenCounter}\setcounter{TeilaufgabenCounter}{1}}{\stepcounter{AufgabenCounter}}
+\newenvironment{teilaufgabe}{\paragraph*{\alph{TeilaufgabenCounter})}}{\stepcounter{TeilaufgabenCounter}}
+
+\renewcommand{\to}{\textnormal{ to }}
+\newcommand{\bigO}{\mathcal{O}}
+
+\newcommand{\qed}{\hfill$\square$}
+
+\begin{document}
+
+\title{Datenstrukturen und Algorithmen \\ Heimübung \zettelNummer{}}
+\author{\studierenderEins{} \\
+  \studierenderZwei{} \\
+  \studierenderDrei{} \\
+  \studierenderVier{}}
+
+\maketitle
+
+% Aufgabe 1
+\begin{aufgabe}
+  Sei $G=(V,E)$ ein ungerichteter Graph.
+
+  \textbf{Zu zeigen}: Nach DFS$(G,s)$ für ein $s\in V$ ist jede von $s$ erreichbare Kankte
+  $e\in E_{\text{connected }s}$ eine Baumkante des DFS-Baums, eine Rückwärts/Vorwärtskante.
+
+  \textbf{Beweis}:
+  Sei $e\in E_{\text{connected }s}$ eine von $s$ erreichbare Kante.
+  Das heißt, dass für $e={v_1,v_2}$ mit $v_1\neq v_2$, der Startknoten $v_1$ im DFS-Baum liegt,
+  und da der Baum bzgl. der Zusammenhangskomponente von $s$ vollständig ist, auch
+  $v_2$ im DFS-Baum liegt.
+
+  Nun lässt sich eine Fallunterscheidung durchführen:
+
+  Wenn $e$ im DFS-Baum liegt, dann ist $e$ eine Baumkante.
+
+  Wenn $e$ nicht im DFS-Baum liegt, dann ist $e$ eine Rückwärts/Vorwärtskante.
+  Da $e$ zwei Knoten aus dem DFS-Baum verbindet. Betrachtet man
+  $e$ als gerichtet, so kann man betrachten, ob $v_1$ vor oder nach $v_2$ in der topologischen Sortierung
+  des Baumes vorkommt.
+\end{aufgabe}
+\begin{aufgabe}
+
+  Wir beginnen mit dem Ergebnis des Algorithmus Tran: $E^*$. $O(|V|^2 + |V|\cdot |E|)$
+
+  In $O(|V|^2)$ reduzieren wir
+  $E^*$ zu
+  $E^{*\prime}=\{(u,v)|\text{Es existiert ein Weg in $G$ von $u$ nach $v$ und von $v$ nach $u$}\}$.
+
+  Und reduzieren dann $E^{*\prime}$ zur ungerichteten unterliegenden Kantenmenge $E^{*\prime\prime}=\{\{u,v\}|\text{Es existiert ein Weg in $G$ von $u$ nach $v$ und von $v$ nach $u$}\}$ auch in $O(|V|^2)$.
+
+  Nun führen wir Suchen (Tiefen oder Breitensuche) maximal $|V|$ mal in $G''=(V,E^{*\prime\prime})$ durch, um die einzelnen Zusammenhangskomponenten zu entfernen.
+
+  $|V|$ mal, da es maximal $|V|$ Zusammenhangskomponenten (eine für jeden Knoten) gibt.
+
+  Das geschieht in einer Laufzeit von $O((|V| + |E|)\cdot |V|)=O(|V|^2+|V|\cdot|E|)$.
+
+  Der Algorithmus beruht auf der Korrektheit von Tran und extrahiert mithilfe von korrekten
+  Suchen starke Zusammenhangskomponenten auf.
+  Die Starken zusammenhangskomponenten bilden innerhalb der doppelt transitiven ungerichteten Hülle die regulären starken
+  Zusammenhangskomponenten, die klassisch mit Suchen entdeckt werden können.
+\end{aufgabe}
+
+\begin{aufgabe}
+  \begin{teilaufgabe}
+    Der Algorithmus funktioniert wie zuvor.
+
+    Sei $(u,v)$ eine Kante mit Gewichtung $0$.
+
+    Nachdem $u$ aus dem Heap entfernt wurde und zur Menge $S$ der entdeckten Knoten
+    hinzugefügt wurde, wird $d(v)$ auf $d(u)+0$ gesetzt und $v$
+    darauffolgend entfernt (mit Knoten mit derselben Distanz).
+
+    Damit wird $v$ Zeitlich richtig im Algorithmus entfernet.
+  \end{teilaufgabe}
+  \begin{teilaufgabe}
+    Wir betrachten diesen Graphen:\\
+    \includegraphics[scale=1]{2022-06-26-Blatt-11-3-b.png}
+
+    Dijkstra von $a$ aus:
+
+    \vspace{0.5cm}
+
+    $S=\{a\}$
+
+    \vspace{0.5cm}
+
+    \begin{tabular}{l|l|l}
+      $V\backslash S$ & b   & c        \\
+      $d(a)$          & $1$ & $\infty$ \\
+      $\pi(a)$        & $a$ & $\infty$
+    \end{tabular}
+
+    \vspace{1cm}
+
+    $S=\{a,b\}$ $d(b)=1$
+
+    \vspace{0.5cm}
+
+    \begin{tabular}{l|l|}
+      $V\backslash S$ & c   \\
+      $d(a)$          & $2$ \\
+      $\pi(a)$        & $b$
+    \end{tabular}
+
+    \vspace{1cm}
+
+    Nach Dijkstra ist der kürzeste Weg: $a\rightarrow b\rightarrow c$ mit Gesamtlänge $3$.
+
+    $\lightning$ kürzester Weg ist $a\rightarrow b\rightarrow b\dots b\rightarrow c$ mit Gesamtlänge $-\infty$.
+  \end{teilaufgabe}
+\end{aufgabe}
+
+\end{document}
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath}
+
+% Pseudocode
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\setlength{\parindent}{0in}
+
+\newcommand{\uebungsGruppe}{1}
+\newcommand{\zettelNummer}{1}
+\newcommand{\studierenderEins}{Martina Musterfrau (1234567)}
+\newcommand{\studierenderZwei}{Max Mustermann (7654321)}
+\newcommand{\studierenderDrei}{Manuel Mustermann (1234765)}
+
+\newcounter{AufgabenCounter}
+\setcounter{AufgabenCounter}{1}
+\newcounter{TeilaufgabenCounter}
+\newenvironment{aufgabe}{\section*{Aufgabe \theAufgabenCounter}\setcounter{TeilaufgabenCounter}{1}}{\stepcounter{AufgabenCounter}}
+\newenvironment{teilaufgabe}{\paragraph*{\alph{TeilaufgabenCounter})}}{\stepcounter{TeilaufgabenCounter}}
+
+\renewcommand{\to}{\textnormal{ to }}
+\newcommand{\bigO}{\mathcal{O}}
+
+\begin{document}
+
+\title{Datenstrukturen und Algorithmen \\ Heimübung \zettelNummer{}}
+\author{\studierenderEins{} \\
+    \studierenderZwei{} \\
+    \studierenderDrei{}}
+
+\maketitle
+
+% Aufgabe 1
+\begin{aufgabe}
+
+    % Teilaufgabe a)
+    \begin{teilaufgabe}
+
+        Wir haben den folgenden Algorithmus entworfen:
+
+        \begin{algorithm}[H]
+            \caption{FindeGrößtesElementFor($A[1, \dots, n]$)}
+            \begin{algorithmic}[1]
+                \State Ergebnis $\gets 0$ 
+                \For{$i \gets 1 \to n$} 
+                    \If{$A[i] \geq$ Ergebnis}
+                        \State Ergebnis $\gets A[i]$
+                    \EndIf
+                \EndFor
+                \State \textbf{Return} Ergebnis
+            \end{algorithmic}
+        \end{algorithm}
+
+        Alternativ haben wir den folgenden äquivalenten Algorithmus entworfen:
+
+        \begin{algorithm}[H]
+            \caption{FindeGrößtesElementFor($A[1, \dots, n]$)}
+            \begin{algorithmic}[1]
+                \State Ergebnis $\gets 0$ 
+                \State $i \gets 1$
+                \While{$i \leq n$} 
+                    \If{$A[i] \geq$ Ergebnis}
+                        \State Ergebnis $\gets A[i]$
+                    \EndIf
+                    \State $i \gets i+1$
+                \EndWhile
+                \State \textbf{Return} Ergebnis
+            \end{algorithmic}
+        \end{algorithm}
+
+    \end{teilaufgabe}
+
+    % Teilaufgabe b)
+    \begin{teilaufgabe}
+        Im ersten Algorithmus haben wir eine Zuweisung in Zeile $1$ und in Zeilen $3-4$ der For-Schleife einen Vergleich und eine Zuweisung. 
+        Die For-Schleife wird $n$ mal durchlaufen.
+        Damit ergibt sich eine Gesamtlaufzeit von $\bigO(n)$.
+
+        Der zweite Algorithmus hat $2$ Zuweisungen außerhalb der While-Schleife und $2$ Zuweisungen, einen Vergleich und eine Addition innerhalb der While-Schleife in Zeilen $4-7$.
+        Da auch die While-Schleife maximal $n$ mal durchlaufen wird, ergibt sich eine Laufzeit von $\bigO(n)$.
+    \end{teilaufgabe}
+
+\end{aufgabe}
+
+% Aufgabe 2
+\begin{aufgabe}
+
+    % Teilaufgabe a)
+    \begin{teilaufgabe}
+        Es gilt ...
+    \end{teilaufgabe}
+
+    % Teilaufgabe b)
+    \begin{teilaufgabe}
+        Hier können wir das in der Vorlesung gezeigte Theorem anwenden und erhalten ...
+    \end{teilaufgabe}
+
+    % Teilaufgabe c)
+    \begin{teilaufgabe}
+        Ein Gegenbeispiel konstruiert sich wie folgt. ...
+    \end{teilaufgabe}
+
+\end{aufgabe}
+
+% Aufgabe 3
+\begin{aufgabe}
+    Für Sortieren haben wir gelernt, dass ...
+\end{aufgabe}
+
+\end{document}Let x be

@@ -1,50 +1,58 @@
-from typing import Iterator, TypeVar
-import random
+from typing import Generator
 
-class SortableChar:
-    def __init__(self, char: str, original_index: int, is_eof_marker: bool = False):
-        self.char = char
-        self.original_index = original_index
-        self.is_eof_marker = is_eof_marker
-    
-    def as_comparable(self):
-        if self.is_eof_marker:
-            return -1
-        else:
-            return ord(self.char.lower())
-    
-    def __lt__(self, other):
-        return self.as_comparable() < other.as_comparable()
-    
-    def __eq__(self, other):
-        return self.as_comparable() == other.as_comparable()
-    
-    def __repr__(self):
-        if self.is_eof_marker:
-            return f'EOF {self.char} ({self.original_index})'
-        return f'{self.char} ({self.original_index})'
 
-T = TypeVar('T')
+alphabet = "abcdefghijklmnopqrstuvwxyz "
+eof_char = '$'
 
-def gen_rotations(s: list[T]) -> Iterator[list[T]]:
+def get_sort_key(char: str) -> int:
+    try:
+        return alphabet.index(char)
+    except ValueError:
+        return -1
+
+def gen_rotations(s: list) -> Generator[str, None, None]:
     for i in range(len(s)):
         yield s[i:] + s[:i]
 
-def naive_bwt(s: list[SortableChar]) -> str:
+def naive_bwt(s: "list[str]") -> str:
     rotations = list(gen_rotations(s))
-    sorted_rotations = sorted(rotations)
-    if False: # debug
-        for i, r in enumerate(sorted_rotations):
-            print(i, r)
-    return ''.join([x[-1].char for x in sorted_rotations])
+    sorted_rotations = sorted(rotations, key=lambda x: [get_sort_key(y) for y in x])
+    return ''.join([x[-1] for x in sorted_rotations])
 
-def transform(s: str) -> str:
-    # We'll treat the end of the string as a special character
-    s1 = [SortableChar(c, i) if i != len(s) - 1 else SortableChar('$', i, True) for i, c in enumerate(s)]
-    return naive_bwt(s1)
+def transform(S: str) -> str:
+    return naive_bwt(S)
+
+def count(S: str, C: str) -> int:
+    # where C is a single character
+    # Counts characters in S smaller than C
+    count = 0
+    for char in S:
+        if get_sort_key(char) < get_sort_key(C):
+            count += 1
+    return count
+
+def rank(c: str, p: int, S: str) -> int:
+    # rank of c in S[:p+1]
+    return S[:p+1].count(c)
+
+def retransform(inp: str) -> str:
+    # using rank and count
+    eof_index = inp.index(eof_char)
+    idx = eof_index
+    output = ''
+    for _ in inp:
+        c = inp[idx]
+        output = c + output
+        idx = count(inp, c) + rank(c, idx, inp) - 1
+    return output
+
+import random
 
 def prop_transform_is_permutation(s: str) -> bool:
     return set(transform(s)) == set(s)
+
+def prop_retransform_is_inverse(s: str) -> bool:
+    return retransform(transform(s)) == s
 
 def test_prop_bwt_str(prop):
     # construct a bwt example string
@@ -56,7 +64,7 @@ def test_prop_bwt_str(prop):
         string = ' '.join(selected)
         string += '$'
         if not prop(string):
-            print(string)
+            print(f"failed on {string}, {prop.__name__}")
             return False
     return True
 
@@ -64,5 +72,14 @@ def test_prop_bwt_str(prop):
 
 if __name__ == '__main__':
     print(test_prop_bwt_str(prop_transform_is_permutation))
+    print(test_prop_bwt_str(prop_retransform_is_inverse))
     abracadabra_bwt = transform('abracadabra$')
     print(f"{abracadabra_bwt=}, {abracadabra_bwt == 'ard$rcaaaabb'=}")
+
+
+    # Add at least one test case consisting of an original string and a retransformed string and check via asserts, if the transform an retransform method performs correctly for this input data.
+
+    # Add a comment to explain, why this test case is a useful test case and describe, which typical mistake shall be covered by this test case.
+
+    test_str = 'mississippi$'
+    print(f"{test_str=} {transform(test_str)=} {retransform(transform(test_str))=}")
