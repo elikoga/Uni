@@ -6,6 +6,7 @@ pkgs.mkShell {
     pkgs.python39Packages.pygments
     pkgs.zlib
     pkgs.stdenv.cc.cc.lib
+    pkgs.sqlite.dev
   ];
   shellHook = ''
     # libz.so.1 is in zlib
