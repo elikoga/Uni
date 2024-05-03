@@ -1,0 +1,37 @@
+\subsection{A2}
+
+% Aufgabe 2 (5 Punkte):
+% Look at the running time estimation for the closest-pair algorithm from the lecture:
+% The update of MinSoFar required the comparison of the newly added point r to just a
+% constant number of points within a speciﬁc rectangle. Because the Status Structure includes a
+% balanced searchtree, the points located in this rectangle can be found quickly. In this exercise,
+% we assume that the Status Structure only contains an unsorted list without a searchtree.
+% (a) What is the resulting worst case running time of the whole algorithm?
+% (b) Construct a scalable input that leads to the worst case running time of (a).
+% (c) How large do the areas dead points and active points become during the calculation of
+% the worst case (b)?
+
+\begin{enumerate}[label=(\alph*)]
+    \item The worst case running time of the whole algorithm is $\O(n^2)$.
+    
+    \textbf{Proof by construction of the worst case:}
+
+    We describe the following set of points $P$ with size $n$:
+
+    $$P = \{p_1, p_2, \ldots, p_n\}$$
+
+    $$p_i = (i/n, i)$$
+
+    One can immediately see that the Algorithms Sweep-Line processes the points in the order $p_1, p_2, \ldots, p_n$.
+
+    When processing $p_i$, all previous closest pairs are $|p_1 p_2| = \sqrt{1+(\frac{1}{n})^2}$ apart.
+
+    And since $|p_1 p_2| \geq 1$ and all points lie on the strip $[0, 1] \times \mathbb{R}$, one must check all previous $i$ points for $p_i$.
+
+    Giving us a total of $\sum_{i=1}^{n-1} i = \frac{n(n-1)}{2} \in \O(n^2)$ comparisons.
+
+    This gives us a running time of $\O(n^2)$.
+
+    \item See above for the construction of the worst case.
+    \item No point ever becomes a dead point, as all points are active points even until $p_n$ is processed, since all x-coordinates lie in the interval $[0, 1]$, and the closest pair is always $|p_1 p_2| = \sqrt{1+(\frac{1}{n})^2}\geq 1$ apart.
+\end{enumerate}

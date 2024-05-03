@@ -1,0 +1,110 @@
+\subsection*{A1}
+% \lstset{
+% language=C,
+% breaklines=true,
+% }
+% \begin{lstlisting}
+
+%     /*
+%     Assumptions
+%     - The Segments are modelled by an Array S consisting of (x,y) coordinate Tuples. S will be given as input
+%     - The balanced binary search tree T can hold tuples (x,y) as elements and is sorted
+%     by the y-value
+%     - T.min.x, T.min.y references the x and y values of the coordinate stored in the
+%     left most leaf
+%     of the tree. If the T is empty, T.min.x, T.min.y each return 'infinite'
+%     */
+
+%     ALG(S):
+
+%     Initialise a balanced binary search tree T
+
+%     /* coordinates is an Array, that holds (x,y) coordinates. 
+%     (x_n, y_a), (x_m, y_a) are to be read in pairs, as the former describes
+%     the starting point of a segment and the latter the ending point.
+%     Added together these segments describe the lower contour. (infinite, infinite) means,
+%     that blank space is starting. */
+%     coordinates := []
+
+%     for (i=0; i<=2n; i++){
+%         old := (T.min.x, T.min.y)
+
+%         // Ending Point detected
+%         if (found(T, S[i])){
+%             T.delete(S[i])
+%         }
+%         //Starting Point detected
+%         else {
+%             T.insert(S[i])
+%         }
+
+%         // Check if the old min is still minimal, otherwise write it into coordinates as
+%         an ending point
+%         if ( old != (T.min.x, T.min.)){
+%             coordinates.append(old)
+%         }
+
+%         coordinates.append((T.min.x,T.min.y))
+%     }
+%     return coordinates
+
+
+% \end{lstlisting}
+
+\textbf{Assumptions}
+
+\begin{itemize}
+    \item The Segments are modelled by an Array $S$ consisting of $(x,y)$ coordinate Tuples. $S$ will be given as input
+    \item The balanced binary search tree $T$ can hold tuples $(x,y)$ as elements and is sorted by the $y$-value
+    \item $T.min.x$, $T.min.y$ references the $x$ and $y$ values of the coordinate stored in the left most leaf of the tree.
+          If the $T$ is empty, $T.min.x$, $T.min.y$ each return 'infinite'
+\end{itemize}
+
+\begin{algorithm}
+    \caption{ALG($S$)}
+    \begin{algorithmic}[1]
+        \State Initialize a balanced binary search tree $T$
+        \State $coordinates \gets []$ \Comment{Array that holds $(x,y)$ coordinates}
+        \For{$i=0$ to $2n$}
+        \State $old \gets (T.min.x, T.min.y)$
+        \If{found($T$, $S[i]$)}
+        \State $T.delete(S[i])$
+        \Else
+        \State $T.insert(S[i])$
+        \EndIf
+        \If{$old \neq (T.min.x, T.min.y)$}
+        \State $coordinates.append(old)$
+        \EndIf
+        \State $coordinates.append((T.min.x,T.min.y))$
+        \EndFor
+        \State \textbf{return} $coordinates$
+    \end{algorithmic}
+\end{algorithm}
+
+\textbf{Comments:}
+The coordinates array holds $(x,y)$ coordinates.
+$(x_n, y_a)$, $(x_m, y_a)$ are to be read in pairs, as the former describes the starting point of a segment and the latter the ending point.
+Added together these segments describe the lower contour. $(\infty, \infty)$ means that blank space is starting.
+
+\hspace{1cm}
+
+\textbf{Runtime:}
+
+% for-loop: $\O(2n) = \O(n)$
+
+% T.delete: $\O(log(n))$
+
+% T.insert: $\O(log(n))$
+
+% The rest has constant runtime.
+
+% Therefore the resulting runtime is $\O(nlog(n))$
+
+\begin{itemize}
+    \item for-loop: $\O(2n) = \O(n)$
+    \item $T.delete$: $\O(\log(n))$
+    \item $T.insert$: $\O(\log(n))$
+    \item The rest has constant runtime.
+\end{itemize}
+
+Therefore the resulting runtime is $\O(n\log(n))$
