@@ -61,6 +61,7 @@ def lexer(chars):
             except KeyError:
                 raise ValueError(f'Invalid character {c}')
     # yield last buffer
+    assert state in accepting
     if buffer:
         # check state for type
         if state == 1 or state == 2:
@@ -81,7 +82,7 @@ def check_parentheses_and_expression(tokens):
     # stack = []
     non_negative_int = 0
     is_start_expr = True
-    
+
     while True:
         try:
             token = next(tokens)
@@ -112,7 +113,7 @@ def check_parentheses_and_expression(tokens):
         raise ValueError('Unbalanced parentheses')
     if is_start_expr:
         raise ValueError('Operator at end of expression')
-    
+
 # let's check some expressions
 
 """
