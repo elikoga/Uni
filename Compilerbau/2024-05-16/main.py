@@ -138,7 +138,7 @@ E1 -> E2 E1'
 E1' -> * E2 E1' | / E2 E1' | ε
 E2 -> E3 E2'
 E2' -> ^ ( E0 ) E2' | ε
-E3 -> (E0) | num
+E3 -> ( E0 ) | num | - num
 """
 
 """
@@ -173,6 +173,7 @@ E2' -> ^ ( E0 ) E2' # Pow
 E2' -> ε # no node
 E3 -> ( E0 ) # Paren
 E3 -> num # Num
+E3 -> - num # Neg
 """
 
 parse_node_types = [
@@ -183,6 +184,7 @@ parse_node_types = [
     "Pow",
     "Paren",
     "Num",
+    "Neg",
 ]
 
 class ParseNode:
@@ -218,14 +220,14 @@ def parse(tokens: Iterator[Token]):
             return True
         return False
 
-    def expect(token_type, value=None):
+    def expect(token_type, value=None, node_type=None):
         nonlocal current
         if token_type == "end_of_string":
             if current.token_type == "end_of_string":
                 return
             else:
                 raise ValueError(f"Expected end of input, got {current.token_type}")
-        if not accept(token_type, value):
+        if not accept(token_type, value, node_type):
             raise ValueError(f"Expected {token_type}, got {current.token_type}")
 
 
@@ -294,6 +296,10 @@ def parse(tokens: Iterator[Token]):
         elif accept("integer", None, "Num"):
             # parse num
             pass
+        elif accept("operator", "-"):
+            expect("integer", None, "Num")
+            value = stack.pop()
+            stack.append(ParseNode("Neg", [value]))
         else:
             raise ValueError(f"Expected integer or lparen, got {current.token_type}")
 
@@ -311,6 +317,8 @@ def test_parser():
         "1-23^(456)",
         "3141592/(1*2)+42",
         "1+(2-3)",
+        "-2",
+        "-2^(2)",
     ]
     bad = [") 1", "1 +", "1 + 2 )", "2^2"]
     for s in good:
@@ -342,6 +350,8 @@ def interpret(node):
         return interpret(node.children[0]) ** interpret(node.children[1])
     elif node.node_type == "Paren":
         return interpret(node.children[0])
+    elif node.node_type == "Neg":
+        return -interpret(node.children[0])
     else:
         raise ValueError(f"Unknown node type {node.node_type}")
 
