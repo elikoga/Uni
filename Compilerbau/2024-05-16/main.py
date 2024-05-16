@@ -137,7 +137,7 @@ E0' -> + E1 E0' | - E1 E0' | ε
 E1 -> E2 E1'
 E1' -> * E2 E1' | / E2 E1' | ε
 E2 -> E3 E2'
-E2' -> ^ E3 E2' | ε
+E2' -> ^ ( E0 ) E2' | ε
 E3 -> (E0) | num
 """
 
@@ -169,7 +169,7 @@ E1' -> * E2 E1' # Mult
 E1' -> / E2 E1' # Div
 E1' -> ε # no node
 E2 -> E3 E2' # no node
-E2' -> ^ E3 E2' # Pow
+E2' -> ^ ( E0 ) E2' # Pow
 E2' -> ε # no node
 E3 -> ( E0 ) # Paren
 E3 -> num # Num
@@ -275,7 +275,9 @@ def parse(tokens: Iterator[Token]):
 
     def E2_():
         if accept("operator", "^"):
-            E3()
+            expect("lparen")
+            E0()
+            expect("rparen")
             right = stack.pop()
             left = stack.pop()
             stack.append(ParseNode("Pow", [left, right]))
@@ -310,7 +312,7 @@ def test_parser():
         "3141592/(1*2)+42",
         "1+(2-3)",
     ]
-    bad = [") 1", "1 +", "1 + 2 )"]
+    bad = [") 1", "1 +", "1 + 2 )", "2^2"]
     for s in good:
         print(f"Good: {s}")
         print(f"Checking {s}")
