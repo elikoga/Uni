@@ -138,25 +138,7 @@ E1 -> E2 E1'
 E1' -> * E2 E1' | / E2 E1' | ε
 E2 -> E3 E2'
 E2' -> ^ ( E0 ) E2' | ε
-E3 -> ( E0 ) | num | - num
-"""
-
-"""
-FIRST(E0) = { (, num }
-FIRST(E0') = { +, -, ε }
-FIRST(E1) = { (, num }
-FIRST(E1') = { *, /, ε }
-FIRST(E2) = { (, num }
-FIRST(E2') = { ^, ε }
-FIRST(E3) = { (, num }
-
-FOLLOW(E0) = { end_of_string, )}
-FOLLOW(E0') = { end_of_string, )}
-FOLLOW(E1) = { +, -, end_of_string, ) }
-FOLLOW(E1') = { +, -, end_of_string, ) }
-FOLLOW(E2) = { *, /, +, -, end_of_string, ) }
-FOLLOW(E2') = { *, /, +, -, end_of_string, ) }
-FOLLOW(E3) = { ^, *, /, +, -, end_of_string, ) }
+E3 -> ( E0 ) | num | - E0
 """
 
 """
@@ -173,7 +155,7 @@ E2' -> ^ ( E0 ) E2' # Pow
 E2' -> ε # no node
 E3 -> ( E0 ) # Paren
 E3 -> num # Num
-E3 -> - num # Neg
+E3 -> - E0 # Neg
 """
 
 parse_node_types = [
@@ -297,7 +279,8 @@ def parse(tokens: Iterator[Token]):
             # parse num
             pass
         elif accept("operator", "-"):
-            expect("integer", None, "Num")
+            # expect("integer", None, "Num")
+            E0()
             value = stack.pop()
             stack.append(ParseNode("Neg", [value]))
         else:

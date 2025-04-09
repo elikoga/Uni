@@ -1,0 +1,19 @@
+; this file was created with wlalink by ville helin <vhelin@iki.fi>.
+; no$gmb symbolic information for "main.gb".
+00:c000 oam
+00:0150 initGB
+00:01ba _defaultPalette
+00:0001 oamDMA
+00:000b endOamDMA
+00:0061 loadPalettes
+00:000c printByte
+00:000c printBCD
+00:0a40 main
+00:00a0 _sizeof_oam
+00:006a _sizeof_initGB
+00:0008 _sizeof__defaultPalette
+00:000a _sizeof_oamDMA
+00:0001 _sizeof_endOamDMA
+00:0091 _sizeof_loadPalettes
+00:0000 _sizeof_printByte
+00:0009 _sizeof_printBCD

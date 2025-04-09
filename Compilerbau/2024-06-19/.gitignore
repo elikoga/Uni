@@ -1,0 +1,6 @@
+*.o
+*.zip
+venv
+*.rom
+*.so
+*.exe

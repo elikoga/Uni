@@ -1,0 +1,10 @@
+grammar SimpleLang;
+program: statement* EOF;
+statement: assignment | expression;
+assignment: ID '=' expression;
+expression: INT | ID | magicFunctionCall;
+magicFunctionCall: ID '(' parameters ')';
+parameters: expression (',' expression)*;
+INT: [0-9]+;
+ID: [a-zA-Z]+;
+WS: [ \t\n\r]+ -> skip;

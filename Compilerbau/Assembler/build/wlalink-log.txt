@@ -1,0 +1,72 @@
+DISCARD: main.o:../framework.asm: Section "waitVBlank" was discarded.
+DISCARD: main.o:../framework.asm: Section "setSpritePosition" was discarded.
+DISCARD: main.o:../framework.asm: Section "setSpriteY" was discarded.
+DISCARD: main.o:../framework.asm: Section "setSpriteX" was discarded.
+DISCARD: main.o:../framework.asm: Section "setSpriteAttributes" was discarded.
+DISCARD: main.o:../framework.asm: Section "setSpriteTile" was discarded.
+DISCARD: main.o:../framework.asm: Section "setSpriteFlags" was discarded.
+DISCARD: main.o:../framework.asm: Section "enableSprites" was discarded.
+DISCARD: main.o:../framework.asm: Section "disableSprites" was discarded.
+DISCARD: main.o:../framework.asm: Section "enableTallSprites" was discarded.
+DISCARD: main.o:../framework.asm: Section "disableTallSprites" was discarded.
+DISCARD: main.o:../framework.asm: Section "enableWindow" was discarded.
+DISCARD: main.o:../framework.asm: Section "disableWindow" was discarded.
+DISCARD: main.o:../framework.asm: Section "turnScreenOn" was discarded.
+DISCARD: main.o:../framework.asm: Section "turnScreenOff" was discarded.
+DISCARD: main.o:../framework.asm: Section "setTile" was discarded.
+DISCARD: main.o:../framework.asm: Section "setTiles" was discarded.
+DISCARD: main.o:../framework.asm: Section "setWindowTile" was discarded.
+DISCARD: main.o:../framework.asm: Section "setFlags" was discarded.
+DISCARD: main.o:../framework.asm: Section "setScrollX" was discarded.
+DISCARD: main.o:../framework.asm: Section "setScrollY" was discarded.
+DISCARD: main.o:../framework.asm: Section "setWindowX" was discarded.
+DISCARD: main.o:../framework.asm: Section "setWindowY" was discarded.
+DISCARD: main.o:../framework.asm: Section "clearVRAM" was discarded.
+DISCARD: main.o:../framework.asm: Section "clearTilemap" was discarded.
+DISCARD: main.o:../framework.asm: Section "clearWindow" was discarded.
+DISCARD: main.o:../framework.asm: Section "loadTiles1bpp" was discarded.
+DISCARD: main.o:../framework.asm: Section "loadTiles" was discarded.
+DISCARD: main.o:../framework.asm: Section "tableSoundNoteFrequencies" was discarded.
+DISCARD: main.o:../framework.asm: Section "playNoteOnChannel1" was discarded.
+DISCARD: main.o:../framework.asm: Section "setChannel1noteAndVolume" was discarded.
+DISCARD: main.o:../framework.asm: Section "playNoteOnChannel2" was discarded.
+DISCARD: main.o:../framework.asm: Section "setChannel2noteAndVolume" was discarded.
+DISCARD: main.o:../framework.asm: Section "playNoteOnChannel3" was discarded.
+DISCARD: main.o:../framework.asm: Section "setChannel3noteAndVolume" was discarded.
+DISCARD: main.o:../framework.asm: Section "playNoise" was discarded.
+DISCARD: main.o:../framework.asm: Section "enableSound" was discarded.
+DISCARD: main.o:../framework.asm: Section "disableSound" was discarded.
+DISCARD: main.o:../framework.asm: Section "setVolume" was discarded.
+DISCARD: main.o:../framework.asm: Section "getButtonStates" was discarded.
+DISCARD: main.o:../framework.asm: Section "rand" was discarded.
+DISCARD: main.o:../framework.asm: Section "memset" was discarded.
+DISCARD: main.o:../framework.asm: Section "memcpy" was discarded.
+DISCARD: main.o:../framework.asm: Section "printSignedByte" was discarded.
+DISCARD: main.o:../framework.asm: Section "printWord" was discarded.
+DISCARD: main.o:../framework.asm: Section "printSignedWord" was discarded.
+DISCARD: main.o:../framework.asm: Section "printChar" was discarded.
+DISCARD: main.o:../framework.asm: Section "printBool" was discarded.
+DISCARD: main.o:../framework.asm: Section "printString" was discarded.
+DISCARD: main.o:../framework.asm: Section "printStringLn" was discarded.
+DISCARD: main.o:../framework.asm: Section "printByteArray" was discarded.
+DISCARD: main.o:../framework.asm: Section "printSignedByteArray" was discarded.
+DISCARD: main.o:../framework.asm: Section "printWordArray" was discarded.
+DISCARD: main.o:../framework.asm: Section "printSignedWordArray" was discarded.
+DISCARD: main.o:../framework.asm: Section "printBoolArray" was discarded.
+DISCARD: main.o:../framework.asm: Section "printCharArray" was discarded.
+DISCARD: main.o:../framework.asm: Section "printFixed" was discarded.
+DISCARD: main.o:../framework.asm: Section "printFixedArray" was discarded.
+Free space at $001b-$0037.
+Free space at $003a-$003f.
+Free space at $0047.
+Free space at $0049-$004f.
+Free space at $0051-$0057.
+Free space at $0059-$005f.
+Free space at $00f2-$00ff.
+Free space at $0135-$0142.
+Free space at $0144-$0146.
+Free space at $014b-$014c.
+Free space at $01c2-$ffff.
+Bank 00 has 32408 bytes (98.90%) free.
+Bank 01 has 32768 bytes (100.0%) free.
+65176 unused bytes of total 65536.
