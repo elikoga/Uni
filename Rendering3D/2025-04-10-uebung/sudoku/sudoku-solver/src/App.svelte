@@ -1,28 +1,121 @@
 <script lang="ts">
-  let sudokuGrid: (number | null)[][] = Array(9)
-    .fill(null)
-    .map(() => Array(9).fill(null));
+  type CellValue = number | null;
+  type SudokuGrid = CellValue[][];
 
-  function resetSudoku(): void {
+  let sudokuGrid: SudokuGrid = $state(Array(9)
+    .fill(null)
+    .map(() => Array(9).fill(null)));
+
+  const resetSudoku = () => {
     sudokuGrid = Array(9)
       .fill(null)
       .map(() => Array(9).fill(null));
-  }
+  };
 
-  function makeStep(): void {
-    // TODO: Implement a single solution step
-    console.log("Making one solution step");
-  }
 
-  function solveFully(): void {
-    // TODO: Implement full solution algorithm
-    console.log("Solving the sudoku completely");
-  }
 
-  function generateNew(): void {
-    // TODO: Implement sudoku generation
-    console.log("Generating a new sudoku puzzle");
-  }
+  const findEmptyCell = (grid: SudokuGrid): [number, number] | null => {
+    for (let row = 0; row < 9; row++) {
+      for (let col = 0; col < 9; col++) {
+        if (grid[row][col] === null) {
+          return [row, col];
+        }
+      }
+    }
+    return null;
+  };
+
+  const isPartialValid = (
+    grid: SudokuGrid,
+    row: number,
+    col: number,
+    value: number
+  ): boolean => {
+    // Check row
+    for (let c = 0; c < 9; c++) {
+      if (grid[row][c] === value && c !== col) {
+        console.log(`1Invalid value ${value} at row ${row}, col ${c}`);
+        return false;
+      }
+    }
+    // Check column
+    for (let r = 0; r < 9; r++) {
+      if (grid[r][col] === value && r !== row) {
+        console.log(`2Invalid value ${value} at row ${r}, col ${col}`);
+        return false;
+      }
+    }
+    // Check box
+    const boxRowStart = Math.floor(row / 3) * 3;
+    const boxColStart = Math.floor(col / 3) * 3;
+    for (let r = boxRowStart; r < boxRowStart + 3; r++) {
+      for (let c = boxColStart; c < boxColStart + 3; c++) {
+        if (grid[r][c] === value && (r !== row || c !== col)) {
+          console.log(`3Invalid value ${value} at row ${r}, col ${c}`);
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+
+  const isFullyValid = (grid: SudokuGrid): boolean => {
+    for (let row = 0; row < 9; row++) {
+      for (let col = 0; col < 9; col++) {
+        const value = grid[row][col];
+        if (value !== null) {
+          // Check if the value is valid in its position
+          if (!isPartialValid(grid, row, col, value)) {
+            console.log(`Invalid value ${value} at row ${row}, col ${col}`);
+            return false;
+          }
+        }
+      }
+    }
+    return true;
+  };
+
+
+
+  const makeStep = () => {
+    // later
+  };
+
+  const solveFully = () => {
+    const solve = (grid: SudokuGrid): boolean => {
+      console.log(`Solving... Current grid: ${JSON.stringify(grid)}`);
+      const emptyCell = findEmptyCell(grid);
+      if (!emptyCell) {
+        return isFullyValid(grid);
+      }
+      const [row, col] = emptyCell;
+
+      // if not fully valid, return false
+      if (!isFullyValid(grid)) {
+        console.log(`Invalid grid at row ${row}, col ${col}`);
+        return false;
+      }
+
+      for (let num = 1; num <= 9; num++) {
+        if (isPartialValid(grid, row, col, num)) {
+          grid[row][col] = num; // Place the number
+          if (solve(grid)) {
+            return true; // If solved, return true
+          }
+          grid[row][col] = null; // Backtrack
+        }
+      }
+      return false;
+    };
+    const isSolved = solve(sudokuGrid);
+    if (isSolved) {
+      alert("Sudoku solved!");
+    } else {
+      alert("No solution exists.");
+    }
+  };
+
+  const generateNew = () => {};
 </script>
 
 <main>
@@ -40,7 +133,7 @@
                 class:top-border={row % 3 === 0 && row !== 0}
               >
                 <input
-                  type="text"
+                  type="number"
                   maxlength="1"
                   bind:value={sudokuGrid[row][col]}
                 />
@@ -52,10 +145,10 @@
     </table>
 
     <div class="button-container">
-      <button on:click={resetSudoku}>Reset</button>
-      <button on:click={makeStep}>Make Step</button>
-      <button on:click={solveFully}>Solve</button>
-      <button on:click={generateNew}>New Puzzle</button>
+      <button onclick={resetSudoku}>Reset</button>
+      <button onclick={makeStep}>Make Step</button>
+      <button onclick={solveFully}>Solve</button>
+      <button onclick={generateNew}>New Puzzle</button>
     </div>
   </div>
 </main>
