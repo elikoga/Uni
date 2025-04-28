@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Assignment 2</title>
+    <style>
+        .slider {
+            width: 500px;
+            height: 10px;
+        }
+
+        #canvas {
+            float: left;
+            margin-right: 1em;
+        }
+
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="500" height="500" style="border:1px solid #000000;">
+        Your browser does not support the HTML5 canvas tag.
+    </canvas>
+    <div>
+        <p>Rotation X: <span id="rotXOut"></span></p>
+        <label for="rotXIn"></label><input type="range" id="rotXIn" min="-180" max="180" class="slider">
+    </div>
+    <div>
+        <p>Rotation Y: <span id="rotYOut"></span></p>
+        <label for="rotYIn"></label><input type="range" id="rotYIn" min="-180" max="180" class="slider">
+    </div>
+    <div>
+        <p>Rotation Z: <span id="rotZOut"></span></p>
+        <label for="rotZIn"></label><input type="range" id="rotZIn" min="-180" max="180" class="slider">
+    </div>
+    <div>
+        <p>Kamera Z Position: <span id="camZOut"></span></p>
+        <label for="camZIn"></label><input type="range" id="camZIn" min="2" max="10" step="0.01" class="slider">
+    </div>
+    <script>
+        let rotX = 0;
+        let rotY = 0;
+        let rotZ = 0;
+        let camZ = 3;
+
+        let rotXIn = document.getElementById("rotXIn");
+        let rotXOut = document.getElementById("rotXOut");
+        rotXIn.value = rotX;
+        rotXOut.innerHTML = rotX;
+        rotXIn.oninput = function () {
+            rotX = this.value;
+            rotXOut.innerHTML = rotX;
+            update();
+        };
+        let rotYIn = document.getElementById("rotYIn");
+        let rotYOut = document.getElementById("rotYOut");
+        rotYIn.value = rotY;
+        rotYOut.innerHTML = rotY;
+        rotYIn.oninput = function () {
+            rotY = this.value;
+            rotYOut.innerHTML = rotY;
+            update();
+        };
+        let rotZIn = document.getElementById("rotZIn");
+        let rotZOut = document.getElementById("rotZOut");
+        rotZIn.value = rotZ;
+        rotZOut.innerHTML = rotZ;
+        rotZIn.oninput = function () {
+            rotZ = this.value;
+            rotZOut.innerHTML = rotZ;
+            update();
+        };
+        let camZIn = document.getElementById("camZIn");
+        let camZOut = document.getElementById("camZOut");
+        camZIn.value = camZ;
+        camZOut.innerHTML = camZ;
+        camZIn.oninput = function () {
+            camZ = this.value;
+            camZOut.innerHTML = camZ;
+            update();
+        };
+
+        class Vector {
+            constructor(x = 0, y = 0, z = 0) {
+                this.x = x;
+                this.y = y;
+                this.z = z;
+                this.w = 0;
+            }
+
+            dot(v) {
+                return this.x * v.x + this.y * v.y + this.z * v.z;
+            }
+
+            cross(v) {
+                return new Vector(
+                    this.y * v.z - this.z * v.y,
+                    this.z * v.x - this.x * v.z,
+                    this.x * v.y - this.y * v.x
+                );
+            }
+
+            norm() {
+                return Math.sqrt(this.dot(this));
+            }
+
+            normalize() {
+                let n = this.norm();
+                this.x /= n;
+                this.y /= n;
+                this.z /= n;
+            }
+
+            sub(v) {
+                return new Vector(
+                    this.x - v.x,
+                    this.y - v.y,
+                    this.z - v.z
+                );
+            }
+        }
+
+        class Point {
+            constructor(x = 0, y = 0, z = 0, w = 1) {
+                this.x = x;
+                this.y = y;
+                this.z = z;
+                this.w = w;
+            }
+
+            dehomogen() {
+                this.x /= this.w;
+                this.y /= this.w;
+                this.z /= this.w;
+                this.w = 1;
+            }
+        }
+
+        class Matrix {
+            constructor(a00 = 1, a01 = 0, a02 = 0, a03 = 0,
+                a10 = 0, a11 = 1, a12 = 0, a13 = 0,
+                a20 = 0, a21 = 0, a22 = 1, a23 = 0,
+                a30 = 0, a31 = 0, a32 = 0, a33 = 1) {
+                this.a00 = a00;
+                this.a01 = a01;
+                this.a02 = a02;
+                this.a03 = a03;
+                this.a10 = a10;
+                this.a11 = a11;
+                this.a12 = a12;
+                this.a13 = a13;
+                this.a20 = a20;
+                this.a21 = a21;
+                this.a22 = a22;
+                this.a23 = a23;
+                this.a30 = a30;
+                this.a31 = a31;
+                this.a32 = a32;
+                this.a33 = a33;
+            }
+
+            mulMat(m) {
+                return new Matrix(
+                    this.a00 * m.a00 + this.a01 * m.a10 + this.a02 * m.a20 + this.a03 * m.a30,
+                    this.a00 * m.a01 + this.a01 * m.a11 + this.a02 * m.a21 + this.a03 * m.a31,
+                    this.a00 * m.a02 + this.a01 * m.a12 + this.a02 * m.a22 + this.a03 * m.a32,
+                    this.a00 * m.a03 + this.a01 * m.a13 + this.a02 * m.a23 + this.a03 * m.a33,
+                    this.a10 * m.a00 + this.a11 * m.a10 + this.a12 * m.a20 + this.a13 * m.a30,
+                    this.a10 * m.a01 + this.a11 * m.a11 + this.a12 * m.a21 + this.a13 * m.a31,
+                    this.a10 * m.a02 + this.a11 * m.a12 + this.a12 * m.a22 + this.a13 * m.a32,
+                    this.a10 * m.a03 + this.a11 * m.a13 + this.a12 * m.a23 + this.a13 * m.a33,
+                    this.a20 * m.a00 + this.a21 * m.a10 + this.a22 * m.a20 + this.a23 * m.a30,
+                    this.a20 * m.a01 + this.a21 * m.a11 + this.a22 * m.a21 + this.a23 * m.a31,
+                    this.a20 * m.a02 + this.a21 * m.a12 + this.a22 * m.a22 + this.a23 * m.a32,
+                    this.a20 * m.a03 + this.a21 * m.a13 + this.a22 * m.a23 + this.a23 * m.a33,
+                    this.a30 * m.a00 + this.a31 * m.a10 + this.a32 * m.a20 + this.a33 * m.a30,
+                    this.a30 * m.a01 + this.a31 * m.a11 + this.a32 * m.a21 + this.a33 * m.a31,
+                    this.a30 * m.a02 + this.a31 * m.a12 + this.a32 * m.a22 + this.a33 * m.a32,
+                    this.a30 * m.a03 + this.a31 * m.a13 + this.a32 * m.a23 + this.a33 * m.a33
+                );
+            }
+
+            mulVec(v) {
+                return new Point(
+                    this.a00 * v.x + this.a01 * v.y + this.a02 * v.z + this.a03 * v.w,
+                    this.a10 * v.x + this.a11 * v.y + this.a12 * v.z + this.a13 * v.w,
+                    this.a20 * v.x + this.a21 * v.y + this.a22 * v.z + this.a23 * v.w,
+                    this.a30 * v.x + this.a31 * v.y + this.a32 * v.z + this.a33 * v.w
+                );
+            }
+        }
+
+        const canvas = document.getElementById("canvas");
+        const offset = 250;
+        const ctx = canvas.getContext("2d");
+
+        function drawPoint(x, y, color = "#000000") {
+            ctx.beginPath();
+            ctx.arc(x + offset, -y + offset, 2, 0, 2 * Math.PI, false);
+            // ctx.fillStyle = '#000000';
+            ctx.fillStyle = color;
+
+            ctx.fill();
+        }
+
+        const colorLerp = (c1, c2, t) => {
+              return {
+                  r: Math.round(c1.r + (c2.r - c1.r) * t),
+                  g: Math.round(c1.g + (c2.g - c1.g) * t),
+                  b: Math.round(c1.b + (c2.b - c1.b) * t)
+              };
+          };
+          const c1 = { r: 0, g: 0, b: 255 };
+          const c2 = { r: 0, g: 255, b: 0 };
+          const rgbToHex = (r, g, b) => {
+              return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+          };
+
+        function drawPoints(points) {
+          const pointColourPairs = [];
+            for (let i = 0; i < points.length; i++) {
+              const color = colorLerp(c1, c2, i / points.length);
+                // drawPoint(points[i].x, points[i].y, rgbToHex(color.r, color.g, color.b));
+              pointColourPairs.push({
+                point: points[i],
+                color: rgbToHex(color.r, color.g, color.b)
+              });
+            }
+            // sort the points by their z value after
+            // pointColourPairs.sort((a, b) => b.point.z - a.point.z);
+            // draw the points in the sorted order
+            for (let i = 0; i < pointColourPairs.length; i++) {
+                drawPoint(pointColourPairs[i].point.x, pointColourPairs[i].point.y, pointColourPairs[i].color);
+            }
+        }
+
+        function createPoints() {
+            let points = [];
+
+            // We will create a cube with 8 points at the corners of +/-1 for x, y, z
+            const createCube = (size) => {
+                let points = [];
+                for (let x = -size; x <= size; x += size * 2) {
+                    for (let y = -size; y <= size; y += size * 2) {
+                        for (let z = -size; z <= size; z += size * 2) {
+                            points.push(new Point(x, y, z));
+                        }
+                    }
+                }
+                return points;
+            };
+            // points.push(...createCube(1));
+
+            // actually, let's create a lorentz attractor
+            // https://en.wikipedia.org/wiki/Lorenz_attractor
+            const sigma = 10;
+            const rho = 28;
+            const beta = 8 / 3;
+            const dt = 0.01;
+            const steps = 5000;
+
+            const lorentzStep = (x, y, z) => {
+                return [
+                    sigma * (y - x),
+                    x * (rho - z) - y,
+                    x * y - beta * z
+                ];
+            };
+
+            const fillLorentzAttractor = (x, y, z) => {
+                let points = [];
+                for (let i = 0; i < steps; i++) {
+                    points.push(new Point(x, y, z));
+                    // let's linearly interpolate between two colors
+                    let t = i / steps;
+                    let [dx, dy, dz] = lorentzStep(x, y, z);
+                    x += dx * dt;
+                    y += dy * dt;
+                    z += dz * dt;
+                }
+                return points;
+            };
+
+            points = fillLorentzAttractor(0, 1, 1.05); // initial point straight from the wiki
+
+            // let's find minX, maxX, minY, maxY, minZ, maxZ
+            // as well as the center of the points centerPoints
+            const findMinMax = (points) => {
+                let minX = points[0].x;
+                let maxX = points[0].x;
+                let minY = points[0].y;
+                let maxY = points[0].y;
+                let minZ = points[0].z;
+                let maxZ = points[0].z;
+
+                for (let i = 1; i < points.length; i++) {
+                    if (points[i].x < minX) minX = points[i].x;
+                    if (points[i].x > maxX) maxX = points[i].x;
+                    if (points[i].y < minY) minY = points[i].y;
+                    if (points[i].y > maxY) maxY = points[i].y;
+                    if (points[i].z < minZ) minZ = points[i].z;
+                    if (points[i].z > maxZ) maxZ = points[i].z;
+                }
+                return { minX, maxX, minY, maxY, minZ, maxZ };
+            };
+            const { minX, maxX, minY, maxY, minZ, maxZ } = findMinMax(points);
+            const findCenter = (points) => {
+                let centerX = 0;
+                let centerY = 0;
+                let centerZ = 0;
+                for (let i = 0; i < points.length; i++) {
+                    centerX += points[i].x;
+                    centerY += points[i].y;
+                    centerZ += points[i].z;
+                }
+                centerX /= points.length;
+                centerY /= points.length;
+                centerZ /= points.length;
+                return new Vector(centerX, centerY, centerZ);
+            };
+            const center = findCenter(points);
+            // now we will move the points to the center
+            for (let i = 0; i < points.length; i++) {
+                points[i].x -= center.x;
+                points[i].y -= center.y;
+                points[i].z -= center.z;
+            }
+            // now we will scale the points to fit in the screen
+            const scale = Math.max(maxX - minX, maxY - minY, maxZ - minZ);
+            const scaleFactor = 2 / scale;
+            for (let i = 0; i < points.length; i++) {
+                points[i].x *= scaleFactor;
+                points[i].y *= scaleFactor;
+                points[i].z *= scaleFactor;
+            }
+
+            // TODO: Aufgabe a
+
+            return points;
+        }
+
+        let mouseRotMat = new Matrix();
+
+        const createScalingMatrix = (sx, sy, sz) => {
+            return new Matrix(
+                sx, 0, 0, 0,
+                0, sy, 0, 0,
+                0, 0, sz, 0,
+                0, 0, 0, 1
+            );
+        };
+
+        function transform(points) {
+            // let modelViewMat = new Matrix();
+
+            /**
+             * @param {number} angle
+             * @param {"x" | "y" | "z"} axis
+             * @returns {Matrix}
+             */
+            const createRotMatrix = (angle, axis) => {
+                let rad = angle * Math.PI / 180;
+                let c = Math.cos(rad);
+                let s = Math.sin(rad);
+
+                switch (axis) {
+                    case 'x':
+                        return new Matrix(
+                            1, 0, 0, 0,
+                            0, c, -s, 0,
+                            0, s, c, 0,
+                            0, 0, 0, 1
+                        );
+                    case 'y':
+                        return new Matrix(
+                            c, 0, s, 0,
+                            0, 1, 0, 0,
+                            -s, 0, c, 0,
+                            0, 0, 0, 1
+                        );
+                    case 'z':
+                        return new Matrix(
+                            c, -s, 0, 0,
+                            s, c, 0, 0,
+                            0, 0, 1, 0,
+                            0, 0, 0, 1
+                        );
+                    default:
+                        return new Matrix();
+                }
+            };
+
+            let rotXMat = createRotMatrix(rotX, 'x');
+            let rotYMat = createRotMatrix(rotY, 'y');
+            let rotZMat = createRotMatrix(rotZ, 'z');
+
+            /**
+             * @param {Point} camPos
+             * @param {Vector} viewDirection
+             * @param {Vector} upDirection
+             * @returns {Matrix}
+             */
+            const createLookAtMatrix = (camPos, viewDirection, upDirection) => {
+                let rVec = viewDirection.cross(upDirection);
+                rVec.normalize();
+
+                let uVec = rVec.cross(viewDirection);
+                uVec.normalize();
+
+                let dVec = new Vector(
+                    viewDirection.x,
+                    viewDirection.y,
+                    viewDirection.z
+                );
+                dVec.normalize();
+
+                let m = new Matrix(
+                    rVec.x, rVec.y, rVec.z, -rVec.dot(camPos),
+                    uVec.x, uVec.y, uVec.z, -uVec.dot(camPos),
+                    -dVec.x, -dVec.y, -dVec.z, dVec.dot(camPos),
+                    0, 0, 0, 1
+                );
+                return m;
+            };
+
+            const modelViewMat = createLookAtMatrix(
+                new Vector(0, 0, camZ), // camera position
+                new Vector(0, 0, -1), // view direction
+                new Vector(0, 1, 0) // up direction
+            ).mulMat(mouseRotMat).mulMat(rotZMat).mulMat(rotYMat).mulMat(rotXMat);
+
+            // TODO: Aufgabe b
+
+            // let projectionMat = new Matrix(
+            //     1, 0, 0, 0,
+            //     0, 1, 0, 0,
+            //     0, 0, 0, -1,
+            //     0, 0, 0, 1
+            // );
+            // projectionMat was a parallel projection matrix, however we will change it to a perspective projection matrix
+
+            const perspectiveProjectionMat = new Matrix(
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, -1, 0
+            );
+
+
+
+            const scalingFactor = 250;
+            const projectionMat = createScalingMatrix(scalingFactor, scalingFactor, scalingFactor)
+                .mulMat(perspectiveProjectionMat).mulMat(modelViewMat);
+
+            // TODO: Aufgabe c
+
+            let res = [];
+            for (let i = 0; i < points.length; i++) {
+                let p = projectionMat.mulVec(points[i]);
+                p.dehomogen();
+                res.push(p);
+            }
+            return res;
+        }
+
+        points = createPoints();
+
+        function update() {
+            ctx.clearRect(0, 0, 500, 500);
+            drawPoints(transform(points));
+        }
+
+        update();
+
+        let down = false;
+        let x0;
+        let y0;
+
+        document.getElementById("canvas").addEventListener("mousedown", function (event) {
+            down = true;
+            x0 = event.clientX - 250;
+            y0 = 250 - event.clientY;
+        });
+
+        document.getElementById("canvas").addEventListener("mousemove", function (event) {
+            if (down) {
+                let x1 = event.clientX - 250;
+                let y1 = 250 - event.clientY;
+                if (x0 !== x1 || y0 !== y1) {
+
+                    // Bonusaufgabe
+
+                    // We place a sphere center point a distance 500/camZ in front of our screen
+                    let sphereCenter = new Vector(0, 0, -500 / camZ);
+                    // no we point a vector from the sphere center to the mouse positions
+                    let mPos0 = new Vector(x0, y0, 0);
+                    let mPos1 = new Vector(x1, y1, 0);
+                    let v0 = mPos0.sub(sphereCenter);
+                    let v1 = mPos1.sub(sphereCenter);
+                    v0.normalize();
+                    v1.normalize();
+
+                    // angle
+                    let angle = Math.acos(v0.dot(v1));
+
+                    // axis
+                    let axis = v0.cross(v1);
+                    axis.normalize();
+
+                    // console.log("angle", angle);
+                    // console.log("axis", axis);
+
+                    // rotation matrix using Rodrigues' rotation formula as seen in the lecture
+                    let cos = Math.cos(angle);
+                    let sin = Math.sin(angle);
+                    let oneMinusCos = 1 - cos;
+                    const createCrossProductMatrix = (v) => {
+                        return new Matrix(
+                            0, -v.z, v.y, 0,
+                            v.z, 0, -v.x, 0,
+                            -v.y, v.x, 0, 0,
+                            0, 0, 0, 1
+                        );
+                    };
+                    const createSelfProductMatrix = (v) => {
+                        return new Matrix(
+                            v.x * v.x, v.x * v.y, v.x * v.z, 0,
+                            v.y * v.x, v.y * v.y, v.y * v.z, 0,
+                            v.z * v.x, v.z * v.y, v.z * v.z, 0,
+                            0, 0, 0, 1
+                        );
+                    };
+
+                    const scalingMatrix = createScalingMatrix(cos, cos, cos);
+                    const selfProductMatrix = createScalingMatrix(oneMinusCos, oneMinusCos, oneMinusCos).mulMat(createSelfProductMatrix(axis));
+                    const crossProductMatrix = createScalingMatrix(sin, sin, sin).mulMat(createCrossProductMatrix(axis));
+
+                    const addMat = (m1, m2) => {
+                      return new Matrix(
+                            m1.a00 + m2.a00, m1.a01 + m2.a01, m1.a02 + m2.a02, m1.a03 + m2.a03,
+                            m1.a10 + m2.a10, m1.a11 + m2.a11, m1.a12 + m2.a12, m1.a13 + m2.a13,
+                            m1.a20 + m2.a20, m1.a21 + m2.a21, m1.a22 + m2.a22, m1.a23 + m2.a23,
+                            m1.a30 + m2.a30, m1.a31 + m2.a31, m1.a32 + m2.a32, m1.a33 + m2.a33
+                          );
+                    };
+                    Matrix.prototype.addMat = function (m) {
+                      return addMat(this, m);
+                    };
+                    let combinedMatrix = scalingMatrix.addMat(selfProductMatrix).addMat(crossProductMatrix);
+                    combinedMatrix.a33 = 1;
+
+                    // const determinant = combinedMatrix.a00 * combinedMatrix.a11 * combinedMatrix.a22 * combinedMatrix.a33 +
+                    //     combinedMatrix.a01 * combinedMatrix.a12 * combinedMatrix.a23 * combinedMatrix.a30 +
+                    //     combinedMatrix.a02 * combinedMatrix.a13 * combinedMatrix.a20 * combinedMatrix.a31 +
+                    //     combinedMatrix.a03 * combinedMatrix.a10 * combinedMatrix.a21 * combinedMatrix.a32 -
+                    //     (combinedMatrix.a00 * combinedMatrix.a12 * combinedMatrix.a23 * combinedMatrix.a31 +
+                    //         combinedMatrix.a01 * combinedMatrix.a13 * combinedMatrix.a20 * combinedMatrix.a32 +
+                    //         combinedMatrix.a02 * combinedMatrix.a10 * combinedMatrix.a21 * combinedMatrix.a33 +
+                    //         combinedMatrix.a03 * combinedMatrix.a11 * combinedMatrix.a22 * combinedMatrix.a30);
+                    const calculateDeterminant = (m) => {
+                      return m.a00 * m.a11 * m.a22 * m.a33 +
+                             m.a01 * m.a12 * m.a23 * m.a30 +
+                             m.a02 * m.a13 * m.a20 * m.a31 +
+                             m.a03 * m.a10 * m.a21 * m.a32 -
+                             (m.a00 * m.a12 * m.a23 * m.a31 +
+                              m.a01 * m.a13 * m.a20 * m.a32 +
+                              m.a02 * m.a10 * m.a21 * m.a33 +
+                              m.a03 * m.a11 * m.a22 * m.a30);
+                    };
+                    // const determinant = calculateDeterminant(combinedMatrix);
+
+                    // scale the matrix by the inverse of the third root of the determinant
+                    // const scale = Math.cbrt(1 / determinant);
+                    // const determinantScaleMatrix = createScalingMatrix(scale, scale, scale);
+                    // combinedMatrix = determinantScaleMatrix.mulMat(combinedMatrix);
+
+                    // console.log("combinedMatrix", combinedMatrix);
+
+                    mouseRotMat = combinedMatrix.mulMat(mouseRotMat);
+                    // console.log("mouseRotMat", mouseRotMat);
+
+                    update();
+                    x0 = x1;
+                    y0 = y1;
+                }
+            }
+        });
+
+        document.getElementById("canvas").addEventListener("mouseup", function () {
+            down = false;
+        });
+
+    </script>
+</body>
+
+</html>
